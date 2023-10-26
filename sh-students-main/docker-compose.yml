@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  sh-students:
+    build:
+      context: .
+      target: prod
+    container_name: sh-students
+    restart: always
+    ports:
+      - 5000:5000
+    networks:
+      - default
+      - sh-network
+
+networks:
+  sh-network:
+    external: true

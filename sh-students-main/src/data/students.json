@@ -1,0 +1,24 @@
+{
+	"students": [
+		{
+			"file_number": 1,
+			"status": true
+		},
+		{
+			"file_number": 2,
+			"status": true
+		},
+		{
+			"file_number": 3,
+			"status": false
+		},
+		{
+			"file_number": 4,
+			"status": false
+		},
+		{
+			"file_number": 5,
+			"status": true
+		}
+	]
+}
