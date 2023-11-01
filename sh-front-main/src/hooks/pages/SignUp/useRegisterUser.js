@@ -32,10 +32,10 @@ export function useRegisterUser() {
     const { isAuthenticated, user_category } = useSelector(authSelector);
 
     useEffect(() => {
-        if (isAuthenticated && user_category != USER_CATEGORIES.DEFAULT) {
+        if (isAuthenticated && user_category !== USER_CATEGORIES.DEFAULT) {
             setLocation(paths.search);
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, setLocation, user_category]);
 
     useEffect(
         () => {
