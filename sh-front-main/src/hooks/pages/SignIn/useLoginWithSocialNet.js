@@ -2,13 +2,13 @@ import { useState, useEffect } from "react"
 import { useMutation } from "@apollo/client";
 import { useToast } from "@chakra-ui/react";
 import { useLocation } from "wouter";
-import { REGISTER_STUDENT_USER_WITH_SOC_NET } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
+import { REGISTER_STUDENT_USER_WITH_SOC_NET, INITIAL_REGISTER_STUDENT_USER_WITH_SOC_NET } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
 import { getVarStudentUserFacebook, getVarStudentUserGoogle, getVarStudentUserGithub } from "client/gql/mutations/registerUser/getVarStudentUser";
 import { paths } from "config/paths";
 import { AUTH_PROVIDERS, USER_CATEGORIES } from "const";
 import { useDispatch, useSelector } from "react-redux";
 import { signInSocialNetAction, authSelector, clearState } from "store/slices/authSlice";
-
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 import { getAgeFromBirthDate } from "utils/getAgeFromBirthDate";
 
@@ -75,8 +75,8 @@ export function useLoginWithSocialNet() {
 
     const onSubmitLogginWithSocialNet = ({ data, provider }) => {
 
-        if (AUTH_PROVIDERS.GOOGLE === provider)
-            onSubmitStudentUserGoogle({ data });
+        /* if (AUTH_PROVIDERS.GOOGLE === provider)
+            onSubmitStudentUserGoogle({ data }); */
 
         if (AUTH_PROVIDERS.FACEBOOK === provider)
             onSubmitStudentUserFacebook({ data });
@@ -85,18 +85,49 @@ export function useLoginWithSocialNet() {
             onSubmitStudentUserGithub({ data });
     };
 
-    const onSubmitStudentUserGoogle = async ({ data }) => {
+    const [registerStudentUser] = useMutation(REGISTER_STUDENT_USER_WITH_SOC_NET);
+const [initialRegisterStudentUser] = useMutation(INITIAL_REGISTER_STUDENT_USER_WITH_SOC_NET);
 
-        let variables = getVarStudentUserGoogle(data);
-        registerStudentUserWithSocNet({ variables }).then(({ data }) => {
-            dispatch(signInSocialNetAction(variables.email));
+/* const onSubmitStudentUserGoogle = async ({ data }) => {
+  const auth = getAuth();
+  const googleProvider = new GoogleAuthProvider();
 
-        }).catch(error => {
-            if (error.graphQLErrors.at(0).extensions.code === "constraint-violation") {
-                dispatch(signInSocialNetAction(variables.email));
-            }
-        });
-    };
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+
+    if (result.user) {
+      // El usuario se ha autenticado con éxito
+      const user = result.user;
+
+      // A continuación, puedes acceder a los datos del usuario, como user.email, user.displayName, etc.
+      const userEmail = user.email;
+      const userLastName = user.lastname || "";
+      const userFirstName = user.firstname || "";
+
+      // Luego, puedes continuar con el registro si es necesario, de la misma forma que en el código proporcionado.
+      const userData = {
+        lastname: userLastName,
+        firstname: userFirstName,
+        email: userEmail,
+        created_with_sn: true,
+        user_status: true,
+      };
+
+      // Ejecutar la mutación inicial para crear un registro en la base de datos
+      await initialRegisterStudentUser({ variables: userData });
+
+      // Ejecutar la mutación para registrar al usuario
+      await registerStudentUser({ variables: userData });
+      setLocation(paths.questions);
+      // Muestra los datos del usuario en la consola
+      console.log("Datos del usuario:", userData);
+    }
+      
+  } catch (error) {
+    console.error("Error al iniciar sesión con Google:", error);
+  }
+}; */
+      
 
     const onSubmitStudentUserFacebook = async ({ data }) => {
 

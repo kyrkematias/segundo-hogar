@@ -8,11 +8,14 @@ import { GoogleLoginButton } from "react-social-login-buttons";
 import {
   REGISTER_STUDENT_USER_WITH_SOC_NET,
   INITIAL_REGISTER_STUDENT_USER_WITH_SOC_NET,
-} from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork.js"; // Asegúrate de importar tus mutaciones
+} from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork.js";
+import { GET_STUDENT_USER_BY_ID } from "client/gql/queries/users.js";
+import { useLocation } from "wouter";
+import { paths } from "config/paths";
 
 const GoogleSignIn = () => {
   const provider = new GoogleAuthProvider();
-
+  const [_, setLocation] = useLocation();
   const [registerStudentUser] = useMutation(REGISTER_STUDENT_USER_WITH_SOC_NET);
   const [initialRegisterStudentUser] = useMutation(
     INITIAL_REGISTER_STUDENT_USER_WITH_SOC_NET
@@ -33,19 +36,19 @@ const GoogleSignIn = () => {
           created_with_sn: true,
           user_status: true,
         };
+
+        console.log("Datos del usuario:", userData);
         //TODO: REVISAR LOS CAMPOS QUE SE ENVÍAN A GQL
         // Ejecuta la mutación inicial para crear un registro en la base de datos
         await initialRegisterStudentUser({ variables: userData });
 
         // Ejecuta la mutación para registrar al usuario
         await registerStudentUser({ variables: userData });
-
-        // Muestra los datos del usuario en la consola
-        console.log("Datos del usuario:", userData);
       }
     } catch (error) {
       console.error("Error al iniciar sesión con Google:", error);
     }
+    setLocation(paths.questions);
   };
 
   useEffect(() => {

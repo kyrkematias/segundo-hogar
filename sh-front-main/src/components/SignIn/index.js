@@ -37,7 +37,6 @@ import {
   GithubLoginButton,
 } from "react-social-login-buttons";
 import GoogleSignIn from "./GoogleSignIn";
-import { useAuth } from "./AuthContext";
 
 const REDIRECT_URI = window.location.href;
 
@@ -172,8 +171,11 @@ export function SignIn() {
               <GithubLoginButton />
             </LoginSocialGithub>
             <GoogleSignIn
-              handleClick={handleSubmit(onSubmitLoggin)}
+              handleClick={handleSubmit(onSubmitLogginWithSocialNet)}
               isLoading={isFetching}
+              onReject={(err) => {
+                console.error(err);
+              }}
             />
           </Stack>
         </Box>
