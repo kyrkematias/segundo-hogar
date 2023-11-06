@@ -129,7 +129,7 @@ export function SignIn() {
             </Stack>
             <br></br>
 
-            <LoginSocialGoogle
+            {/* <LoginSocialGoogle
               scope={GOOGLE_AUTH_SCOPE}
               client_id={process.env.REACT_APP_GG_APP_ID || ""}
               redirect_uri={REDIRECT_URI}
@@ -141,7 +141,7 @@ export function SignIn() {
               }}
             >
               <GoogleLoginButton />
-            </LoginSocialGoogle>
+            </LoginSocialGoogle> */}
 
             <LoginSocialFacebook
               appId={process.env.REACT_APP_FB_APP_ID || ""}
@@ -170,9 +170,14 @@ export function SignIn() {
             >
               <GithubLoginButton />
             </LoginSocialGithub>
+            
             <GoogleSignIn
-              handleClick={handleSubmit(onSubmitLogginWithSocialNet)}
+              // handleClick={handleSubmit(onSubmitLogginWithSocialNet)}
+              redirect_uri={REDIRECT_URI}
               isLoading={isFetching}
+              onResolve={({ provider, data }) => {
+                onSubmitLogginWithSocialNet({ data, provider });
+              }}
               onReject={(err) => {
                 console.error(err);
               }}

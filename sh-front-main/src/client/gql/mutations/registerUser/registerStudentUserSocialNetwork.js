@@ -30,7 +30,7 @@ mutation InitialRegisterStudentUserSocialNetworks($lastname: String, $firstname:
     }
 `;
 
-
+// Esta mutacion es para completar el registro de un usuario que registro por redes sociales
 export const REGISTER_STUDENT_USER_WITH_SOC_NET = gql`
 mutation RegisterStudentUser($gender: String, $birth_date: date, $phone: String, $cities_id: bigint, $file_number: bigint, $careers_id: bigint, $shared: Boolean, $username: String, $bio: String, $created_with_sn: Boolean, $user_status: Boolean, $user_categories_id: bigint, $avatar: String) 
     {
