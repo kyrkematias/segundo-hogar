@@ -45,3 +45,11 @@ query GetOwnerById($id: Int) {
   }
 }
 `;
+
+export const GET_SN_VALIDATION = gql`
+  query GetSnValidation {
+    sh_users {
+      created_with_sn
+    }
+  }
+`;

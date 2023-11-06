@@ -59,13 +59,13 @@ const GoogleSignIn = () => {
 
         // Llama a tu acción de Redux para actualizar el estado de autenticación
         dispatch(signInSocialNetAction(user.email));
-
+        setLocation(paths.search);
         // Redirige según el estado de autenticación y la categoría del usuario
-        if (isAuthenticated && user_category !== USER_CATEGORIES.DEFAULT) {
-          setLocation(paths.account);
-        } else if (isAuthenticated && user_category === USER_CATEGORIES.DEFAULT) {
-          setLocation(paths.register);
-        }
+        /* if (isAuthenticated && user_category !== USER_CATEGORIES.STUDENT) {
+          setLocation(paths.search);
+        } else if (isAuthenticated && user_category === USER_CATEGORIES.STUDENT) {
+          setLocation(paths.search);
+        } */
       }
     } catch (error) {
       console.error("Error al iniciar sesión con Google:", error);
