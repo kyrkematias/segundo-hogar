@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useMutation } from "@apollo/client";
-import { AuthProvider } from "./AuthContext.jsx";
+import { AuthProvider } from "./AuthContextGoogle.jsx";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import {
   REGISTER_STUDENT_USER_WITH_SOC_NET,
@@ -59,13 +59,13 @@ const GoogleSignIn = () => {
 
         // Llama a tu acción de Redux para actualizar el estado de autenticación
         dispatch(signInSocialNetAction(user.email));
-        setLocation(paths.search);
+        setLocation(paths.questions);
         // Redirige según el estado de autenticación y la categoría del usuario
-        /* if (isAuthenticated && user_category !== USER_CATEGORIES.STUDENT) {
-          setLocation(paths.search);
-        } else if (isAuthenticated && user_category === USER_CATEGORIES.STUDENT) {
-          setLocation(paths.search);
-        } */
+        // if (isAuthenticated && user_category !== USER_CATEGORIES.STUDENT) {
+        //   setLocation(paths.search);
+        // } else if (isAuthenticated && user_category === USER_CATEGORIES.STUDENT) {
+        //   setLocation(paths.search);
+        // }
       }
     } catch (error) {
       console.error("Error al iniciar sesión con Google:", error);

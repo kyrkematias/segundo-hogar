@@ -26,17 +26,13 @@ import {
 } from "utils/validations/SignIn";
 import { SectionHeader } from "components/commons/SectionHeader";
 import { sections } from "config/sections";
-import {
-  LoginSocialGoogle,
-  LoginSocialFacebook,
-  LoginSocialGithub,
-} from "reactjs-social-login";
+import { LoginSocialFacebook, LoginSocialGithub } from "reactjs-social-login";
 import {
   FacebookLoginButton,
-  GoogleLoginButton,
   GithubLoginButton,
 } from "react-social-login-buttons";
 import GoogleSignIn from "./GoogleSignIn";
+import GitHubSignIn from "./GitHubSignIn";
 
 const REDIRECT_URI = window.location.href;
 
@@ -129,8 +125,16 @@ export function SignIn() {
             </Stack>
             <br></br>
 
-            <GoogleSignIn />
-            
+            <GoogleSignIn
+              onResolve={({ provider, data }) => {
+                onSubmitLogginWithSocialNet({ data, provider });
+              }}
+              onReject={(err) => {
+                console.log(err);
+              }}
+              redirect_uri={REDIRECT_URI}
+            />
+
             <LoginSocialFacebook
               appId={process.env.REACT_APP_FB_APP_ID || ""}
               redirect_uri={REDIRECT_URI}
@@ -144,20 +148,15 @@ export function SignIn() {
               <FacebookLoginButton />
             </LoginSocialFacebook>
 
-            <LoginSocialGithub
-              scope="user"
-              client_id={process.env.REACT_APP_GITHUB_APP_ID || ""}
-              client_secret={process.env.REACT_APP_GITHUB_APP_SECRET || ""}
-              redirect_uri={window.location.href}
+            <GitHubSignIn
               onResolve={({ provider, data }) => {
                 onSubmitLogginWithSocialNet({ data, provider });
               }}
               onReject={(err) => {
-                console.error(err);
+                console.log(err);
               }}
-            >
-              <GithubLoginButton />
-            </LoginSocialGithub>
+              redirect_uri={REDIRECT_URI}
+            />
           </Stack>
         </Box>
       </Stack>
