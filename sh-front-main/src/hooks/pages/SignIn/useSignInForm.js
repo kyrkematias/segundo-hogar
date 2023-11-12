@@ -41,10 +41,10 @@ export function useSignInForm() {
   /**************************************************************************************/
 
   useEffect(() => {
-    if (isAuthenticated && user_category != USER_CATEGORIES.DEFAULT) {
+    if (isAuthenticated && user_category !== USER_CATEGORIES.DEFAULT) {
       setLocation(paths.search);
     }
-    if (isAuthenticated && user_category == USER_CATEGORIES.DEFAULT) {
+    if (isAuthenticated && user_category === USER_CATEGORIES.DEFAULT) {
       setLocation(paths.register);
     }
   }, [isAuthenticated, user_category]);

@@ -18,6 +18,7 @@ import { RoommateProfileView } from "views/RoommateProfile";
 import { ProtectedRoute } from "components/commons/ProtectedRoute";
 import { paths } from "config/paths";
 import { FaqView } from "views/Faq";
+import { CompleteRegisterFormView } from "views/CompleteProfile";
 
 export function Router() {
   return (
@@ -32,6 +33,7 @@ export function Router() {
       <Route path={paths.tags} component={TagsView} exact />
       <Route path={paths.questions} component={QuestionsView} exact />
       <Route path={paths.faq} component={FaqView} exact />
+      <Route path={paths.completeprofile} component={CompleteRegisterFormView} exact />
       <ProtectedRoute>
         <Route path={paths.account} component={ProfileView} exact />
         <Route path={paths.publicationDetail} component={PublicationDetailView} exact />
