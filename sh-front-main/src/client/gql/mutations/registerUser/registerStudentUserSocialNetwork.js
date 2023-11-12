@@ -81,7 +81,7 @@ export const REGISTER_STUDENT_USER_WITH_SOC_NET = gql`
               }
             ],
             on_conflict: {
-              constraint: users_email_key,  # Assuming you have a unique constraint on the email column
+              constraint: users_email_key,
               update_columns: [username, bio, created_with_sn, user_status, user_categories_id, avatar]
             }
           }
