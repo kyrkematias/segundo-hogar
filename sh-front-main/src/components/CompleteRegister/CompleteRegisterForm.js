@@ -32,7 +32,6 @@ import { REGISTER_STUDENT_USER_WITH_SOC_NET } from "client/gql/mutations/registe
 
 export function CompleteRegisterForm() {
   const [registerStudentUser] = useMutation(REGISTER_STUDENT_USER_WITH_SOC_NET);
-
   const {
     register,
     handleSubmit,
@@ -84,7 +83,7 @@ export function CompleteRegisterForm() {
           avatar: "URL_del_avatar_aquí",
           lastname: data.lastname,
           firstname: data.firstname,
-          email: data.email,
+          email: data.email
         },
       });
 
