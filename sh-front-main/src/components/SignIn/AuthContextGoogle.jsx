@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       if (user) {
-        // Puedes realizar acciones adicionales aquí si es necesario
+  
       }
     } catch (error) {
       console.error('Error al iniciar sesión con Google:', error);
@@ -48,7 +48,6 @@ export function AuthProvider({ children }) {
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
       if (user) {
-        // Puedes realizar acciones adicionales aquí si es necesario
       }
     } catch (error) {
       console.error('Error al iniciar sesión con GitHub:', error);

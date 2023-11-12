@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import { Box, Flex, Switch, FormControl, FormLabel } from "@chakra-ui/react";
-import { SectionHeader } from "components/commons/SectionHeader";
-import { sections } from "config/sections";
+import { Box, Flex, FormControl } from "@chakra-ui/react";
+
 import { CompleteRegisterForm } from "./CompleteRegisterForm";
 
 export const CompleteProfileForm = () => {

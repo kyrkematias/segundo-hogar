@@ -1,5 +1,5 @@
 import React from "react";
-import { AuthProvider, useAuth } from "./AuthContextGoogle"; // Asegúrate de tener un AuthContext adecuado
+import { AuthProvider, useAuth } from "./AuthContextGoogle"; 
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useMutation } from "@apollo/client";
 import {
@@ -30,11 +30,18 @@ const GithubSignIn = () => {
     try {
       const result = await signInWithPopup(getAuth(), provider);
       const user = result.user;
+
+      const nameParts = user.displayName.split(" ");
+  
+      // Obtener el nombre y el apellido
+      const firstName = nameParts[0];
+      const lastName = nameParts[1];
+
       if (user) {
-        // Aquí deberías extraer los datos necesarios de user para pasárselos a tus mutaciones
+        // Extrae los datos necesarios de user para pasárselos a tus mutaciones
         const userData = {
-          lastname: user.lastName || "",
-          firstname: user.firstName || "",
+          lastname: lastName || "",
+          firstname: firstName || "",
           email: user.email || "",
           created_with_sn: true,
           user_status: true,
@@ -43,11 +50,13 @@ const GithubSignIn = () => {
 
         console.log("Datos del usuario:", userData);
 
+        localStorage.setItem("userData", JSON.stringify(userData));
+
         const registerResult = await initialRegisterStudentUser({
           variables: userData,
         });
 
-        dispatch(signInSocialNetAction(user.email)); // Debes pasar el email del usuario aquí
+        dispatch(signInSocialNetAction(user.email)); 
         setLocation(paths.questions);
       }
     } catch (error) {
