@@ -48,7 +48,8 @@ const GoogleSignIn = () => {
           email: user.email || "",
           created_with_sn: true,
           user_status: true,
-          file_number: 0,
+          file_number: 10,
+          user_categories_id: 2,
         };
   
         console.log("Datos del usuario:", userData);
@@ -64,7 +65,7 @@ const GoogleSignIn = () => {
             // Puedes llamar a la acción de Redux para actualizar el estado de autenticación
             dispatch(signInSocialNetAction(user.email));
             // Redirige según el estado de autenticación y la categoría del usuario
-            setLocation(paths.completeprofile);
+            setLocation(paths.search);
           } else {
             // Si el correo no está registrado, realiza el registro
             const registerResult = await initialRegisterStudentUser({
