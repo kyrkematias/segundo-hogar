@@ -76,7 +76,7 @@ const GoogleSignIn = () => {
             dispatch(signInSocialNetAction(user.email));
   
             // Redirige según el estado de autenticación y la categoría del usuario
-            setLocation(paths.completeprofile);
+            setLocation(paths.completeProfile);
           }
         } catch (error) {
           // Maneja el error de violación de unicidad aquí

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useMutation } from "@apollo/client";
+import useLocation from "wouter/use-location";
 import {
   Box,
   Flex,
@@ -29,6 +30,7 @@ import { useGetStates } from "hooks/utils/useGetStates";
 import { useGetCareers } from "hooks/utils/useGetCareers";
 import { CustomButton } from "components/commons/CustomButton";
 import { REGISTER_STUDENT_USER_WITH_SOC_NET } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
+import { paths } from "config/paths";
 
 export function CompleteRegisterForm() {
   const [registerStudentUser] = useMutation(REGISTER_STUDENT_USER_WITH_SOC_NET);
@@ -43,26 +45,28 @@ export function CompleteRegisterForm() {
   const { cities, setStateSelected } = useGetCities();
   const { careers } = useGetCareers();
 
+  const [_, setLocation] = useLocation();
+
   // Get values from localStorage
-  const storedUserData = JSON.parse(localStorage.getItem('userData')) || {};
-  const storedFirstname = storedUserData.firstname || '';
-  const storedLastname = storedUserData.lastname || '';
-  const storedEmail = storedUserData.email || '';
+  const storedUserData = JSON.parse(localStorage.getItem("userData")) || {};
+  const storedFirstname = storedUserData.firstname || "";
+  const storedLastname = storedUserData.lastname || "";
+  const storedEmail = storedUserData.email || "";
 
   // Set default values for firstname and lastname
   useEffect(() => {
     if (storedFirstname) {
-      setValue('firstname', storedFirstname);
+      setValue("firstname", storedFirstname);
     }
     if (storedLastname) {
-      setValue('lastname', storedLastname);
+      setValue("lastname", storedLastname);
     }
     if (storedEmail) {
-      setValue('email', storedEmail);
+      setValue("email", storedEmail);
     }
   }, [storedFirstname, storedLastname, storedEmail, setValue]);
 
-  console.log(storedFirstname, storedLastname, storedEmail)
+  console.log(storedFirstname, storedLastname, storedEmail);
 
   const onSubmit = async (data) => {
     try {
@@ -83,13 +87,15 @@ export function CompleteRegisterForm() {
           avatar: "URL_del_avatar_aquí",
           lastname: data.lastname,
           firstname: data.firstname,
-          email: data.email
+          email: data.email,
         },
       });
 
       console.log("Mutation result:", result);
+      setLocation(paths.questions);
     } catch (mutationError) {
       console.error("Error al realizar la mutación:", mutationError);
+      setLocation(paths.questions);
     }
   };
 
@@ -99,6 +105,18 @@ export function CompleteRegisterForm() {
         Completa tus datos antes de continuar
       </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <Flex>
+        <FormControl m={2} isInvalid={errors.numberSumary}>
+            <FormLabel>Ingresá tu email</FormLabel>
+            <Input
+              id="lastname"
+              type="text"
+              placeholder="Apellido"
+              {...register("email")}
+              isDisabled 
+            />
+          </FormControl>
+        </Flex>
         <Flex direction={["column", "column", "row", "row", "row"]}>
           <FormControl m={2} isInvalid={errors.numberSumary}>
             <FormLabel>Ingresá tu legajo</FormLabel>
@@ -130,30 +148,30 @@ export function CompleteRegisterForm() {
 
         <Flex direction={["column", "column", "row", "row", "row"]}>
           <FormControl m={2} isInvalid={errors.lastname}>
-              <FormLabel>Ingresá tu apellido</FormLabel>
-              <Input
-                id="lastname"
-                type="text"
-                placeholder="Apellido"
-                {...register("lastname", validateLastname)}
-              />
-              <FormErrorMessage>
-                {errors.lastname && errors.lastname.message}
-              </FormErrorMessage>
-            </FormControl>
+            <FormLabel>Ingresá tu apellido</FormLabel>
+            <Input
+              id="lastname"
+              type="text"
+              placeholder="Apellido"
+              {...register("lastname", validateLastname)}
+            />
+            <FormErrorMessage>
+              {errors.lastname && errors.lastname.message}
+            </FormErrorMessage>
+          </FormControl>
 
-            <FormControl m={2} isInvalid={errors.firstname}>
-              <FormLabel>Ingresá tu nombre</FormLabel>
-              <Input
-                id="firstname"
-                type="text"
-                placeholder="Nombre"
-                {...register("firstname", validateFirstname)}
-              />
-              <FormErrorMessage>
-                {errors.firstname && errors.firstname.message}
-              </FormErrorMessage>
-            </FormControl>
+          <FormControl m={2} isInvalid={errors.firstname}>
+            <FormLabel>Ingresá tu nombre</FormLabel>
+            <Input
+              id="firstname"
+              type="text"
+              placeholder="Nombre"
+              {...register("firstname", validateFirstname)}
+            />
+            <FormErrorMessage>
+              {errors.firstname && errors.firstname.message}
+            </FormErrorMessage>
+          </FormControl>
         </Flex>
 
         <Flex direction={["column", "column", "row", "row", "row"]}>

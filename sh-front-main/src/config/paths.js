@@ -18,5 +18,6 @@ export const paths = {
     forgetterpass: "/recuperar",
     members: "/integrantes",
     findRoommate: "/buscar/roommate",
-    faq: "/faq"
+    faq: "/faq",
+    completeProfile: "/completatuperfil"
   };

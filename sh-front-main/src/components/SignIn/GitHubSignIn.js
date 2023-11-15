@@ -60,11 +60,7 @@ const GithubSignIn = () => {
   
         try {
           if (isEmailRegistered) {
-            // Si el correo está registrado, inicia sesión
-            // Realiza la lógica necesaria para iniciar sesión aquí
-            // Puedes llamar a la acción de Redux para actualizar el estado de autenticación
             dispatch(signInSocialNetAction(user.email));
-            // Redirige según el estado de autenticación y la categoría del usuario
             setLocation(paths.search);
           } else {
             // Si el correo no está registrado, realiza el registro
@@ -72,11 +68,10 @@ const GithubSignIn = () => {
               variables: userData,
             });
   
-            // Llama a tu acción de Redux para actualizar el estado de autenticación
             dispatch(signInSocialNetAction(user.email));
   
             // Redirige según el estado de autenticación y la categoría del usuario
-            setLocation(paths.completeprofile);
+            setLocation(paths.completeProfile);
           }
         } catch (error) {
           // Maneja el error de violación de unicidad aquí

@@ -33,7 +33,7 @@ export function Router() {
       <Route path={paths.tags} component={TagsView} exact />
       <Route path={paths.questions} component={QuestionsView} exact />
       <Route path={paths.faq} component={FaqView} exact />
-      {/* <Route path={paths.completeprofile} component={CompleteRegisterFormView} exact /> */}
+      <Route path={paths.completeProfile} component={CompleteRegisterFormView} exact />
       <ProtectedRoute>
         <Route path={paths.account} component={ProfileView} exact />
         <Route path={paths.publicationDetail} component={PublicationDetailView} exact />
