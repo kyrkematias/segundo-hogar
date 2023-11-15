@@ -26,10 +26,17 @@ import {
 } from "utils/validations/SignIn";
 import { SectionHeader } from "components/commons/SectionHeader";
 import { sections } from "config/sections";
+<<<<<<< HEAD
 import { LoginSocialFacebook, LoginSocialGithub } from "reactjs-social-login";
 import {
   FacebookLoginButton,
   GithubLoginButton,
+=======
+import { LoginSocialFacebook, } from "reactjs-social-login";
+import {
+  FacebookLoginButton,
+  
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
 } from "react-social-login-buttons";
 import GoogleSignIn from "./GoogleSignIn";
 import GitHubSignIn from "./GitHubSignIn";

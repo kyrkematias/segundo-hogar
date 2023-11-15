@@ -21,7 +21,7 @@ import {
   AccordionIcon,
   Checkbox,
   Stack,
-  Center
+  Center,
 } from "@chakra-ui/react";
 import {
   validateIsFurnished,
@@ -30,21 +30,23 @@ import {
   validatePrice,
   validateFullname,
   validatePhone,
-  validateEmailSignUp
+  validateEmailSignUp,
 } from "utils/validations/PublicationRegister";
 import { CustomButton } from "components/commons/CustomButton";
 import { useRegisterPublicationForm } from "hooks/pages/PublicationRegister/usePublicationRegister";
+import { REGISTER_PUBLICATION } from "client/gql/mutations/registerPublication/registerPublication";
+import { useMutation } from "@apollo/client";
+import { useDispatch } from "react-redux";
 
 export function PublicationRegisterForm() {
-  const {
-    register,
-    handleSubmit,
-    errors,
-    isSubmitting,
-    errorsCaptcha,
-    onSubmit,
-    onChange,
-  } = useRegisterPublicationForm();
+  const { register, handleSubmit, errors, isSubmitting, onSubmit } =
+    useRegisterPublicationForm();
+
+  const dispatch = useDispatch;
+
+  const [registerPublication, { loading }] = useMutation(REGISTER_PUBLICATION);
+
+ 
 
   return (
     <Box my={8} textAlign="left">
@@ -209,13 +211,7 @@ export function PublicationRegisterForm() {
 
               <FormControl mt={4} isInvalid={errors.amount}>
                 <FormLabel>Cantidad de inquilinos: </FormLabel>
-                <NumberInput
-                  w={20}
-                  size="sm"
-                  defaultValue={1}
-                  min={1}
-                  max={20}
-                >
+                <NumberInput w={20} size="sm" defaultValue={1} min={1} max={20}>
                   <NumberInputField {...register("amount")} />
                   <NumberInputStepper>
                     <NumberIncrementStepper />
@@ -230,13 +226,13 @@ export function PublicationRegisterForm() {
           </AccordionItem>
         </Accordion>
 
-        <FormControl mt={16} isInvalid={errorsCaptcha.message}>
+        {/* <FormControl mt={16} isInvalid={errorsCaptcha.message}>
           <Center d="flex" flexDir="column">
             <FormErrorMessage>
               {errorsCaptcha && errorsCaptcha.message}
             </FormErrorMessage>
           </Center>
-        </FormControl>
+        </FormControl> */}
 
         <Center m={8}>
           <CustomButton

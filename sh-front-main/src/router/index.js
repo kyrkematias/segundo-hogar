@@ -33,7 +33,11 @@ export function Router() {
       <Route path={paths.tags} component={TagsView} exact />
       <Route path={paths.questions} component={QuestionsView} exact />
       <Route path={paths.faq} component={FaqView} exact />
+<<<<<<< HEAD
       <Route path={paths.completeprofile} component={CompleteRegisterFormView} exact />
+=======
+      <Route path={paths.completeProfile} component={CompleteRegisterFormView} exact />
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
       <ProtectedRoute>
         <Route path={paths.account} component={ProfileView} exact />
         <Route path={paths.publicationDetail} component={PublicationDetailView} exact />

@@ -48,7 +48,12 @@ const GoogleSignIn = () => {
           email: user.email || "",
           created_with_sn: true,
           user_status: true,
+<<<<<<< HEAD
           file_number: 0,
+=======
+          file_number: 10,
+          user_categories_id: 2,
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
         };
   
         console.log("Datos del usuario:", userData);
@@ -64,7 +69,11 @@ const GoogleSignIn = () => {
             // Puedes llamar a la acción de Redux para actualizar el estado de autenticación
             dispatch(signInSocialNetAction(user.email));
             // Redirige según el estado de autenticación y la categoría del usuario
+<<<<<<< HEAD
             setLocation(paths.completeprofile);
+=======
+            setLocation(paths.search);
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
           } else {
             // Si el correo no está registrado, realiza el registro
             const registerResult = await initialRegisterStudentUser({
@@ -75,7 +84,11 @@ const GoogleSignIn = () => {
             dispatch(signInSocialNetAction(user.email));
   
             // Redirige según el estado de autenticación y la categoría del usuario
+<<<<<<< HEAD
             setLocation(paths.completeprofile);
+=======
+            setLocation(paths.completeProfile);
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
           }
         } catch (error) {
           // Maneja el error de violación de unicidad aquí

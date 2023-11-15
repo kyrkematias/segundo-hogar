@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const INITIAL_REGISTER_STUDENT_USER_WITH_SOC_NET = gql`
 mutation InitialRegisterStudentUserSocialNetworks($lastname: String, $firstname: String, 
-  $email: String, $created_with_sn: Boolean, $user_status: Boolean)
+  $email: String, $created_with_sn: Boolean, $user_status: Boolean, $user_categories_id: bigint)
     {
       insert_sh_persons_one(object: 
         {
@@ -14,6 +14,7 @@ mutation InitialRegisterStudentUserSocialNetworks($lastname: String, $firstname:
                 email: $email,
                 created_with_sn: $created_with_sn,
                 user_status: $user_status
+                user_categories_id: $user_categories_id
               }
             ]
           }
@@ -25,6 +26,7 @@ mutation InitialRegisterStudentUserSocialNetworks($lastname: String, $firstname:
           id
           email
           created_with_sn
+          user_categories_id
         }
       }
     }

@@ -27,13 +27,13 @@ import { useGetCities } from "hooks/utils/useGetCities";
 import { CustomButton } from "components/commons/CustomButton";
 
 export function ProfileForm() {
-
   const { user } = useGetUser();
   const { careers } = useGetCareers();
   const { cities, setStateSelected } = useGetCities();
   const { states } = useGetStates();
 
-  const { register, handleSubmit, onSubmit, onCancel, errors, isSubmitting } = useProfileForm();
+  const { register, handleSubmit, onSubmit, onCancel, errors, isSubmitting } =
+    useProfileForm();
 
   return (
     <>
@@ -52,7 +52,9 @@ export function ProfileForm() {
               direction={["column", "column", "column", "column", "column"]}
             >
               <Text fontSize="2xl">{`${user?.person.lastname}, ${user?.person.firstname}`}</Text>
-              <Text fontSize="lg">{`Legajo: ${user?.person.students.at(0).file_number}`}</Text>
+              <Text fontSize="lg">{`Legajo: ${
+                user?.person.students?.[0]?.file_number || "N/A"
+              }`}</Text>
               <Text fontSize="lg">{`@${user?.username}`}</Text>
               <Text fontSize="lg">{user?.email}</Text>
             </Flex>
@@ -68,7 +70,6 @@ export function ProfileForm() {
             </Flex>
 
             <Flex direction={["column", "column", "row", "row", "row"]}>
-
               <FormControl m={2}>
                 <FormLabel>Compartir</FormLabel>
                 <Select
@@ -78,7 +79,12 @@ export function ProfileForm() {
                   _focus={{ background: "none" }}
                 >
                   <option value="No">No</option>
-                  <option value="Si" selected={user?.person.students.at(0).shared}>Si</option>
+                  <option
+                    value="Si"
+                    selected={user?.person.students?.[0]?.shared || false}
+                  >
+                    Si
+                  </option>
                 </Select>
               </FormControl>
 
@@ -93,9 +99,13 @@ export function ProfileForm() {
                 >
                   {careers?.map((career) => {
                     return (
-                      <option key={career.id} value={career.id} selected={user?.person.students.at(0).career.id === career.id}>
-                        {career.name}
-                      </option>
+                      <option
+                        key={career.id}
+                        value={career.id}
+                        selected={
+                          user?.person.students?.[0]?.career?.id === career.id
+                        }
+                      />
                     );
                   })}
                 </Select>
@@ -103,7 +113,6 @@ export function ProfileForm() {
                   {errors.career && errors.career.message}
                 </FormErrorMessage>
               </FormControl>
-
             </Flex>
 
             <Flex direction={["column", "column", "row", "row", "row"]} w="50%">
@@ -115,9 +124,24 @@ export function ProfileForm() {
                   {...register("gender", validateGender)}
                   _focus={{ background: "none" }}
                 >
-                  <option value="Male" selected={user?.person.gender === 'male'}>Masculino</option>
-                  <option value="Female" selected={user?.person.gender === 'female'}>Femenino</option>
-                  <option value="Other" selected={user?.person.gender === 'other'}>Otro</option>
+                  <option
+                    value="Male"
+                    selected={user?.person.gender === "male"}
+                  >
+                    Masculino
+                  </option>
+                  <option
+                    value="Female"
+                    selected={user?.person.gender === "female"}
+                  >
+                    Femenino
+                  </option>
+                  <option
+                    value="Other"
+                    selected={user?.person.gender === "other"}
+                  >
+                    Otro
+                  </option>
                 </Select>
                 <FormErrorMessage>
                   {errors.gender && errors.gender.message}
@@ -137,7 +161,14 @@ export function ProfileForm() {
                 >
                   {states?.map((state) => {
                     return (
-                      <option value={state.id} key={state.id} selected={user?.person.students.at(0).city.state_id === state.id}>
+                      <option
+                        value={state.id}
+                        key={state.id}
+                        selected={
+                          user?.person?.students?.[0]?.state?.id === state.id &&
+                          user?.person?.students?.[0]?.state !== undefined
+                        }
+                      >
                         {state.name}
                       </option>
                     );
@@ -158,7 +189,14 @@ export function ProfileForm() {
                 >
                   {cities?.map((city) => {
                     return (
-                      <option value={city.id} key={city.id} selected={user?.person.students.at(0).city.id === city.id}>
+                      <option
+                        value={city.id}
+                        key={city.id}
+                        selected={
+                          user?.person?.students?.[0]?.city?.id === city.id &&
+                          user?.person?.students?.[0]?.city !== undefined
+                        }
+                      >
                         {city.name}
                       </option>
                     );
@@ -187,7 +225,6 @@ export function ProfileForm() {
                 </FormErrorMessage>
               </FormControl>
             </Flex>
-
           </Box>
         </form>
       </Flex>

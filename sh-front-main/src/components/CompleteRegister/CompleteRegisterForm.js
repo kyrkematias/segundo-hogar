@@ -1,5 +1,9 @@
 import { useEffect } from "react";
 import { useMutation } from "@apollo/client";
+<<<<<<< HEAD
+=======
+import useLocation from "wouter/use-location";
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
 import {
   Box,
   Flex,
@@ -29,6 +33,10 @@ import { useGetStates } from "hooks/utils/useGetStates";
 import { useGetCareers } from "hooks/utils/useGetCareers";
 import { CustomButton } from "components/commons/CustomButton";
 import { REGISTER_STUDENT_USER_WITH_SOC_NET } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
+<<<<<<< HEAD
+=======
+import { paths } from "config/paths";
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
 
 export function CompleteRegisterForm() {
   const [registerStudentUser] = useMutation(REGISTER_STUDENT_USER_WITH_SOC_NET);
@@ -43,15 +51,26 @@ export function CompleteRegisterForm() {
   const { cities, setStateSelected } = useGetCities();
   const { careers } = useGetCareers();
 
+<<<<<<< HEAD
   // Get values from localStorage
   const storedUserData = JSON.parse(localStorage.getItem('userData')) || {};
   const storedFirstname = storedUserData.firstname || '';
   const storedLastname = storedUserData.lastname || '';
   const storedEmail = storedUserData.email || '';
+=======
+  const [_, setLocation] = useLocation();
+
+  // Get values from localStorage
+  const storedUserData = JSON.parse(localStorage.getItem("userData")) || {};
+  const storedFirstname = storedUserData.firstname || "";
+  const storedLastname = storedUserData.lastname || "";
+  const storedEmail = storedUserData.email || "";
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
 
   // Set default values for firstname and lastname
   useEffect(() => {
     if (storedFirstname) {
+<<<<<<< HEAD
       setValue('firstname', storedFirstname);
     }
     if (storedLastname) {
@@ -63,6 +82,19 @@ export function CompleteRegisterForm() {
   }, [storedFirstname, storedLastname, storedEmail, setValue]);
 
   console.log(storedFirstname, storedLastname, storedEmail)
+=======
+      setValue("firstname", storedFirstname);
+    }
+    if (storedLastname) {
+      setValue("lastname", storedLastname);
+    }
+    if (storedEmail) {
+      setValue("email", storedEmail);
+    }
+  }, [storedFirstname, storedLastname, storedEmail, setValue]);
+
+  console.log(storedFirstname, storedLastname, storedEmail);
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
 
   const onSubmit = async (data) => {
     try {
@@ -83,13 +115,24 @@ export function CompleteRegisterForm() {
           avatar: "URL_del_avatar_aquí",
           lastname: data.lastname,
           firstname: data.firstname,
+<<<<<<< HEAD
           email: data.email
+=======
+          email: data.email,
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
         },
       });
 
       console.log("Mutation result:", result);
+<<<<<<< HEAD
     } catch (mutationError) {
       console.error("Error al realizar la mutación:", mutationError);
+=======
+      setLocation(paths.questions);
+    } catch (mutationError) {
+      console.error("Error al realizar la mutación:", mutationError);
+      setLocation(paths.questions);
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
     }
   };
 
@@ -99,6 +142,21 @@ export function CompleteRegisterForm() {
         Completa tus datos antes de continuar
       </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
+<<<<<<< HEAD
+=======
+        <Flex>
+        <FormControl m={2} isInvalid={errors.numberSumary}>
+            <FormLabel>Ingresá tu email</FormLabel>
+            <Input
+              id="lastname"
+              type="text"
+              placeholder="Apellido"
+              {...register("email")}
+              isDisabled 
+            />
+          </FormControl>
+        </Flex>
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
         <Flex direction={["column", "column", "row", "row", "row"]}>
           <FormControl m={2} isInvalid={errors.numberSumary}>
             <FormLabel>Ingresá tu legajo</FormLabel>
@@ -130,6 +188,7 @@ export function CompleteRegisterForm() {
 
         <Flex direction={["column", "column", "row", "row", "row"]}>
           <FormControl m={2} isInvalid={errors.lastname}>
+<<<<<<< HEAD
               <FormLabel>Ingresá tu apellido</FormLabel>
               <Input
                 id="lastname"
@@ -154,6 +213,32 @@ export function CompleteRegisterForm() {
                 {errors.firstname && errors.firstname.message}
               </FormErrorMessage>
             </FormControl>
+=======
+            <FormLabel>Ingresá tu apellido</FormLabel>
+            <Input
+              id="lastname"
+              type="text"
+              placeholder="Apellido"
+              {...register("lastname", validateLastname)}
+            />
+            <FormErrorMessage>
+              {errors.lastname && errors.lastname.message}
+            </FormErrorMessage>
+          </FormControl>
+
+          <FormControl m={2} isInvalid={errors.firstname}>
+            <FormLabel>Ingresá tu nombre</FormLabel>
+            <Input
+              id="firstname"
+              type="text"
+              placeholder="Nombre"
+              {...register("firstname", validateFirstname)}
+            />
+            <FormErrorMessage>
+              {errors.firstname && errors.firstname.message}
+            </FormErrorMessage>
+          </FormControl>
+>>>>>>> 743622a744336222d343dc70846a4cc59083077a
         </Flex>
 
         <Flex direction={["column", "column", "row", "row", "row"]}>
