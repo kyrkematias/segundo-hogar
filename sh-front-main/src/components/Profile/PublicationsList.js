@@ -1,4 +1,5 @@
-import React from "react";
+// En el archivo PublicationsList.js
+import {useState} from "react";
 import {
   Table,
   Thead,
@@ -13,21 +14,24 @@ import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
 import { EditIcon, ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
-import { useIsPublished } from "hooks/utils/useIsPublished";
 import { setOwnershipId } from "store/slices/ownershipSlice";
+import { EditPublicationModal } from "components/PublicationRegister/EditPublicationModal";
 
 export function PublicationsList() {
   const [_, setLocation] = useLocation();
-  const { ownerships } = useGetOwnershipsByOwnerId();
-
+  const { ownerships, deleteOwnership } = useGetOwnershipsByOwnerId();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPublicationId, setSelectedPublicationId] = useState(null);
   const dispatch = useDispatch();
-
-  const handleDelete = (id) => {
-    console.log(id);
-  };
-
+  
   const handleEdit = (id) => {
     console.log(id);
+    setSelectedPublicationId(id);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (id) => {
+    deleteOwnership({ variables: { id: id } });
   };
 
   const handlePublish = (id) => {
@@ -76,6 +80,13 @@ export function PublicationsList() {
           </Tbody>
         </Table>
       </TableContainer>
+      {isModalOpen && (
+        <EditPublicationModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          publicationId={selectedPublicationId}
+        />
+      )}
     </>
   );
 }

@@ -1,35 +1,39 @@
 import { gql } from "@apollo/client";
 
 export const INITIAL_REGISTER_STUDENT_USER_WITH_SOC_NET = gql`
-mutation InitialRegisterStudentUserSocialNetworks($lastname: String, $firstname: String, 
-  $email: String, $created_with_sn: Boolean, $user_status: Boolean, $user_categories_id: bigint)
-    {
-      insert_sh_persons_one(object: 
-        {
-          lastname: $lastname,
-          firstname: $firstname,
-          users: {
-            data: [
-              {
-                email: $email,
-                created_with_sn: $created_with_sn,
-                user_status: $user_status
-                user_categories_id: $user_categories_id
-              }
-            ]
-          }
-        }
-      )
-      {
-        id
-        users {
-          id
-          email
-          created_with_sn
-          user_categories_id
+  mutation InitialRegisterStudentUserSocialNetworks(
+    $lastname: String
+    $firstname: String
+    $email: String
+    $created_with_sn: Boolean
+    $user_status: Boolean
+    $user_categories_id: bigint
+  ) {
+    insert_sh_persons_one(
+      object: {
+        lastname: $lastname
+        firstname: $firstname
+        users: {
+          data: [
+            {
+              email: $email
+              created_with_sn: $created_with_sn
+              user_status: $user_status
+              user_categories_id: $user_categories_id
+            }
+          ]
         }
       }
+    ) {
+      id
+      users {
+        id
+        email
+        created_with_sn
+        user_categories_id
+      }
     }
+  }
 `;
 
 // Esta mutacion es para completar el registro de un usuario que registro por redes sociales
@@ -81,10 +85,17 @@ export const REGISTER_STUDENT_USER_WITH_SOC_NET = gql`
                 avatar: $avatar
                 email: $email
               }
-            ],
+            ]
             on_conflict: {
-              constraint: users_email_key,
-              update_columns: [username, bio, created_with_sn, user_status, user_categories_id, avatar]
+              constraint: users_email_key
+              update_columns: [
+                username
+                bio
+                created_with_sn
+                user_status
+                user_categories_id
+                avatar
+              ]
             }
           }
         }
@@ -123,4 +134,3 @@ export const REGISTER_STUDENT_USER_WITH_SOC_NET = gql`
     }
   }
 `;
-

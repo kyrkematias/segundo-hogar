@@ -14,6 +14,6 @@ export function useGetUser() {
     return {
         loading,
         error,
-        user: user?.sh_users.at(0)
+        user: user?.sh_users?.[0]
     };
 }

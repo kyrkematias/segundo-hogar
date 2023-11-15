@@ -34,7 +34,7 @@ export function ProfileForm() {
 
   const { register, handleSubmit, onSubmit, onCancel, errors, isSubmitting } =
     useProfileForm();
-
+    console.log("Data from GET_STUDENT_USER_BY_ID:", user);
   return (
     <>
       <Flex justifyContent="center">
@@ -53,7 +53,7 @@ export function ProfileForm() {
             >
               <Text fontSize="2xl">{`${user?.person.lastname}, ${user?.person.firstname}`}</Text>
               <Text fontSize="lg">{`Legajo: ${
-                user?.person.students?.[0]?.file_number || "N/A"
+                user?.person.students?.[0]?.file_number || "-"
               }`}</Text>
               <Text fontSize="lg">{`@${user?.username}`}</Text>
               <Text fontSize="lg">{user?.email}</Text>

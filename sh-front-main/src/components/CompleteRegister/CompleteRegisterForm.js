@@ -92,10 +92,10 @@ export function CompleteRegisterForm() {
       });
 
       console.log("Mutation result:", result);
-      setLocation(paths.questions);
+      setLocation('http://localhost:3001/preguntas');
     } catch (mutationError) {
       console.error("Error al realizar la mutación:", mutationError);
-      setLocation(paths.questions);
+      setLocation('http://localhost:3001/preguntas');
     }
   };
 
