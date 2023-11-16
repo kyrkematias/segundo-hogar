@@ -26,11 +26,8 @@ import {
 } from "utils/validations/SignIn";
 import { SectionHeader } from "components/commons/SectionHeader";
 import { sections } from "config/sections";
-import { LoginSocialFacebook, } from "reactjs-social-login";
-import {
-  FacebookLoginButton,
-  
-} from "react-social-login-buttons";
+import { LoginSocialFacebook } from "reactjs-social-login";
+import { FacebookLoginButton } from "react-social-login-buttons";
 import GoogleSignIn from "./GoogleSignIn";
 import GitHubSignIn from "./GitHubSignIn";
 

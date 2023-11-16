@@ -87,15 +87,15 @@ export function CompleteRegisterForm() {
           avatar: "URL_del_avatar_aquí",
           lastname: data.lastname,
           firstname: data.firstname,
-          email: data.email,
+          email: data.email
         },
       });
 
       console.log("Mutation result:", result);
-      setLocation('http://localhost:3001/preguntas');
+      setLocation(paths.questions);
     } catch (mutationError) {
       console.error("Error al realizar la mutación:", mutationError);
-      setLocation('http://localhost:3001/preguntas');
+      setLocation(paths.questions);
     }
   };
 
@@ -148,30 +148,30 @@ export function CompleteRegisterForm() {
 
         <Flex direction={["column", "column", "row", "row", "row"]}>
           <FormControl m={2} isInvalid={errors.lastname}>
-            <FormLabel>Ingresá tu apellido</FormLabel>
-            <Input
-              id="lastname"
-              type="text"
-              placeholder="Apellido"
-              {...register("lastname", validateLastname)}
-            />
-            <FormErrorMessage>
-              {errors.lastname && errors.lastname.message}
-            </FormErrorMessage>
-          </FormControl>
+              <FormLabel>Ingresá tu apellido</FormLabel>
+              <Input
+                id="lastname"
+                type="text"
+                placeholder="Apellido"
+                {...register("lastname", validateLastname)}
+              />
+              <FormErrorMessage>
+                {errors.lastname && errors.lastname.message}
+              </FormErrorMessage>
+            </FormControl>
 
-          <FormControl m={2} isInvalid={errors.firstname}>
-            <FormLabel>Ingresá tu nombre</FormLabel>
-            <Input
-              id="firstname"
-              type="text"
-              placeholder="Nombre"
-              {...register("firstname", validateFirstname)}
-            />
-            <FormErrorMessage>
-              {errors.firstname && errors.firstname.message}
-            </FormErrorMessage>
-          </FormControl>
+            <FormControl m={2} isInvalid={errors.firstname}>
+              <FormLabel>Ingresá tu nombre</FormLabel>
+              <Input
+                id="firstname"
+                type="text"
+                placeholder="Nombre"
+                {...register("firstname", validateFirstname)}
+              />
+              <FormErrorMessage>
+                {errors.firstname && errors.firstname.message}
+              </FormErrorMessage>
+            </FormControl>
         </Flex>
 
         <Flex direction={["column", "column", "row", "row", "row"]}>

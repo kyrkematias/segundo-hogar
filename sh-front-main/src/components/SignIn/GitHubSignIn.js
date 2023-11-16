@@ -32,7 +32,7 @@ const GithubSignIn = () => {
     try {
       const result = await signInWithPopup(getAuth(), provider);
       const user = result.user;
-  
+
       // Dividir el nombre completo por el espacio
       const nameParts = user.displayName.split(" ");
   
