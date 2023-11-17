@@ -5,7 +5,6 @@ import { useMutation, useApolloClient } from "@apollo/client";
 import { AuthProvider } from "./AuthContextGoogle.jsx";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import {
-  REGISTER_STUDENT_USER_WITH_SOC_NET,
   INITIAL_REGISTER_STUDENT_USER_WITH_SOC_NET,
 } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork.js";
 import { useLocation } from "wouter";
@@ -14,15 +13,13 @@ import { signInSocialNetAction } from "store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginWithSocialNet } from "hooks/pages/SignIn/useLoginWithSocialNet.js";
 import { authSelector } from "store/slices/authSlice";
-import { USER_CATEGORIES } from "const";
-import { GET_USER_BY_EMAIL, GET_USER_STATUS_BY_EMAIL } from "client/gql/queries/users";
+import { GET_USER_BY_EMAIL } from "client/gql/queries/users";
 
 
 const GoogleSignIn = () => {
   const { onSubmitLogginWithSocialNet } = useLoginWithSocialNet();
   const provider = new GoogleAuthProvider();
   const [_, setLocation] = useLocation();
-  const [registerStudentUser] = useMutation(REGISTER_STUDENT_USER_WITH_SOC_NET);
   const [initialRegisterStudentUser] = useMutation(
     INITIAL_REGISTER_STUDENT_USER_WITH_SOC_NET
   );
@@ -57,13 +54,15 @@ const GoogleSignIn = () => {
         };
   
         console.log("Datos del usuario:", userData);
+        console.log("Mail del usuario:", user.email);
   
         localStorage.setItem("userData", JSON.stringify(userData));
-        console.log(user.mail);
-        // Verificar si el correo electrónico ya está registrado
-        const isEmailRegistered = await checkIfEmailRegistered(user.email);
+        console.log(user.email);
 
-        onSubmitLogginWithSocialNet({ data: userData, provider: "google" });
+        // Verificar si el correo electrónico ya está registrado
+        // onSubmitLogginWithSocialNet({ data: userData, provider: "google" });
+
+        const isEmailRegistered = await checkIfEmailRegistered(user.email);
         try {
           console.log("el user esta registrado?" + isEmailRegistered)
           if (isEmailRegistered) {
@@ -75,7 +74,7 @@ const GoogleSignIn = () => {
             const registerResult = await initialRegisterStudentUser({
               variables: userData,
             });
-  
+
             // Llama a tu acción de Redux para actualizar el estado de autenticación
             dispatch(signInSocialNetAction(user.email));
             console.log("está registrando")
@@ -113,13 +112,15 @@ const GoogleSignIn = () => {
   // Función para verificar si el correo electrónico ya está registrado
   const checkIfEmailRegistered = async (email) => {
     try {
+      console.log("mail que llega:" + email)
       const { data } = await client.query({
         query: GET_USER_BY_EMAIL,
-        variables: {
-          email: email, // Puedes cambiar esto dependiendo de cómo esté estructurada tu consulta
-        },
+        variables: { email },
+        fetchPolicy: 'no-cache',
       });
 
+      console.log(data)
+      console.log("existe person? ", data?.sh_users.length > 0)
       return data?.sh_users.length > 0; // Devuelve true si el correo está registrado, false si no lo está
     } catch (error) {
       console.error("Error al verificar el correo electrónico:", error);

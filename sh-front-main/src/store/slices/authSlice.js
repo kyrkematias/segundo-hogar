@@ -111,6 +111,7 @@ export const signInSocialNetAction = (data) => async (dispatch) => {
 export const signOutAction = () => async (dispatch) => {
   dispatch(authLoading());
   dispatch(successSignOut());
+  dispatch(clearState());
 };
 
 export default authSlice.reducer;

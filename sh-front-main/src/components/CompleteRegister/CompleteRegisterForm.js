@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useApolloClient, useQuery } from "@apollo/client";
 import useLocation from "wouter/use-location";
 import {
   Box,
@@ -29,11 +29,12 @@ import { useGetCities } from "hooks/utils/useGetCities";
 import { useGetStates } from "hooks/utils/useGetStates";
 import { useGetCareers } from "hooks/utils/useGetCareers";
 import { CustomButton } from "components/commons/CustomButton";
-import { REGISTER_STUDENT_USER_WITH_SOC_NET } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
+import { REGISTER_STUDENT_USER_WITH_SOC_NET, UPDATE_STUDENT_USER_WITH_SOC_NET, GET_PE } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
+import { GET_PERSON_ID_BY_USER_EMAIL } from "client/gql/queries/users";
 import { paths } from "config/paths";
 
 export function CompleteRegisterForm() {
-  const [registerStudentUser] = useMutation(REGISTER_STUDENT_USER_WITH_SOC_NET);
+  const [registerStudentUser] = useMutation(UPDATE_STUDENT_USER_WITH_SOC_NET);
   const {
     register,
     handleSubmit,
@@ -44,7 +45,8 @@ export function CompleteRegisterForm() {
   const { states } = useGetStates();
   const { cities, setStateSelected } = useGetCities();
   const { careers } = useGetCareers();
-
+  // apollo client with void cache
+  const client = useApolloClient();
   const [_, setLocation] = useLocation();
 
   // Get values from localStorage
@@ -69,7 +71,22 @@ export function CompleteRegisterForm() {
   console.log(storedFirstname, storedLastname, storedEmail);
 
   const onSubmit = async (data) => {
+    
     try {
+      // get person id by user email
+      console.log("Completar perfil data.email: " + data.email)
+      const personIdData = await client.query({
+        query: GET_PERSON_ID_BY_USER_EMAIL,
+        variables: {
+          email: data.email,
+        },
+        fetchPolicy: 'no-cache',
+      });
+
+      console.log("Person id data:")
+      console.log(personIdData);
+      console.log(personIdData.data.sh_users[0].persons_id);
+
       const result = await registerStudentUser({
         variables: {
           gender: data.gender,
@@ -87,7 +104,8 @@ export function CompleteRegisterForm() {
           avatar: "URL_del_avatar_aquí",
           lastname: data.lastname,
           firstname: data.firstname,
-          email: data.email
+          email: data.email,
+          id: personIdData.data.sh_users[0].persons_id,
         },
       });
 
