@@ -10,9 +10,9 @@ export function QuestionsView() {
 
     const { isAuthenticated, user_category } = useRedirect();
 
-    if (isAuthenticated && user_category != USER_CATEGORIES.DEFAULT) {
-        setLocation(paths.search);
-    }
+    // if (isAuthenticated && user_category != USER_CATEGORIES.DEFAULT) {
+    //     setLocation(paths.search);
+    // }
 
     return <Questions />
 }
