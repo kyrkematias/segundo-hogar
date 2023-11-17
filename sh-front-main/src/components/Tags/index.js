@@ -13,6 +13,8 @@ import { CustomButton } from "components/commons/CustomButton";
 import { SectionHeader } from "components/commons/SectionHeader";
 import { sections } from "config/sections";
 import { createRelationsAction } from "store/slices/recommSlice";
+import { useLocation } from "wouter";
+import { paths } from "config/paths";
 
 const REGISTAR = "Registrar";
 const GUARDAR = "Guardar";
@@ -24,6 +26,9 @@ const musicGenresIds = [24, 25, 26, 27, 28, 29, 30];
 const hobbiesids = [31, 32, 33, 34, 35, 36, 37];
 
 export function Tags({ fromPage }) {
+
+    const [_, setLocation] = useLocation();
+
     const dispatch = useDispatch();
 
     const [selectedTags, setSelectedTags] = useState([]);
@@ -71,6 +76,7 @@ export function Tags({ fromPage }) {
         };
 
         dispatch(createRelationsAction(body));
+        setLocation(paths.landing);
     }
 
     const { tags } = sections;

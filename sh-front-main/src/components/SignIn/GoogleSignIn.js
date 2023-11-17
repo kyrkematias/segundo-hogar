@@ -15,7 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLoginWithSocialNet } from "hooks/pages/SignIn/useLoginWithSocialNet.js";
 import { authSelector } from "store/slices/authSlice";
 import { USER_CATEGORIES } from "const";
-import { GET_STUDENT_USER_BY_ID } from "client/gql/queries/users";
+import { GET_USER_BY_EMAIL, GET_USER_STATUS_BY_EMAIL } from "client/gql/queries/users";
+
 
 const GoogleSignIn = () => {
   const { onSubmitLogginWithSocialNet } = useLoginWithSocialNet();
@@ -25,6 +26,7 @@ const GoogleSignIn = () => {
   const [initialRegisterStudentUser] = useMutation(
     INITIAL_REGISTER_STUDENT_USER_WITH_SOC_NET
   );
+
 
   const dispatch = useDispatch();
   const { isAuthenticated, user_category } = useSelector(authSelector);
@@ -49,25 +51,26 @@ const GoogleSignIn = () => {
           firstname: firstName || "",
           email: user.email || "",
           created_with_sn: true,
-          user_status: true,
+          user_status: true, 
           file_number: 0,
-          // user_categories_id: 2,
+          user_categories_id: 2,
         };
   
         console.log("Datos del usuario:", userData);
   
         localStorage.setItem("userData", JSON.stringify(userData));
+        console.log(user.mail);
         // Verificar si el correo electrónico ya está registrado
         const isEmailRegistered = await checkIfEmailRegistered(user.email);
+
         onSubmitLogginWithSocialNet({ data: userData, provider: "google" });
         try {
+          console.log("el user esta registrado?" + isEmailRegistered)
           if (isEmailRegistered) {
-            
             dispatch(signInSocialNetAction(user.email));
-            // Redirige según el estado de autenticación y la categoría del usuario
-            setLocation(paths.completeProfile);
-            console.log("está logeando")
-          } else {
+            setLocation(paths.search);
+          } 
+          else {
             // Si el correo no está registrado, realiza el registro
             const registerResult = await initialRegisterStudentUser({
               variables: userData,
@@ -111,9 +114,9 @@ const GoogleSignIn = () => {
   const checkIfEmailRegistered = async (email) => {
     try {
       const { data } = await client.query({
-        query: GET_STUDENT_USER_BY_ID,
+        query: GET_USER_BY_EMAIL,
         variables: {
-          id: email, // Puedes cambiar esto dependiendo de cómo esté estructurada tu consulta
+          email: email, // Puedes cambiar esto dependiendo de cómo esté estructurada tu consulta
         },
       });
 

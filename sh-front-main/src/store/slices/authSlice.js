@@ -98,6 +98,7 @@ export const signInSocialNetAction = (data) => async (dispatch) => {
 
     if (statusCode === 200) {
       dispatch(successSignInWithSocialNet(res));
+      console.log("signInSocialNetAction con 200")
     }
     if (statusCode === 400 || statusCode === 401) {
       dispatch(authFailed(res));

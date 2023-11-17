@@ -83,7 +83,7 @@ export function CompleteRegisterForm() {
           bio: "Información de biografía aquí",
           created_with_sn: true,
           user_status: true,
-          // user_categories_id: 2,
+          user_categories_id: 2,
           avatar: "URL_del_avatar_aquí",
           lastname: data.lastname,
           firstname: data.firstname,
