@@ -75,6 +75,7 @@ export const signInAction = (data) => async (dispatch) => {
     const statusCode = response.status;
     const res = await response.json();
     res.user = jwt_decode(res.data);
+    console.log("sdasda")
 
     if (statusCode === 200) {
       dispatch(successSignIn(res));

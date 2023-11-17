@@ -91,8 +91,8 @@ export function useLoginWithSocialNet() {
   /**************************************************************************************/
 
   const onSubmitLogginWithSocialNet = ({ data, provider }) => {
-    /* if (AUTH_PROVIDERS.GOOGLE === provider)
-            onSubmitStudentUserGoogle({ data }); */
+    // if (AUTH_PROVIDERS.GOOGLE === provider)
+    //         onSubmitStudentUserGoogle({ data });
 
     if (AUTH_PROVIDERS.FACEBOOK === provider)
       onSubmitStudentUserFacebook({ data });

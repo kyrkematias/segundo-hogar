@@ -12,11 +12,13 @@ import { useLocation } from "wouter";
 import { paths } from "config/paths";
 import { signInSocialNetAction } from "store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useLoginWithSocialNet } from "hooks/pages/SignIn/useLoginWithSocialNet.js";
 import { authSelector } from "store/slices/authSlice";
 import { USER_CATEGORIES } from "const";
 import { GET_STUDENT_USER_BY_ID } from "client/gql/queries/users";
 
 const GoogleSignIn = () => {
+  const { onSubmitLogginWithSocialNet } = useLoginWithSocialNet();
   const provider = new GoogleAuthProvider();
   const [_, setLocation] = useLocation();
   const [registerStudentUser] = useMutation(REGISTER_STUDENT_USER_WITH_SOC_NET);
@@ -49,6 +51,7 @@ const GoogleSignIn = () => {
           created_with_sn: true,
           user_status: true,
           file_number: 0,
+          // user_categories_id: 2,
         };
   
         console.log("Datos del usuario:", userData);
@@ -56,15 +59,14 @@ const GoogleSignIn = () => {
         localStorage.setItem("userData", JSON.stringify(userData));
         // Verificar si el correo electrónico ya está registrado
         const isEmailRegistered = await checkIfEmailRegistered(user.email);
-  
+        onSubmitLogginWithSocialNet({ data: userData, provider: "google" });
         try {
           if (isEmailRegistered) {
-            // Si el correo está registrado, inicia sesión
-            // Realiza la lógica necesaria para iniciar sesión aquí
-            // Puedes llamar a la acción de Redux para actualizar el estado de autenticación
+            
             dispatch(signInSocialNetAction(user.email));
             // Redirige según el estado de autenticación y la categoría del usuario
             setLocation(paths.completeProfile);
+            console.log("está logeando")
           } else {
             // Si el correo no está registrado, realiza el registro
             const registerResult = await initialRegisterStudentUser({
@@ -73,7 +75,7 @@ const GoogleSignIn = () => {
   
             // Llama a tu acción de Redux para actualizar el estado de autenticación
             dispatch(signInSocialNetAction(user.email));
-  
+            console.log("está registrando")
             // Redirige según el estado de autenticación y la categoría del usuario
             setLocation(paths.completeProfile);
           }
