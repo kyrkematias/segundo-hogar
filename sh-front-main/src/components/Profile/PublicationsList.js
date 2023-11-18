@@ -16,6 +16,7 @@ import { EditIcon, ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
 import { setOwnershipId } from "store/slices/ownershipSlice";
 import { EditPublicationModal } from "components/PublicationRegister/EditPublicationModal";
+import { UPDATE_OWNERSHIP } from "client/gql/queries/update/updateOwnershipById";
 
 export function PublicationsList() {
   const [_, setLocation] = useLocation();
@@ -23,6 +24,10 @@ export function PublicationsList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPublicationId, setSelectedPublicationId] = useState(null);
   const dispatch = useDispatch();
+
+  const updatePublication = (data, id) => {
+    console.log(`Actualizando publicación con ID ${id}:`, data);
+  };
   
   const handleEdit = (id) => {
     console.log(id);
