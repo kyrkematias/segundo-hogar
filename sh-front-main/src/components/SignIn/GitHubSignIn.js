@@ -1,5 +1,5 @@
 import React from "react";
-import { AuthProvider, useAuth } from "./AuthContextGoogle"; 
+import { AuthProvider, useAuth } from "./AuthContextGoogle";
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useMutation, useApolloClient } from "@apollo/client";
 import {
@@ -10,12 +10,15 @@ import { useLocation } from "wouter";
 import { paths } from "config/paths";
 import { signInSocialNetAction } from "store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useLoginWithSocialNet } from "hooks/pages/SignIn/useLoginWithSocialNet.js";
 import { authSelector } from "store/slices/authSlice";
 import { USER_CATEGORIES } from "const";
 import { getAuth, signInWithPopup, GithubAuthProvider } from "firebase/auth";
 import { GET_STUDENT_USER_BY_ID } from "client/gql/queries/users";
+import { GET_USER_BY_EMAIL } from "client/gql/queries/users";
 
 const GithubSignIn = () => {
+  const { onSubmitLogginWithSocialNet } = useLoginWithSocialNet();
   const provider = new GithubAuthProvider();
   const [_, setLocation] = useLocation();
   const [registerStudentUser] = useMutation(REGISTER_STUDENT_USER_WITH_SOC_NET);
@@ -33,43 +36,45 @@ const GithubSignIn = () => {
       const result = await signInWithPopup(getAuth(), provider);
       const user = result.user;
 
-      // Dividir el nombre completo por el espacio
       const nameParts = user.displayName.split(" ");
-  
-      // Obtener el nombre y el apellido
+
       const firstName = nameParts[0];
       const lastName = nameParts[1];
-  
+
       if (user) {
-        // Aquí deberías extraer los datos necesarios de user para pasárselos a tus mutaciones
         const userData = {
           lastname: lastName || "",
           firstname: firstName || "",
           email: user.email || "",
           created_with_sn: true,
           user_status: true,
-          file_number: 10,
+          file_number: 0,
           user_categories_id: 2,
         };
-  
+
         console.log("Datos del usuario:", userData);
-  
+        console.log("Mail del usuario:", user.email);
+
         localStorage.setItem("userData", JSON.stringify(userData));
-        // Verificar si el correo electrónico ya está registrado
+        console.log(user.email);
+
         const isEmailRegistered = await checkIfEmailRegistered(user.email);
-  
+
         try {
+          console.log("el user esta registrado?" + isEmailRegistered)
           if (isEmailRegistered) {
             dispatch(signInSocialNetAction(user.email));
             setLocation(paths.search);
-          } else {
+          } 
+          else {
             // Si el correo no está registrado, realiza el registro
             const registerResult = await initialRegisterStudentUser({
               variables: userData,
             });
-  
+
+            // Llama a tu acción de Redux para actualizar el estado de autenticación
             dispatch(signInSocialNetAction(user.email));
-  
+            console.log("está registrando")
             // Redirige según el estado de autenticación y la categoría del usuario
             setLocation(paths.completeProfile);
           }
@@ -85,13 +90,15 @@ const GithubSignIn = () => {
 
   const checkIfEmailRegistered = async (email) => {
     try {
+      console.log("mail que llega:" + email)
       const { data } = await client.query({
-        query: GET_STUDENT_USER_BY_ID,
-        variables: {
-          id: email, // Puedes cambiar esto dependiendo de cómo esté estructurada tu consulta
-        },
+        query: GET_USER_BY_EMAIL,
+        variables: { email },
+        fetchPolicy: 'no-cache',
       });
 
+      console.log(data)
+      console.log("existe person? ", data?.sh_users.length > 0)
       return data?.sh_users.length > 0; // Devuelve true si el correo está registrado, false si no lo está
     } catch (error) {
       console.error("Error al verificar el correo electrónico:", error);

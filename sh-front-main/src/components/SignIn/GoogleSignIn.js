@@ -34,7 +34,6 @@ const GoogleSignIn = () => {
       const result = await signInWithPopup(getAuth(), provider);
       const user = result.user;
   
-      // Dividir el nombre completo por el espacio
       const nameParts = user.displayName.split(" ");
   
       // Obtener el nombre y el apellido
@@ -42,7 +41,6 @@ const GoogleSignIn = () => {
       const lastName = nameParts[1];
   
       if (user) {
-        // Aquí deberías extraer los datos necesarios de user para pasárselos a tus mutaciones
         const userData = {
           lastname: lastName || "",
           firstname: firstName || "",
@@ -59,10 +57,8 @@ const GoogleSignIn = () => {
         localStorage.setItem("userData", JSON.stringify(userData));
         console.log(user.email);
 
-        // Verificar si el correo electrónico ya está registrado
-        // onSubmitLogginWithSocialNet({ data: userData, provider: "google" });
-
         const isEmailRegistered = await checkIfEmailRegistered(user.email);
+        
         try {
           console.log("el user esta registrado?" + isEmailRegistered)
           if (isEmailRegistered) {

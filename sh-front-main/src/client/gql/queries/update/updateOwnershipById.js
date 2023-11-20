@@ -1,5 +1,4 @@
-import gql from 'graphql-tag';
-
+import { gql } from "@apollo/client";
 export const UPDATE_OWNERSHIP = gql`
   mutation UpdateOwnership($id: bigint!, $address: AddressInput!, $owners_id: bigint) {
     update_sh_ownerships_by_pk(
