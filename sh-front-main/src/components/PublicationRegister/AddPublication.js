@@ -1,5 +1,6 @@
 import { SmallAddIcon } from "@chakra-ui/icons";
-import { Flex, Button, Box, Text } from "@chakra-ui/react";
+import { Flex, Box, Text } from "@chakra-ui/react";
+import { CustomButton } from "components/commons/CustomButton";
 import { paths } from "config/paths";
 import useLocation from "wouter/use-location";
 
@@ -12,14 +13,10 @@ export const AddPublication = () => {
 
   return (
     <Flex justifyContent="space-around" alignItems="center" my="5">
-      <Button gap="3" variant="outline" boxShadow="md" onClick={handleClick}>
-        <Box>
-          <Text fontSize="xl">Agregar Propiedad</Text>
-        </Box>
-        <Box>
+      <CustomButton width="20%"
+          textButton="Agregar Propiedad" onClick={handleClick}>
           <SmallAddIcon />
-        </Box>
-      </Button>
+      </CustomButton>
     </Flex>
   );
 };

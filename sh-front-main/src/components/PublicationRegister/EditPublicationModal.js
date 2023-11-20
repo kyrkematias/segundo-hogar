@@ -41,8 +41,8 @@ export function EditPublicationModal({
   onClose,
   publicationId,
   onUpdatePublication,
+  address,
 }) {
-  // Utilizamos useState para gestionar el estado del modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const SOURCE = "register-ownership";
@@ -71,7 +71,11 @@ export function EditPublicationModal({
   } = useHouseRegisterForm();
 
   const onSubmit = (data) => {
-  
+    
+    onUpdatePublication(data, publicationId);
+
+    // Cerrar el modal después de la actualización
+    onClose();
   };
 
   return (
@@ -222,7 +226,7 @@ export function EditPublicationModal({
                         placeholder="Dirección del inmueble..."
                         size="sm"
                         onChange={(e) => setAddress(e.target.value)}
-                        // {...register("address", validateAddress)}
+                        {...register("address")}
                       />
 
                       <Button
@@ -379,7 +383,12 @@ export function EditPublicationModal({
             >
               Cerrar
             </Button>
-            <Button variant="ghost" bg="black" color="white">
+            <Button
+              variant="ghost"
+              bg="black"
+              color="white"
+              onClick={handleSubmit(onSubmit)}
+            >
               Guardar Cambios
             </Button>
           </ModalFooter>

@@ -13,6 +13,8 @@ import {
   Center,
   Button,
   useColorModeValue,
+  Text,
+  Divider
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { paths } from "config/paths";
@@ -120,8 +122,9 @@ export function SignIn() {
                 />
               </Center>
             </Stack>
-            <br></br>
-
+           
+            <Divider mt="2"/>
+            <Text fontSize='md' fontWeight="400">¿Sos estudiante? Registrate con tus redes sociales.</Text>
             <GoogleSignIn
               onResolve={({ provider, data }) => {
                 onSubmitLogginWithSocialNet({ data, provider });

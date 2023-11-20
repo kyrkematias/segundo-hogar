@@ -61,26 +61,24 @@ const GithubSignIn = () => {
         const isEmailRegistered = await checkIfEmailRegistered(user.email);
 
         try {
-          console.log("el user esta registrado?" + isEmailRegistered)
+          console.log("el user esta registrado?" + isEmailRegistered);
           if (isEmailRegistered) {
             dispatch(signInSocialNetAction(user.email));
             setLocation(paths.search);
-          } 
-          else {
-            // Si el correo no está registrado, realiza el registro
+          } else {
             const registerResult = await initialRegisterStudentUser({
               variables: userData,
             });
 
-            // Llama a tu acción de Redux para actualizar el estado de autenticación
             dispatch(signInSocialNetAction(user.email));
-            console.log("está registrando")
-            // Redirige según el estado de autenticación y la categoría del usuario
+            console.log("está registrando");
             setLocation(paths.completeProfile);
           }
         } catch (error) {
-          // Maneja el error de violación de unicidad aquí
-          console.error("Error al registrar o iniciar sesión con el usuario:", error);
+          console.error(
+            "Error al registrar o iniciar sesión con el usuario:",
+            error
+          );
         }
       }
     } catch (error) {
@@ -90,19 +88,19 @@ const GithubSignIn = () => {
 
   const checkIfEmailRegistered = async (email) => {
     try {
-      console.log("mail que llega:" + email)
+      console.log("mail que llega:" + email);
       const { data } = await client.query({
         query: GET_USER_BY_EMAIL,
         variables: { email },
-        fetchPolicy: 'no-cache',
+        fetchPolicy: "no-cache",
       });
 
-      console.log(data)
-      console.log("existe person? ", data?.sh_users.length > 0)
-      return data?.sh_users.length > 0; // Devuelve true si el correo está registrado, false si no lo está
+      console.log(data);
+      console.log("existe person? ", data?.sh_users.length > 0);
+      return data?.sh_users.length > 0; 
     } catch (error) {
       console.error("Error al verificar el correo electrónico:", error);
-      return false; // En caso de error, asumimos que el correo no está registrado
+      return false;
     }
   };
 

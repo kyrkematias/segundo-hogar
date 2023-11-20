@@ -1,5 +1,5 @@
 // En el archivo PublicationsList.js
-import {useState} from "react";
+import { useState } from "react";
 import {
   Table,
   Thead,
@@ -12,11 +12,12 @@ import {
 } from "@chakra-ui/react";
 import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
+import { useMutation } from "@apollo/client";
 import { EditIcon, ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
 import { setOwnershipId } from "store/slices/ownershipSlice";
 import { EditPublicationModal } from "components/PublicationRegister/EditPublicationModal";
-// import { UPDATE_OWNERSHIP } from "client/gql/queries/update/updateOwnershipById";
+import { UPDATE_OWNERSHIP } from "client/gql/queries/update/updateOwnershipById";
 
 export function PublicationsList() {
   const [_, setLocation] = useLocation();
@@ -25,12 +26,37 @@ export function PublicationsList() {
   const [selectedPublicationId, setSelectedPublicationId] = useState(null);
   const dispatch = useDispatch();
 
-  const updatePublication = (data, id) => {
+  const [updateOwnership] = useMutation(UPDATE_OWNERSHIP);
+
+  const updatePublication = async (data, id, address) => {
+    try {
+      const result = await updateOwnership({
+        variables: {
+          id: id,
+          object: {
+            address: data.address,
+            // addresses_id: data.address,
+            bathrooms: data.bathrooms,
+            size: data.size,
+            rooms: data.rooms,
+            shared: true,
+            is_published: false,
+          },
+        },
+      });
+
+      console.log(`Publicación actualizada:`, result.data.update_sh_ownerships_by_pk);
+      console.log(`data de dirección`,data.address)
+    } catch (error) {
+      console.error("Error al actualizar la publicación:", error);
+    }
+
+    setIsModalOpen(false);
     console.log(`Actualizando publicación con ID ${id}:`, data);
   };
-  
+
   const handleEdit = (id) => {
-    console.log(id);
+    console.log(id)
     setSelectedPublicationId(id);
     setIsModalOpen(true);
   };
@@ -87,9 +113,11 @@ export function PublicationsList() {
       </TableContainer>
       {isModalOpen && (
         <EditPublicationModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          publicationId={selectedPublicationId}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onUpdatePublication={updatePublication}
+        publicationId={selectedPublicationId}
+        // address={ownerships.find(o => o.id === selectedPublicationId)?.address?.address}
         />
       )}
     </>
