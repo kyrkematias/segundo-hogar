@@ -32,8 +32,12 @@ import { CustomButton } from "components/commons/CustomButton";
 import { REGISTER_STUDENT_USER_WITH_SOC_NET, UPDATE_STUDENT_USER_WITH_SOC_NET, GET_PE } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
 import { GET_PERSON_ID_BY_USER_EMAIL } from "client/gql/queries/users";
 import { paths } from "config/paths";
+import { createNodeAction } from "store/slices/recommSlice";
+import { getAgeFromBirthDate } from "utils/getAgeFromBirthDate";
+import { useDispatch } from "react-redux";
 
 export function CompleteRegisterForm() {
+  const dispatch = useDispatch();
   const [registerStudentUser] = useMutation(UPDATE_STUDENT_USER_WITH_SOC_NET);
   const {
     register,
@@ -54,7 +58,20 @@ export function CompleteRegisterForm() {
   const storedFirstname = storedUserData.firstname || "";
   const storedLastname = storedUserData.lastname || "";
   const storedEmail = storedUserData.email || "";
-
+  const makePersonToSave = (user) => {
+    const userToSave = {
+        "id": user.id,
+        "fullname": `${user.lastname}, ${user.firstname}`,
+        "username": user.users.at(0).username,
+        "career": user.students.at(0).career.id,
+        "gender": user.gender,
+        "age": getAgeFromBirthDate(user.birth_date),
+        "state": user.students.at(0).city.state_id,
+        "city": user.students.at(0).city.id,
+        "bio": user.users.at(0).bio
+    };
+    return userToSave;
+}
   // Set default values for firstname and lastname
   useEffect(() => {
     if (storedFirstname) {
@@ -110,6 +127,8 @@ export function CompleteRegisterForm() {
       });
 
       console.log("Mutation result:", result);
+      const person = makePersonToSave(result.data.insert_sh_persons.returning.at(0));
+      dispatch(createNodeAction(person));
       setLocation(paths.questions);
     } catch (mutationError) {
       console.error("Error al realizar la mutación:", mutationError);
