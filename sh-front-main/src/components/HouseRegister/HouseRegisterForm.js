@@ -229,9 +229,7 @@ export function HouseRegisterForm() {
             />
           </Box> */}
 
-          <Center>
-            <Places />
-          </Center>
+          <Places />
 
           <Box textAlign="center" mt={10} mb={8}>
             <Heading as="h4" size="md">

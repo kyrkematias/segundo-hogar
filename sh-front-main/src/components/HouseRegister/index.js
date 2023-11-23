@@ -8,9 +8,12 @@ export function HouseRegister() {
   const { registerHouse } = sections;
 
   return (
-    <FormArea>
-      <SectionHeader section={registerHouse.section} sectionTitle={registerHouse.title} />
-      <HouseRegisterForm />
-    </FormArea>
+      <FormArea>
+        <SectionHeader
+          section={registerHouse.section}
+          sectionTitle={registerHouse.title}
+        />
+        <HouseRegisterForm />
+      </FormArea>
   );
 }

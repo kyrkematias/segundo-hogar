@@ -38,12 +38,12 @@ export const NewMap = () => {
   );
 
   const [mapCenter, setMapCenter] = useState(center);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(center);
 
   return (
     <>
       <APIProvider apiKey="AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE">
-        <div style={{ height: "500px", width: "500px" }}>
+        <div style={{ height: "500px", width: "500px", margin:"auto" }}>
           <div
             className="places-container"
             style={{ width: "500px", height: "40px" }}
