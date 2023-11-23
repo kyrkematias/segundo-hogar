@@ -31,7 +31,8 @@ function Map(props) {
         >
             {
                 props?.isMarkerShown &&
-                props.posts?.map(post =>
+                Array.isArray(props.posts) &&
+                props.posts.map(post =>
                     <Marker
                         key={post.id}
                         title={post.title}

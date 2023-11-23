@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import {
-    Flex,
-    Box,
-    Stack,
-    Center,
-    useColorModeValue,
-    SimpleGrid
-} from '@chakra-ui/react';
+  Flex,
+  Box,
+  Stack,
+  Center,
+  useColorModeValue,
+  SimpleGrid,
+} from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { useGetTags } from "hooks/utils/useGetTags";
 import { CustomButton } from "components/commons/CustomButton";
@@ -15,6 +15,7 @@ import { sections } from "config/sections";
 import { createRelationsAction } from "store/slices/recommSlice";
 import { useLocation } from "wouter";
 import { paths } from "config/paths";
+import { StepperProfile } from "components/commons/Stepper/Stepper";
 
 const REGISTAR = "Registrar";
 const GUARDAR = "Guardar";
@@ -26,110 +27,126 @@ const musicGenresIds = [24, 25, 26, 27, 28, 29, 30];
 const hobbiesids = [31, 32, 33, 34, 35, 36, 37];
 
 export function Tags({ fromPage }) {
+  const [_, setLocation] = useLocation();
 
-    const [_, setLocation] = useLocation();
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+  const [selectedTags, setSelectedTags] = useState([]);
 
-    const [selectedTags, setSelectedTags] = useState([]);
+  const { allTags } = useGetTags();
 
-    const { allTags } = useGetTags();
+  const isSelectedElem = (tag) => selectedTags.includes(tag);
 
-    const isSelectedElem = (tag) => selectedTags.includes(tag);
-
-    const selectTag = (tag) => {
-        if (isSelectedElem(tag)) {
-            const addedTagsArr = selectedTags.filter(t => t !== tag);
-            setSelectedTags([...addedTagsArr]);
-            return;
-        }
-        setSelectedTags([...selectedTags, tag]);
+  const selectTag = (tag) => {
+    if (isSelectedElem(tag)) {
+      const addedTagsArr = selectedTags.filter((t) => t !== tag);
+      setSelectedTags([...addedTagsArr]);
+      return;
     }
+    setSelectedTags([...selectedTags, tag]);
+  };
 
-    const handleSubmit = () => {
-        const questionArr = JSON.parse(window.localStorage.getItem("questionsValue"));
-        const selectedTagsFiltered = [...new Set(selectedTags)];
-
-        const sports = [];
-        const pets = [];
-        const genremusic = [];
-        const genremovies = [];
-        const hobbies = [];
-
-        selectedTagsFiltered.forEach(tag => {
-            if (sportsIds.includes(tag)) sports.push(tag)
-            if (petsIds.includes(tag)) pets.push(tag)
-            if (musicGenresIds.includes(tag)) genremusic.push(tag)
-            if (genresIds.includes(tag)) genremovies.push(tag)
-            if (hobbiesids.includes(tag)) hobbies.push(tag)
-        });
-
-        const body = {
-            "preferences": {
-                sports,
-                genremovies,
-                genremusic,
-                hobbies,
-                pets,
-            },
-            "lifestyles": questionArr
-        };
-
-        dispatch(createRelationsAction(body));
-        setLocation(paths.landing);
-    }
-
-    const { tags } = sections;
-
-    const textButton = fromPage !== "profile" ? REGISTAR : GUARDAR;
-
-    return (
-        <Flex align={'center'} justify={'center'}>
-            <Stack spacing={8} py={12} px={6} >
-
-                {fromPage !== 'profile' ? <Stack align={'center'}>
-                    <SectionHeader section={tags.section} sectionTitle={tags.title} />
-                </Stack> : ""}
-
-                <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={8}>
-
-                    <SimpleGrid columns={6} spacing={10}>
-                        {allTags?.map((tg) => (
-                            <Box
-                                id={`tag-${tg?.id}`}
-                                size='lg'
-                                padding={3}
-                                key={tg?.id}
-                                borderRadius='full'
-                                color='black'
-                                fontWeight='medium'
-                                textAlign='center'
-                                background={isSelectedElem(tg?.id) ? '#F5F5F5' : 'white'}
-                                cursor={isSelectedElem(tg?.id) ? 'pointer' : ''}
-                                transform={isSelectedElem(tg?.id) ? 'translateY(-2px)' : ''}
-                                boxShadow={isSelectedElem(tg?.id) ? 'lg' : 'md'}
-                                _hover={{ cursor: 'pointer', background: "#F5F5F5", transform: 'translateY(-2px)', boxShadow: 'lg' }}
-                                onClick={() => selectTag(tg?.id)}
-                            >
-                                {tg?.description}
-                            </Box>
-                        ))}
-                    </SimpleGrid>
-
-                    <Stack spacing={10} mt={10}>
-                        <Center>
-                            <CustomButton
-                                handleClick={handleSubmit}
-                                type="submit"
-                                isLoading={false}
-                                loadingText="Enviando"
-                                width="30%"
-                                textButton={textButton}
-                            />
-                        </Center>
-                    </Stack>
-                </Box>
-            </Stack>
-        </Flex>
+  const handleSubmit = () => {
+    const questionArr = JSON.parse(
+      window.localStorage.getItem("questionsValue")
     );
+    const selectedTagsFiltered = [...new Set(selectedTags)];
+
+    const sports = [];
+    const pets = [];
+    const genremusic = [];
+    const genremovies = [];
+    const hobbies = [];
+
+    selectedTagsFiltered.forEach((tag) => {
+      if (sportsIds.includes(tag)) sports.push(tag);
+      if (petsIds.includes(tag)) pets.push(tag);
+      if (musicGenresIds.includes(tag)) genremusic.push(tag);
+      if (genresIds.includes(tag)) genremovies.push(tag);
+      if (hobbiesids.includes(tag)) hobbies.push(tag);
+    });
+
+    const body = {
+      preferences: {
+        sports,
+        genremovies,
+        genremusic,
+        hobbies,
+        pets,
+      },
+      lifestyles: questionArr,
+    };
+
+    dispatch(createRelationsAction(body));
+    setLocation(paths.landing);
+  };
+
+  const { tags } = sections;
+
+  const textButton = fromPage !== "profile" ? REGISTAR : GUARDAR;
+
+  return (
+    <>
+    <StepperProfile initialStep={2}/>
+      <Flex align={"center"} justify={"center"}>
+        <Stack spacing={8} py={12} px={6}>
+          {fromPage !== "profile" ? (
+            <Stack align={"center"}>
+              <SectionHeader section={tags.section} sectionTitle={tags.title} />
+            </Stack>
+          ) : (
+            ""
+          )}
+
+          <Box
+            rounded={"lg"}
+            bg={useColorModeValue("white", "gray.700")}
+            boxShadow={"lg"}
+            p={8}
+          >
+            <SimpleGrid columns={6} spacing={10}>
+              {allTags?.map((tg) => (
+                <Box
+                  id={`tag-${tg?.id}`}
+                  size="lg"
+                  padding={3}
+                  key={tg?.id}
+                  borderRadius="full"
+                  color="black"
+                  fontWeight="medium"
+                  textAlign="center"
+                  background={isSelectedElem(tg?.id) ? "#F5F5F5" : "white"}
+                  cursor={isSelectedElem(tg?.id) ? "pointer" : ""}
+                  transform={isSelectedElem(tg?.id) ? "translateY(-2px)" : ""}
+                  boxShadow={isSelectedElem(tg?.id) ? "lg" : "md"}
+                  _hover={{
+                    cursor: "pointer",
+                    background: "#F5F5F5",
+                    transform: "translateY(-2px)",
+                    boxShadow: "lg",
+                  }}
+                  onClick={() => selectTag(tg?.id)}
+                >
+                  {tg?.description}
+                </Box>
+              ))}
+            </SimpleGrid>
+
+            <Stack spacing={10} mt={10}>
+              <Center>
+                <CustomButton
+                  handleClick={handleSubmit}
+                  type="submit"
+                  isLoading={false}
+                  loadingText="Enviando"
+                  width="30%"
+                  textButton={textButton}
+                />
+              </Center>
+            </Stack>
+          </Box>
+        </Stack>
+      </Flex>
+    </>
+  );
 }

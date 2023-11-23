@@ -12,9 +12,9 @@ export const AddPublication = () => {
   };
 
   return (
-    <Flex justifyContent="space-around" alignItems="center" my="5">
+    <Flex justifyContent="space-around" alignItems="center" my="5" onClick={handleClick}>
       <CustomButton width="20%"
-          textButton="Agregar Propiedad" onClick={handleClick}>
+          textButton="Agregar Propiedad" >
           <SmallAddIcon />
       </CustomButton>
     </Flex>

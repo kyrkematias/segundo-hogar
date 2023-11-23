@@ -30,6 +30,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 // import { ModalQuestion } from "pages/owners/components/ModalQuestion";
 import { CustomButton } from "components/commons/CustomButton";
 import { useHouseRegisterForm } from "hooks/pages/HouseRegister/useHouseRegisterForm";
+import Places from "components/commons/MapContainer/NewMap";
 
 const SOURCE = "register-ownership";
 
@@ -218,7 +219,7 @@ export function HouseRegisterForm() {
             </FormControl>
           </Flex>
 
-          <Box height={"500px"} mt={4}>
+          {/* <Box height={"500px"} mt={4}>
             <MapContainer
               initialCenter={coordinates ? coordinates : initialCenter}
               zoom={zoom}
@@ -226,7 +227,11 @@ export function HouseRegisterForm() {
               coordinates={coordinates}
               source={SOURCE}
             />
-          </Box>
+          </Box> */}
+
+          <Center>
+            <Places />
+          </Center>
 
           <Box textAlign="center" mt={10} mb={8}>
             <Heading as="h4" size="md">
