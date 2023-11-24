@@ -9,6 +9,7 @@ import {
   Td,
   TableContainer,
   Button,
+  Icon,
 } from "@chakra-ui/react";
 import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
@@ -45,8 +46,11 @@ export function PublicationsList() {
         },
       });
 
-      console.log(`Publicación actualizada:`, result.data.update_sh_ownerships_by_pk);
-      console.log(`data de dirección`,data.address)
+      console.log(
+        `Publicación actualizada:`,
+        result.data.update_sh_ownerships_by_pk
+      );
+      console.log(`data de dirección`, data.address);
     } catch (error) {
       console.error("Error al actualizar la publicación:", error);
     }
@@ -56,7 +60,7 @@ export function PublicationsList() {
   };
 
   const handleEdit = (id) => {
-    console.log(id)
+    console.log(id);
     setSelectedPublicationId(id);
     setIsModalOpen(true);
   };
@@ -81,6 +85,7 @@ export function PublicationsList() {
               <Th width={"10%"}>Editar</Th>
               <Th width={"10%"}>Eliminar</Th>
               <Th width={"10%"}>Publicar</Th>
+              <Th></Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -94,8 +99,12 @@ export function PublicationsList() {
                   </Button>
                 </Td>
                 <Td>
-                  <Button size="sm" onClick={() => handleDelete(ownership?.id)}>
-                    <DeleteIcon />
+                  <Button
+                    size="sm"
+                    onClick={() => handleDelete(ownership?.id)}
+                    _hover={{ bg: "#E70020" }}
+                  >
+                    <DeleteIcon _hover={{ color: "white" }} />
                   </Button>
                 </Td>
                 <Td>
@@ -106,6 +115,13 @@ export function PublicationsList() {
                     <ArrowRightIcon />
                   </Button>
                 </Td>
+                <Td>
+                  {ownership?.id?.is_published? (
+                    <PublishedIcon />
+                  ) : (
+                    <NotPublishedIcon />
+                  )}
+                </Td>
               </Tr>
             ))}
           </Tbody>
@@ -113,13 +129,35 @@ export function PublicationsList() {
       </TableContainer>
       {isModalOpen && (
         <EditPublicationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onUpdatePublication={updatePublication}
-        publicationId={selectedPublicationId}
-        // address={ownerships.find(o => o.id === selectedPublicationId)?.address?.address}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onUpdatePublication={updatePublication}
+          publicationId={selectedPublicationId}
+          // address={ownerships.find(o => o.id === selectedPublicationId)?.address?.address}
         />
       )}
     </>
   );
 }
+
+const PublishedIcon = () => {
+  return (
+    <Icon viewBox="0 0 200 200" color="green.500">
+      <path
+        fill="currentColor"
+        d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
+      />
+    </Icon>
+  );
+};
+
+const NotPublishedIcon = () => {
+  return (
+    <Icon viewBox="0 0 200 200" color="red.500">
+      <path
+        fill="currentColor"
+        d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
+      />
+    </Icon>
+  );
+};

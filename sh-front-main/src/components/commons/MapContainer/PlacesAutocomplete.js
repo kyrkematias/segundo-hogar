@@ -1,4 +1,3 @@
-// PlacesAutocomplete.js
 import React from "react";
 import usePlacesAutocomplete, {
   getGeocode,
@@ -27,17 +26,20 @@ const PlacesAutocomplete = ({ setSelected }) => {
     setValue(address, false);
     clearSuggestions();
 
+    const extractedAddress = address.split(',')[0].trim();
+
+
     const results = await getGeocode({ address });
     const { lat, lng } = await getLatLng(results[0]);
 
     localStorage.setItem('lat', lat);
     localStorage.setItem('lng', lng);
-    localStorage.setItem("address", address)
+    localStorage.setItem("address", extractedAddress)
 
     setSelected({ lat, lng });
     console.log("lat", lat);
     console.log("lng", lng);
-    console.log("Adrress", address);
+    console.log("Adrress", extractedAddress);
   };
 
   return (

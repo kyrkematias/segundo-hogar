@@ -35,6 +35,7 @@ import {
   validateBathrooms,
   validateSize,
 } from "utils/validations/PublicationRegister";
+import Places from "components/commons/MapContainer/NewMap";
 
 export function EditPublicationModal({
   isOpen,
@@ -71,7 +72,6 @@ export function EditPublicationModal({
   } = useHouseRegisterForm();
 
   const onSubmit = (data) => {
-    
     onUpdatePublication(data, publicationId);
 
     // Cerrar el modal después de la actualización
@@ -87,6 +87,7 @@ export function EditPublicationModal({
           onClose();
           closeModal();
         }}
+        size={"xl"}
       >
         <ModalOverlay />
         <ModalContent>
@@ -217,39 +218,11 @@ export function EditPublicationModal({
                 <Flex
                   direction={["column", "column", "column", "column", "column"]}
                 >
-                  <FormControl m={2} isInvalid={errors.address}>
-                    <FormLabel>Dirección</FormLabel>
-                    <Flex>
-                      <Input
-                        id="address"
-                        type="text"
-                        placeholder="Dirección del inmueble..."
-                        size="sm"
-                        onChange={(e) => setAddress(e.target.value)}
-                        {...register("address")}
-                      />
-
-                      <Button
-                        onClick={getCoordinates}
-                        size="sm"
-                        ml={4}
-                        color="white"
-                        bg="black"
-                        _hover={{
-                          background: "#36393f",
-                        }}
-                      >
-                        <Search2Icon mr={2} /> Buscar
-                      </Button>
-                    </Flex>
-                    <FormErrorMessage>
-                      {errors.address && errors.address.message}
-                    </FormErrorMessage>
-                  </FormControl>
-
+                  <Places styles={{width: "300px"}}/>
                   <FormControl
                     w={["100%", "100%", "100%", "100%", "100%"]}
-                    m={2}
+                    mt={16}
+                    ml={2}
                     isInvalid={errors.floor}
                   >
                     <FormLabel>Piso</FormLabel>
@@ -283,16 +256,6 @@ export function EditPublicationModal({
                     </FormErrorMessage>
                   </FormControl>
                 </Flex>
-
-                <Box height={"500px"} mt={4}>
-                  <MapContainer
-                    initialCenter={coordinates ? coordinates : initialCenter}
-                    zoom={zoom}
-                    isMarkerShown={true}
-                    coordinates={coordinates}
-                    source={SOURCE}
-                  />
-                </Box>
 
                 <Box textAlign="center" mt={10} mb={8}>
                   <Heading as="h4" size="md">

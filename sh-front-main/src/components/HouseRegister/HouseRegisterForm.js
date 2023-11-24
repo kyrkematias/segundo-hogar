@@ -1,4 +1,3 @@
-import { useState, useMemo } from "react";
 import {
   Box,
   Flex,
@@ -18,7 +17,6 @@ import {
   Image,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { Search2Icon } from "@chakra-ui/icons";
 import {
   validateTypeHouse,
   validateBedrooms,
