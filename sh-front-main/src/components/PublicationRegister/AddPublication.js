@@ -15,7 +15,7 @@ export const AddPublication = () => {
     <Flex justifyContent="space-around" alignItems="center" my="5" onClick={handleClick}>
       <CustomButton width="20%"
           textButton="Agregar Propiedad" >
-          <SmallAddIcon />
+         
       </CustomButton>
     </Flex>
   );

@@ -5,6 +5,10 @@ import { REGISTER_PUBLICATION } from 'client/gql/mutations/registerPublication/r
 import { paths } from "config/paths";
 import useLocation from 'wouter/use-location';
 import { useInitialPublications } from "hooks/pages/Search/useInitialPublications";
+import { authSelector } from "store/slices/authSlice";
+import { useSelector } from "react-redux";
+
+
 
 // Define la acción para crear una nueva publicación
 export const createPublicationAction = (data) => ({
@@ -29,7 +33,7 @@ export function useRegisterPublicationForm() {
   const { publications, isError, isFetching } = useInitialPublications();
   // const [errorsCaptcha, setErrorsCaptcha] = useState({ message: '' });
   // const [validCaptcha, setValidCaptcha] = useState(false);
-
+  const { user } = useSelector(authSelector);
   const onSubmit = async (data) => {
     try {
       console.log("price:", data.price);
@@ -52,14 +56,14 @@ export function useRegisterPublicationForm() {
       console.log(result);
       if (result.data && result.data.registerPublication) {
         dispatch(onSubmit(result.data.registerPublication));
-        setLocation(paths.publicationDetail.replace(":id", "5"))
+        setLocation(`/cuenta/${user.id}`);
       } else {
         console.error("La mutación no devolvió datos válidos.");
-        setLocation(paths.publicationDetail.replace(":id", "id"))
+        setLocation(`/cuenta/${user.id}`);
       }
     } catch (error) {
       console.error("Error al registrar la publicación:", error.message);
-      setLocation(paths.publicationDetail.replace(":id", "5"))
+      setLocation(`/cuenta/${user.id}`);
     }
   };
 
