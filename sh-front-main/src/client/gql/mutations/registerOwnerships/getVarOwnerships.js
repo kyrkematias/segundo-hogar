@@ -1,20 +1,23 @@
 export function getVarOwnerships(data) {
+  let variables = {
+    shared: true,
+    rooms: data.bedrooms,
+    bathrooms: data.bathrooms,
+    size: data.size,
+    rating: 0,
+    ownerships_state: true,
+    ownerships_types_id: data.typeHouse,
+    owners_id: -1,
+    lat: storedLat,
+    lon: storedLng,
+    address: storedAddress,
+    floor: data.floor,
+    apartment: data.apartment,
+  };
 
-    let variables = {
-        shared: true, 
-        rooms: data.bedrooms, 
-        bathrooms: data.bathrooms, 
-        size: data.size,
-        rating: 0, 
-        ownerships_state: true, 
-        ownerships_types_id: data.typeHouse, 
-        owners_id: -1,
-        lat: data?.coordinates.lat, 
-        lon: data?.coordinates.lng, 
-        address: data.address, 
-        floor: data.floor, 
-        apartment: data.apartment
-    };
-
-    return variables;
+  return variables;
 }
+
+const storedLat = parseFloat(localStorage.getItem("lat"));
+const storedLng = parseFloat(localStorage.getItem("lng"));
+const storedAddress = localStorage.getItem("address");

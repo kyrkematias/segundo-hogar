@@ -15,7 +15,6 @@ Geocode.setLanguage("es");
 Geocode.setLocationType("ROOFTOP");
 
 export function useHouseRegisterForm() {
-
   const [initialCenter, setInitialCenter] = useState({
     lat: -26.83033687159553,
     lng: -65.20379811655849,
@@ -42,25 +41,15 @@ export function useHouseRegisterForm() {
   } = useForm();
 
   /**************************************************************************************/
+  
 
-  const getCoordinates = () => {
-    setCoordinates({ lat: -26.83002230629563, lng: -65.20258569223947 });
-    setInitialCenter({ lat: -26.83002230629563, lng: -65.20258569223947 });
-    setZoom(16);
-    if (address != "") {
-      Geocode.fromAddress(address).then(
-        (response) => {
-          const { lat, lng } = response.results[0].geometry.location;
-          setCoordinates({ lat, lng });
-          setZoom(16);
-          setInitialCenter({ lat, lng });
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
-    }
-  };
+  // const getCoordinates = () => {
+  //   const storedLat = parseFloat(localStorage.getItem("lat"));
+  //   const storedLng = parseFloat(localStorage.getItem("lng"));
+  //   setCoordinates({ lat: storedLat, lng: storedLng });
+  //   setInitialCenter({ lat: -26.83002230629563, lng: -65.20258569223947 });
+  //   setZoom(16);
+  // };
 
   /**************************************************************************************/
 
@@ -69,7 +58,6 @@ export function useHouseRegisterForm() {
   const [registerOwnership, { error }] = useMutation(REGISTER_OWNERSHIPS);
 
   const onSubmit = (data) => {
-
     if (images.length === 0) {
       setErrorsImage({
         ...errorsImage,
@@ -80,9 +68,10 @@ export function useHouseRegisterForm() {
 
     setLoading(true);
 
-    data.coordinates = coordinates;
-    data.address = address;
-
+    // data.coordinates = coordinates;
+    // data.address = address;
+    console.log("data: ",data);
+    console.log("Coordinates",coordinates)
     let variables = getVarOwnerships(data);
 
     variables.owners_id = owner_id;
@@ -140,7 +129,7 @@ export function useHouseRegisterForm() {
     initialCenter,
     coordinates,
     zoom,
-    getCoordinates,
+    // getCoordinates,
     register,
     handleSubmit,
     errors,

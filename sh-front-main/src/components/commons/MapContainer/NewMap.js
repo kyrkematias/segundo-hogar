@@ -43,20 +43,22 @@ export const NewMap = () => {
   return (
     <>
       <APIProvider apiKey="AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE">
-        <div style={{ height: "500px", width: "500px", margin:"auto" }}>
+        <div style={{ height: "500px", width: "500px", margin: "auto" }}>
           <div
             className="places-container"
             style={{ width: "500px", height: "40px" }}
           >
-            <PlacesAutocomplete setSelected={setSelected} style={{margin: "20rem 0"}}/>
+            <PlacesAutocomplete
+              setSelected={setSelected}
+              style={{ margin: "20rem 0" }}
+            />
           </div>
           <GoogleMap
             zoom={14}
             center={selected}
             mapId={"50cc0d0fbf707831"}
-            mapContainerStyle={{ height: '500px', width: '500px' }}
+            mapContainerStyle={{ height: "500px", width: "500px" }}
           >
-           
             {selected && <Marker position={selected} />}
           </GoogleMap>
         </div>

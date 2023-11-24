@@ -29,8 +29,15 @@ const PlacesAutocomplete = ({ setSelected }) => {
 
     const results = await getGeocode({ address });
     const { lat, lng } = await getLatLng(results[0]);
+
+    localStorage.setItem('lat', lat);
+    localStorage.setItem('lng', lng);
+    localStorage.setItem("address", address)
+
     setSelected({ lat, lng });
-    console.log(lat, lng);
+    console.log("lat", lat);
+    console.log("lng", lng);
+    console.log("Adrress", address);
   };
 
   return (

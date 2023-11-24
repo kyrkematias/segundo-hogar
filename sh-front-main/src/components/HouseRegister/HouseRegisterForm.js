@@ -31,7 +31,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { CustomButton } from "components/commons/CustomButton";
 import { useHouseRegisterForm } from "hooks/pages/HouseRegister/useHouseRegisterForm";
 import Places from "components/commons/MapContainer/NewMap";
-import PlacesAutocomplete from "components/commons/MapContainer/PlacesAutocomplete";
 
 const SOURCE = "register-ownership";
 
@@ -54,11 +53,11 @@ export function HouseRegisterForm() {
     removeImage,
   } = useHouseRegisterForm();
 
-  const center = useMemo(
-    () => ({ lat: -26.830529214328564, lng: -65.20384130911128 }),
-    []
-  );
-  const [selected, setSelected] = useState(center);
+  // const center = useMemo(
+  //   () => ({ lat: -26.830529214328564, lng: -65.20384130911128 }),
+  //   []
+  // );
+  // const [selected, setSelected] = useState(center);
 
   return (
     <>
