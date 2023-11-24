@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useMemo } from "react";
 import {
   Box,
   Flex,
@@ -23,7 +23,7 @@ import {
   validateTypeHouse,
   validateBedrooms,
   validateBathrooms,
-  validateSize
+  validateSize,
 } from "utils/validations/PublicationRegister";
 import { MapContainer } from "components/commons/MapContainer";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -31,6 +31,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { CustomButton } from "components/commons/CustomButton";
 import { useHouseRegisterForm } from "hooks/pages/HouseRegister/useHouseRegisterForm";
 import Places from "components/commons/MapContainer/NewMap";
+import PlacesAutocomplete from "components/commons/MapContainer/PlacesAutocomplete";
 
 const SOURCE = "register-ownership";
 
@@ -52,6 +53,12 @@ export function HouseRegisterForm() {
     error,
     removeImage,
   } = useHouseRegisterForm();
+
+  const center = useMemo(
+    () => ({ lat: -26.830529214328564, lng: -65.20384130911128 }),
+    []
+  );
+  const [selected, setSelected] = useState(center);
 
   return (
     <>
@@ -86,7 +93,8 @@ export function HouseRegisterForm() {
             <FormControl
               mt={4}
               w={["100%", "100%", "100%", "48%", "48%"]}
-              isInvalid={errors.bedrooms}>
+              isInvalid={errors.bedrooms}
+            >
               <FormLabel>Cantidad de habitaciones</FormLabel>
               <NumberInput
                 id="bedrooms"
@@ -112,7 +120,8 @@ export function HouseRegisterForm() {
             <FormControl
               mt={4}
               w={["100%", "100%", "100%", "48%", "48%"]}
-              isInvalid={errors.bathrooms}>
+              isInvalid={errors.bathrooms}
+            >
               <FormLabel>Cantidad de baños</FormLabel>
               <NumberInput size="md" m={2} defaultValue={1} min={1} max={10}>
                 <NumberInputField
@@ -133,7 +142,8 @@ export function HouseRegisterForm() {
             <FormControl
               mt={4}
               w={["100%", "100%", "100%", "48%", "48%"]}
-              isInvalid={errors.size}>
+              isInvalid={errors.size}
+            >
               <FormLabel>Tamaño (m²)</FormLabel>
               <NumberInput size="md" m={2} defaultValue={40} min={0} max={100}>
                 <NumberInputField {...register("size", validateSize)} />
@@ -155,9 +165,10 @@ export function HouseRegisterForm() {
           </Box>
 
           <Flex direction={["column", "column", "row", "row", "row"]}>
-            <FormControl m={2} isInvalid={errors.address}>
+            {/* <FormControl m={2} isInvalid={errors.address}>
               <FormLabel>Dirección</FormLabel>
               <Flex>
+                <PlacesAutocomplete setSelected={setSelected}/>
                 <Input
                   id="address"
                   type="text"
@@ -165,7 +176,6 @@ export function HouseRegisterForm() {
                   onChange={(e) => setAddress(e.target.value)}
                 // {...register("address", validateAddress)}
                 />
-
                 <Button
                   onClick={getCoordinates}
                   size="md"
@@ -182,8 +192,12 @@ export function HouseRegisterForm() {
               <FormErrorMessage>
                 {errors.address && errors.address.message}
               </FormErrorMessage>
-            </FormControl>
+            </FormControl> */}
+          </Flex>
 
+          <Places />
+
+          <Center mt={"20"}>
             <FormControl
               w={["100%", "100%", "20%", "20$", "20%"]}
               m={2}
@@ -217,19 +231,7 @@ export function HouseRegisterForm() {
                 {errors.apartment && errors.apartment.message}
               </FormErrorMessage>
             </FormControl>
-          </Flex>
-
-          {/* <Box height={"500px"} mt={4}>
-            <MapContainer
-              initialCenter={coordinates ? coordinates : initialCenter}
-              zoom={zoom}
-              isMarkerShown={true}
-              coordinates={coordinates}
-              source={SOURCE}
-            />
-          </Box> */}
-
-          <Places />
+          </Center>
 
           <Box textAlign="center" mt={10} mb={8}>
             <Heading as="h4" size="md">

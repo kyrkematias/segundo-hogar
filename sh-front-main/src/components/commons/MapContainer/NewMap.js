@@ -20,6 +20,8 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 import { from } from "@apollo/client";
+import PlacesAutocomplete from "./PlacesAutocomplete";
+import { Loading } from "../Loading";
 
 export default function Places() {
   const { isLoaded } = useLoadScript({
@@ -27,7 +29,7 @@ export default function Places() {
     libraries: ["places"],
   });
 
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded) return <Loading />;
   return <NewMap />;
 }
 
@@ -36,8 +38,6 @@ export const NewMap = () => {
     () => ({ lat: -26.830529214328564, lng: -65.20384130911128 }),
     []
   );
-
-  const [mapCenter, setMapCenter] = useState(center);
   const [selected, setSelected] = useState(center);
 
   return (
@@ -48,7 +48,7 @@ export const NewMap = () => {
             className="places-container"
             style={{ width: "500px", height: "40px" }}
           >
-            <PlacesAutocomplete setSelected={setSelected} />
+            <PlacesAutocomplete setSelected={setSelected} style={{margin: "20rem 0"}}/>
           </div>
           <GoogleMap
             zoom={14}
@@ -65,42 +65,42 @@ export const NewMap = () => {
   );
 };
 
-const PlacesAutocomplete = ({ setSelected }) => {
-  const {
-    ready,
-    value,
-    setValue,
-    suggestions: { status, data },
-    clearSuggestions,
-  } = usePlacesAutocomplete();
+// const PlacesAutocomplete = ({ setSelected }) => {
+//   const {
+//     ready,
+//     value,
+//     setValue,
+//     suggestions: { status, data },
+//     clearSuggestions,
+//   } = usePlacesAutocomplete();
 
-  const handleSelect = async (address) => {
-    setValue(address, false);
-    clearSuggestions();
+//   const handleSelect = async (address) => {
+//     setValue(address, false);
+//     clearSuggestions();
 
-    const results = await getGeocode({ address });
-    const {lat, lng} = await getLatLng(results[0]);
-    setSelected({lat, lng});
-    console.log(lat, lng)
-  };
+//     const results = await getGeocode({ address });
+//     const {lat, lng} = await getLatLng(results[0]);
+//     setSelected({lat, lng});
+//     console.log(lat, lng)
+//   };
 
-  return (
-    <Combobox onSelect={handleSelect}>
-      <ComboboxInput
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        disabled={!ready}
-        className="combobox-input"
-        placeholder="buscar una dirección"
-      />
-      <ComboboxPopover>
-        <ComboboxList>
-          {status === "OK" &&
-            data.map(({ place_id, description }) => (
-              <ComboboxOption key={place_id} value={description} />
-            ))}
-        </ComboboxList>
-      </ComboboxPopover>
-    </Combobox>
-  );
-};
+//   return (
+//     <Combobox onSelect={handleSelect}>
+//       <ComboboxInput
+//         value={value}
+//         onChange={(e) => setValue(e.target.value)}
+//         disabled={!ready}
+//         className="combobox-input"
+//         placeholder="buscar una dirección"
+//       />
+//       <ComboboxPopover>
+//         <ComboboxList>
+//           {status === "OK" &&
+//             data.map(({ place_id, description }) => (
+//               <ComboboxOption key={place_id} value={description} />
+//             ))}
+//         </ComboboxList>
+//       </ComboboxPopover>
+//     </Combobox>
+//   );
+// };
