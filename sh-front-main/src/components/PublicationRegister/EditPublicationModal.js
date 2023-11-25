@@ -36,6 +36,9 @@ import {
   validateSize,
 } from "utils/validations/PublicationRegister";
 import Places from "components/commons/MapContainer/NewMap";
+import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
+import { GET_OWNERSHIPS_BY_ID } from "client/gql/queries/utils";
+import { useApolloClient } from "@apollo/client";
 
 export function EditPublicationModal({
   isOpen,
@@ -45,12 +48,14 @@ export function EditPublicationModal({
   address,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const  { ownerships } = useGetOwnershipsByOwnerId();
   const SOURCE = "register-ownership";
 
   useEffect(() => {
     setIsModalOpen(isOpen);
   }, [isOpen]);
+
+  const client = useApolloClient();
 
   const { onOpen, onClose: closeModal } = useDisclosure();
 
@@ -71,9 +76,21 @@ export function EditPublicationModal({
     removeImage,
   } = useHouseRegisterForm();
 
-  const onSubmit = (data) => {
-    onUpdatePublication(data, publicationId);
-
+  const onSubmit = async (data) => {
+    // onUpdatePublication(data, publicationId);
+    console.log("Datos formulario", data)
+    const ownershipId = localStorage.getItem('ownershipToEdit');
+    console.log("OWNER ship ip a editar:", ownershipId)
+    const ownership = await client.query({
+      query: GET_OWNERSHIPS_BY_ID,
+      variables: { id : ownershipId },
+      fetchPolicy: "no-cache",
+    });
+    console.log("propiedad a editar", ownership)
+    // llamadas a las mutaciones por tabla
+    //.. 
+    //..
+    localStorage.removeItem("ownershipToEdit")
     // Cerrar el modal después de la actualización
     onClose();
   };
@@ -218,7 +235,7 @@ export function EditPublicationModal({
                 <Flex
                   direction={["column", "column", "column", "column", "column"]}
                 >
-                  <Places styles={{width: "300px"}}/>
+                  <Places />
                   <FormControl
                     w={["100%", "100%", "100%", "100%", "100%"]}
                     mt={16}

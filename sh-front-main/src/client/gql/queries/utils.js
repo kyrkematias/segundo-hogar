@@ -44,8 +44,33 @@ export const GET_OWNERSHIPS_BY_OWNER_ID = gql`
                 address
                 floor
                 apartment
+                id
+            }
+            coordinate {
+                lat
+                lon
+                id
             }
             owners_id
+        }
+    }
+`;
+
+export const GET_OWNERSHIPS_BY_ID = gql`
+    query GetOwnershipsById($id: Int) {
+        sh_ownerships(where: {id: {_eq: $id}}) {
+            id
+            address {
+            address
+            floor
+            apartment
+            id
+            }
+            coordinate {
+                lat
+                lon
+                id
+            }
         }
     }
 `;

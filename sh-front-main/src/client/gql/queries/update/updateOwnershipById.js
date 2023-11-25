@@ -21,3 +21,44 @@ mutation update_sh_ownerships_by_pk($id: Int!, $object: sh_ownerships_set_input!
   }
 }
 `;
+
+export const UPDATE_ADDRESS_MUTATION = (id, address, apartment, floor, updatedAt) => `
+  mutation {
+    update_sh_addresses(
+      where: { id: { _eq: ${id} } }
+      _set: {
+        address: "${address}"
+        apartment: "${apartment}"
+        floor: "${floor}"
+        updated_at: "${updatedAt}"
+      }
+    )
+  }
+`;
+
+export const UPDATE_COORDINATES_MUTATION = (id, lat, lon, updatedAt) => `
+  mutation {
+    update_sh_coordinates(
+      where: { id: { _eq: ${id} } }
+      _set: {
+        lat: "${lat}"
+        lon: "${lon}"
+        updated_at: "${updatedAt}"
+      }
+    )
+  }
+`;
+
+export const UPDATE_OWNERSHIPS_MUTATION = (id, updatedAt, bathrooms, rooms, shared) => `
+  mutation {
+    update_sh_ownerships(
+      where: { id: { _eq: ${id} } }
+      _set: {
+        updated_at: "${updatedAt}"
+        bathrooms: ${bathrooms}
+        rooms: ${rooms}
+        shared: ${shared}
+      }
+    )
+  }
+`;

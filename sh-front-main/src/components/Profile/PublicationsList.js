@@ -61,6 +61,8 @@ export function PublicationsList() {
 
   const handleEdit = (id) => {
     console.log(id);
+    // guardamos el ownership a editar el localStorage
+    localStorage.setItem('ownershipToEdit', id);
     setSelectedPublicationId(id);
     setIsModalOpen(true);
   };
