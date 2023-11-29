@@ -68,8 +68,6 @@ export function useHouseRegisterForm() {
 
     setLoading(true);
 
-    // data.coordinates = coordinates;
-    // data.address = address;
     console.log("data: ",data);
     console.log("Coordinates",coordinates)
     let variables = getVarOwnerships(data);

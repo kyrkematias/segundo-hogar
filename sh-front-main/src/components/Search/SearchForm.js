@@ -17,7 +17,8 @@ import {
   RangeSliderTrack,
   RangeSliderFilledTrack,
   RangeSliderThumb,
-  Tooltip
+  Tooltip,
+  filter
 } from "@chakra-ui/react";
 import { CustomButton } from "components/commons/CustomButton";
 import { useSearchForm } from "hooks/pages/Search/useSearchForm";
@@ -53,6 +54,7 @@ export function SearchForm() {
       priceRange
     };
     onSubmitSearchPublications(filters);
+    console.log(filters)
   };
 
   return (

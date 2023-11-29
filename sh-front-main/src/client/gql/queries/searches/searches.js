@@ -81,7 +81,7 @@ export function buildQueryInitialPublications(filters) {
           }
         }  
       `;
-
+        console.log(query)
   return query;
 }
 

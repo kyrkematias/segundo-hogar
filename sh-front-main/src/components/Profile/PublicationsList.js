@@ -19,6 +19,7 @@ import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId
 import { setOwnershipId } from "store/slices/ownershipSlice";
 import { EditPublicationModal } from "components/PublicationRegister/EditPublicationModal";
 import { UPDATE_OWNERSHIP } from "client/gql/queries/update/updateOwnershipById";
+import { paths } from "config/paths";
 
 export function PublicationsList() {
   const [_, setLocation] = useLocation();
@@ -28,6 +29,7 @@ export function PublicationsList() {
   const dispatch = useDispatch();
 
   const [updateOwnership] = useMutation(UPDATE_OWNERSHIP);
+  const storedAddress = localStorage.getItem("address");
 
   const updatePublication = async (data, id, address) => {
     try {
@@ -35,7 +37,7 @@ export function PublicationsList() {
         variables: {
           id: id,
           object: {
-            address: data.address,
+            address: storedAddress,
             // addresses_id: data.address,
             bathrooms: data.bathrooms,
             size: data.size,
@@ -55,7 +57,7 @@ export function PublicationsList() {
       console.error("Error al actualizar la publicación:", error);
     }
 
-    setIsModalOpen(false);
+    // setIsModalOpen(false);
     console.log(`Actualizando publicación con ID ${id}:`, data);
   };
 
@@ -64,8 +66,9 @@ export function PublicationsList() {
     // guardamos el ownership a editar el localStorage
     localStorage.setItem('ownershipToEdit', id);
     setSelectedPublicationId(id);
-    setIsModalOpen(true);
-  };
+    setLocation(`editar/${id}`)
+    // setIsModalOpen(true);
+  }
 
   const handleDelete = (id) => {
     deleteOwnership({ variables: { id: id } });
@@ -129,7 +132,7 @@ export function PublicationsList() {
           </Tbody>
         </Table>
       </TableContainer>
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <EditPublicationModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
@@ -137,7 +140,7 @@ export function PublicationsList() {
           publicationId={selectedPublicationId}
           // address={ownerships.find(o => o.id === selectedPublicationId)?.address?.address}
         />
-      )}
+      )} */}
     </>
   );
 }

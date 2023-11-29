@@ -2,7 +2,19 @@ import { gql } from "@apollo/client";
 export const UPDATE_OWNERSHIP = gql`
 mutation update_sh_ownerships_by_pk($id: Int!, $object: sh_ownerships_set_input!) {
   update_sh_ownerships_by_pk(pk_columns: {id: $id}, _set: $object) {
-    addresses_id
+    address {
+      address
+      apartment
+      floor
+      id
+      __typename
+    }
+    coordinate {
+      id
+      lat
+      lon
+      __typename
+    }
     bathrooms
     coordinates_id
     created_at
@@ -17,7 +29,6 @@ mutation update_sh_ownerships_by_pk($id: Int!, $object: sh_ownerships_set_input!
     shared
     size
     updated_at
-    address
   }
 }
 `;

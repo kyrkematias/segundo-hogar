@@ -77,7 +77,7 @@ export function EditPublicationModal({
   } = useHouseRegisterForm();
 
   const onSubmit = async (data) => {
-    // onUpdatePublication(data, publicationId);
+    onUpdatePublication(data, publicationId);
     console.log("Datos formulario", data)
     const ownershipId = localStorage.getItem('ownershipToEdit');
     console.log("OWNER ship ip a editar:", ownershipId)
@@ -91,8 +91,6 @@ export function EditPublicationModal({
     //.. 
     //..
     localStorage.removeItem("ownershipToEdit")
-    // Cerrar el modal después de la actualización
-    onClose();
   };
 
   return (

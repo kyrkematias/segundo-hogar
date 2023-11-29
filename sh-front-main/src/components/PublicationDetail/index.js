@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Container, Flex, Center, Text, Heading } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
-import { Loading } from "components/commons/Loading"
+import { Loading } from "components/commons/Loading";
 import "swiper/swiper-bundle.min.css";
 import { useGetPublicationById } from "hooks/pages/PublicationDetail/useGetPublicationById";
 import { useRoute } from "wouter";
@@ -9,13 +9,15 @@ import { Slider } from "./Slider";
 import { paths } from "config/paths";
 import { INITIAL_CENTER, INITIAL_ZOOM } from "config/map";
 import { MapContainer } from "./MapContainer";
+import { MapSearch } from "components/Search/Map";
 
 export function PublicationDetail() {
-
   // eslint-disable-next-line
   const [_, params] = useRoute(paths.publicationDetail);
 
-  const { loading, error, publication } = useGetPublicationById({ id: params.id });
+  const { loading, error, publication } = useGetPublicationById({
+    id: params.id,
+  });
 
   if (loading) return <Loading minH={"60vh"} size={"lg"} m={50} />;
   if (error) return <div>Error!</div>;
@@ -50,7 +52,9 @@ export function PublicationDetail() {
               .map((_, i) => (
                 <StarIcon
                   key={i}
-                  color={i < publication.ownership.rating ? "teal.500" : "gray.300"}
+                  color={
+                    i < publication.ownership.rating ? "teal.500" : "gray.300"
+                  }
                 />
               ))}
             {/* <Box as="span" ml="2" color="gray.600" fontSize="sm">
@@ -66,12 +70,22 @@ export function PublicationDetail() {
               {publication.description}
             </Text>
           </Box>
-          <MapContainer
+          <MapSearch
+            markers={[
+              {
+                position: {
+                  lat: publication.ownership.coordinate.lat,
+                  lng: publication.ownership.coordinate.lng,
+                },
+              },
+            ]}
+          />
+          {/* <MapContainer
             initialCenter={INITIAL_CENTER}
             zoom={INITIAL_ZOOM}
             isMarkerShown={true}
             publication={publication}
-          />
+          /> */}
         </Flex>
       </Flex>
     </Container>
