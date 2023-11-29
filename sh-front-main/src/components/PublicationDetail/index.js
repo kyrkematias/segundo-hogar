@@ -21,6 +21,11 @@ export function PublicationDetail() {
 
   if (loading) return <Loading minH={"60vh"} size={"lg"} m={50} />;
   if (error) return <div>Error!</div>;
+  const idPublication = publication.id
+  const { lat, lon } = publication.ownership.coordinate;
+  console.log("publication id: ", idPublication)
+  console.log("lat: ", lat);
+  console.log("lng: ", lon)
 
   return (
     <Container maxW="container.xl" mt={4}>
@@ -74,8 +79,8 @@ export function PublicationDetail() {
             markers={[
               {
                 position: {
-                  lat: publication.ownership.coordinate.lat,
-                  lng: publication.ownership.coordinate.lng,
+                  lat: lat,
+                  lng: lon,
                 },
               },
             ]}

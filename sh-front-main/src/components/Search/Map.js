@@ -27,7 +27,7 @@ function getCoordinates(ownership) {
   return coordinates;
 }
 
-export const MapSearch = ({ coordinates }) => {
+export const MapSearch = ({ markers }) => {
   const center = useMemo(
     () => ({ lat: -26.830529214328564, lng: -65.20384130911128 }),
     []
@@ -37,8 +37,8 @@ export const MapSearch = ({ coordinates }) => {
   const [open, setOpen] = useState(false);
 
   const initialPosition = useMemo(() => {
-    return coordinates || center;
-  }, [coordinates, center]);
+    return markers && markers.length > 0 ? markers[0].position : center;
+  }, [markers, center]);
 
   return (
     <APIProvider apiKey="AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE">
@@ -49,27 +49,29 @@ export const MapSearch = ({ coordinates }) => {
           mapId={"50cc0d0fbf707831"}
           mapContainerStyle={{ height: "500px", width: "100%" }}
         >
-          {coordinates && (
-            <AdvancedMarker
-              position={coordinates}
-              onClick={() => {
-                setSelected(coordinates);
-                setOpen(true);
-              }}
-            >
-              <Pin />
-              {open && selected === coordinates && (
-                <InfoWindow
-                  position={coordinates}
-                  onCloseClick={() => {
-                    setOpen(false);
-                  }}
-                >
-                  Opened
-                </InfoWindow>
-              )}
-            </AdvancedMarker>
-          )}
+          {markers &&
+            markers.map((marker, index) => (
+              <AdvancedMarker
+                key={index}
+                position={marker.position}
+                onClick={() => {
+                  setSelected(marker.position);
+                  setOpen(true);
+                }}
+              >
+                <Pin />
+                {open && selected === marker.position && (
+                  <InfoWindow
+                    position={marker.position}
+                    onCloseClick={() => {
+                      setOpen(false);
+                    }}
+                  >
+                    Opened
+                  </InfoWindow>
+                )}
+              </AdvancedMarker>
+            ))}
         </Map>
       </div>
     </APIProvider>
