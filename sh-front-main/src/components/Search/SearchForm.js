@@ -97,7 +97,7 @@ export function SearchForm() {
               onChange={(value) => setBedrooms(value)}
               size="md"
               maxW={24}
-              defaultValue={2}
+              defaultValue={1}
               min={1}
               max={15}
             >
