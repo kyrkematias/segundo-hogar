@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useLocation } from "wouter";
 import { useSelector } from "react-redux";
-import { REGISTER_OWNERSHIPS, INSERT_OWNERSHIPS_IMAGES } from "client/gql/mutations/registerOwnerships/registerOwnerships";
+import { REGISTER_OWNERSHIPS } from "client/gql/mutations/registerOwnerships/registerOwnerships";
 import { getVarOwnerships } from "client/gql/mutations/registerOwnerships/getVarOwnerships";
 import Geocode from "react-geocode";
 import { useGetOwnerId } from "hooks/utils/useGetOwnerId";
@@ -56,7 +56,6 @@ export function useHouseRegisterForm() {
   const { owner_id } = useGetOwnerId();
 
   const [registerOwnership, { error }] = useMutation(REGISTER_OWNERSHIPS);
-  const [insertOwnershipImages] = useMutation(INSERT_OWNERSHIPS_IMAGES);
 
   const onSubmit = (data) => {
     if (images.length === 0) {
@@ -90,18 +89,6 @@ export function useHouseRegisterForm() {
 
       const response = await postImagesService({ formData });
       console.log("response: ",response);
-
-      // insert images on api database for each image in response.data
-      for (let index = 0; index < response?.data?.length; index++) {
-        const image = response?.data[index];
-        const variables = {
-          public_id: image?.publib_id,
-          image_url: image?.imageURL,
-          ownerships_id: idHouse,
-        };
-        insertOwnershipImages({ variables });
-      }
-      
 
       if (response?.success === true) {
         setLocation(`/cuenta/${user.id}`);
