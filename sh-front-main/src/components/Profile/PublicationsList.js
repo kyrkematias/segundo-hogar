@@ -18,11 +18,12 @@ import { EditIcon, ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
 import { setOwnershipId } from "store/slices/ownershipSlice";
 import { UPDATE_OWNERSHIP } from "client/gql/queries/update/updateOwnershipById";
+import { DELETE_PUBLICATIONS } from "client/gql/queries/delete/deletePublicationByOwnershipId";
 import { paths } from "config/paths";
 
 export function PublicationsList() {
   const [_, setLocation] = useLocation();
-  const { ownerships, deleteOwnership } = useGetOwnershipsByOwnerId();
+  const { ownerships, deleteOwnership, deletePublications, deleteImages } = useGetOwnershipsByOwnerId();
   const [selectedPublicationId, setSelectedPublicationId] = useState(null);
   const dispatch = useDispatch();
 
@@ -68,6 +69,9 @@ export function PublicationsList() {
   }
 
   const handleDelete = (id) => {
+    console.log()
+    deletePublications({variables: { ownerships_id: id}})
+    deleteImages({variables: { ownerships_id: id}})
     deleteOwnership({ variables: { id: id } });
   };
 
