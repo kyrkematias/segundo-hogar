@@ -1,4 +1,7 @@
 export function getVarOwnerships(data) {
+  const storedLat = parseFloat(localStorage.getItem("lat"));
+  const storedLng = parseFloat(localStorage.getItem("lng"));
+  const storedAddress = localStorage.getItem("address");
   let variables = {
     shared: true,
     rooms: data.bedrooms,
@@ -17,7 +20,3 @@ export function getVarOwnerships(data) {
 
   return variables;
 }
-
-const storedLat = parseFloat(localStorage.getItem("lat"));
-const storedLng = parseFloat(localStorage.getItem("lng"));
-const storedAddress = localStorage.getItem("address");

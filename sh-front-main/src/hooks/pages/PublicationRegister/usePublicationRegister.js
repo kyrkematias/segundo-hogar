@@ -34,6 +34,7 @@ export function useRegisterPublicationForm() {
   // const [errorsCaptcha, setErrorsCaptcha] = useState({ message: '' });
   // const [validCaptcha, setValidCaptcha] = useState(false);
   const { user } = useSelector(authSelector);
+  const ownershipId = localStorage.getItem("ownershipId");
   const onSubmit = async (data) => {
     try {
       console.log("price:", data.price);
@@ -42,7 +43,7 @@ export function useRegisterPublicationForm() {
       console.log("contact_email:", data.contact_email);
       const result = await registerPublication({
         variables: {
-          ownerships_id: 5,
+          ownerships_id: ownershipId,
           is_furnished: data.isFurnished,
           title: data.title,
           description: data.description,
@@ -56,6 +57,7 @@ export function useRegisterPublicationForm() {
       console.log(result);
       if (result.data && result.data.registerPublication) {
         dispatch(onSubmit(result.data.registerPublication));
+        localStorage.removeItem(ownershipId);
         setLocation(`/cuenta/${user.id}`);
       } else {
         console.error("La mutación no devolvió datos válidos.");

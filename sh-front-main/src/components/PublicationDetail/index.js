@@ -42,6 +42,7 @@ export function PublicationDetail() {
   console.log("mail: ", email);
   console.log("lat: ", lat);
   console.log("lng: ", lon);
+  console.log("ownership id: ", publication.ownership.id)
 
   const phoneLink = `https://wa.me/${phone}`;
   const emailLink = `https://mailto${email}`;

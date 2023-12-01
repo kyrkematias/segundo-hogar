@@ -46,6 +46,7 @@ query SearchForDetails($id: Int) {
             coordinate {
                 lat
                 lon
+                id
             }
             ownerships_type {
                 description

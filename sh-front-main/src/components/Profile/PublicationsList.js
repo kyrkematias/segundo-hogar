@@ -72,6 +72,7 @@ export function PublicationsList() {
   };
 
   const handlePublish = (id) => {
+    localStorage.setItem("ownershipId", id)
     console.log("id: ", id)
     dispatch(setOwnershipId(id));
     setLocation(`/registrar/publicacion/${id}`);
