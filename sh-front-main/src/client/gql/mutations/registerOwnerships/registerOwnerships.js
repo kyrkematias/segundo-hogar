@@ -48,3 +48,26 @@ export const REGISTER_OWNERSHIPS = gql`
     }
   }
 `;
+
+// Insert ownerships images, with imageurl, publicid and ownerships_id
+export const INSERT_OWNERSHIPS_IMAGES = gql `
+  mutation InsertOwnershipsImages (
+    $public_id: String
+    $image_url: String
+    $ownerships_id: bigint
+  ) {
+    insert_sh_ownerships_images (
+      objects: [
+        {
+          public_id: $public_id
+          imageurl: $image_url
+          ownerships_id: $ownerships_id
+        }
+      ]
+    ) {
+      returning {
+        id
+      }
+    }
+  }
+`;
