@@ -30,6 +30,9 @@ query SearchForDetails($id: Int) {
         id
         title
         price
+        contact_name
+        contact_phone
+        contact_email
         ownership {
             id
             rooms

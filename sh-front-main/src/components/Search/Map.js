@@ -7,7 +7,6 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 
-// Agrega la función getCoordinates aquí
 function getCoordinates(ownership) {
   if (
     ownership === undefined ||
@@ -42,7 +41,7 @@ export const MapSearch = ({ markers }) => {
 
   return (
     <APIProvider apiKey="AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE">
-      <div style={{ height: "400px" }}>
+      <div style={{ height: "400px", width:"400px" }}>
         <Map
           zoom={14}
           center={initialPosition}

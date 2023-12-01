@@ -44,10 +44,6 @@ export function PublicationRegisterForm() {
 
   const dispatch = useDispatch;
 
-  const [registerPublication, { loading }] = useMutation(REGISTER_PUBLICATION);
-
- 
-
   return (
     <Box my={8} textAlign="left">
       <form>

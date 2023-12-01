@@ -48,6 +48,7 @@ export const NewMap = () => {
             className="places-container"
             style={{ width: "500px", height: "40px" }}
           >
+            <PlacesAutocomplete setSelected={setSelected}/>
           </div>
           <GoogleMap
             zoom={14}

@@ -17,14 +17,12 @@ import { useMutation } from "@apollo/client";
 import { EditIcon, ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
 import { setOwnershipId } from "store/slices/ownershipSlice";
-import { EditPublicationModal } from "components/PublicationRegister/EditPublicationModal";
 import { UPDATE_OWNERSHIP } from "client/gql/queries/update/updateOwnershipById";
 import { paths } from "config/paths";
 
 export function PublicationsList() {
   const [_, setLocation] = useLocation();
   const { ownerships, deleteOwnership } = useGetOwnershipsByOwnerId();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPublicationId, setSelectedPublicationId] = useState(null);
   const dispatch = useDispatch();
 
@@ -67,7 +65,6 @@ export function PublicationsList() {
     localStorage.setItem('ownershipToEdit', id);
     setSelectedPublicationId(id);
     setLocation(`editar/${id}`)
-    // setIsModalOpen(true);
   }
 
   const handleDelete = (id) => {
@@ -75,6 +72,7 @@ export function PublicationsList() {
   };
 
   const handlePublish = (id) => {
+    console.log("id: ", id)
     dispatch(setOwnershipId(id));
     setLocation(`/registrar/publicacion/${id}`);
   };
