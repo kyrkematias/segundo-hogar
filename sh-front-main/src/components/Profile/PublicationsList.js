@@ -1,5 +1,5 @@
 // En el archivo PublicationsList.js
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Table,
   Thead,
@@ -9,8 +9,10 @@ import {
   Td,
   TableContainer,
   Button,
-  Icon,
+  useToast,
+  Text,
 } from "@chakra-ui/react";
+
 import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@apollo/client";
@@ -18,17 +20,33 @@ import { EditIcon, ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
 import { setOwnershipId } from "store/slices/ownershipSlice";
 import { UPDATE_OWNERSHIP } from "client/gql/queries/update/updateOwnershipById";
-import { DELETE_PUBLICATIONS } from "client/gql/queries/delete/deletePublicationByOwnershipId";
 import { paths } from "config/paths";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+} from '@chakra-ui/react'
 
 export function PublicationsList() {
+  
   const [_, setLocation] = useLocation();
-  const { ownerships, deleteOwnership, deletePublications, deleteImages } = useGetOwnershipsByOwnerId();
+  const { ownerships, deleteOwnership, deletePublications, deleteImages } =
+    useGetOwnershipsByOwnerId();
   const [selectedPublicationId, setSelectedPublicationId] = useState(null);
   const dispatch = useDispatch();
 
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  console.log("ownership: ",ownerships)
+  const [propertyToDelete, setPropertyToDelete] = useState(null);
+
   const [updateOwnership] = useMutation(UPDATE_OWNERSHIP);
   const storedAddress = localStorage.getItem("address");
+
+  const toast = useToast();
 
   const updatePublication = async (data, id, address) => {
     try {
@@ -56,28 +74,46 @@ export function PublicationsList() {
       console.error("Error al actualizar la publicación:", error);
     }
 
-    // setIsModalOpen(false);
     console.log(`Actualizando publicación con ID ${id}:`, data);
   };
 
   const handleEdit = (id) => {
     console.log(id);
-    // guardamos el ownership a editar el localStorage
-    localStorage.setItem('ownershipToEdit', id);
+    localStorage.setItem("ownershipToEdit", id);
     setSelectedPublicationId(id);
-    setLocation(`editar/${id}`)
-  }
+    setLocation(`editar/${id}`);
+  };
 
+  const cancelRef = useRef();
   const handleDelete = (id) => {
-    console.log()
-    deletePublications({variables: { ownerships_id: id}})
-    deleteImages({variables: { ownerships_id: id}})
-    deleteOwnership({ variables: { id: id } });
+    setDeleteDialogOpen(true);
+    setPropertyToDelete(id);
+  };
+
+  const handleConfirmDelete = () => {
+    deletePublications({ variables: { ownerships_id: propertyToDelete } });
+    deleteImages({ variables: { ownerships_id: propertyToDelete } });
+    deleteOwnership({ variables: { id: propertyToDelete } });
+    setDeleteDialogOpen(false);
+    setPropertyToDelete(null);
+    toast({
+      title: "Propiedad eliminada",
+      description: "La propiedad se ha eliminado correctamente.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+  };
+
+  const handleCancelDelete = () => {
+    // Cierra el diálogo de eliminación y restablece el ID de la propiedad
+    setDeleteDialogOpen(false);
+    setPropertyToDelete(null);
   };
 
   const handlePublish = (id) => {
-    localStorage.setItem("ownershipId", id)
-    console.log("id: ", id)
+    localStorage.setItem("ownershipId", id);
+    console.log("id: ", id);
     dispatch(setOwnershipId(id));
     setLocation(`/registrar/publicacion/${id}`);
   };
@@ -123,49 +159,39 @@ export function PublicationsList() {
                     <ArrowRightIcon />
                   </Button>
                 </Td>
-                <Td>
-                  {ownership?.id?.is_published? (
-                    <PublishedIcon />
-                  ) : (
-                    <NotPublishedIcon />
-                  )}
-                </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
       </TableContainer>
-      {/* {isModalOpen && (
-        <EditPublicationModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onUpdatePublication={updatePublication}
-          publicationId={selectedPublicationId}
-          // address={ownerships.find(o => o.id === selectedPublicationId)?.address?.address}
-        />
-      )} */}
+      <AlertDialog
+        isOpen={isDeleteDialogOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={handleCancelDelete}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Eliminar propiedad
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              ¿Estás seguro de eliminar esta propiedad? Se eliminarán también las publicaciones asociadas.  <Text as="b">Este cambio no es reversible</Text>.
+            </AlertDialogBody>
+            
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={handleCancelDelete}>
+                Cancelar
+              </Button>
+              <Button colorScheme='red' onClick={handleConfirmDelete} ml={3}>
+                Eliminar
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </>
   );
 }
 
-const PublishedIcon = () => {
-  return (
-    <Icon viewBox="0 0 200 200" color="green.500">
-      <path
-        fill="currentColor"
-        d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
-      />
-    </Icon>
-  );
-};
 
-const NotPublishedIcon = () => {
-  return (
-    <Icon viewBox="0 0 200 200" color="red.500">
-      <path
-        fill="currentColor"
-        d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
-      />
-    </Icon>
-  );
-};
