@@ -7,11 +7,15 @@ export const GET_INITIAL_PUBLICATIONS = gql`
             id
             title
             price
+            description
             ownership {
                 id
                 rooms
                 bathrooms
                 rating
+                address {
+                  address
+                }
                 ownerships_images {
                   imageurl
                 }
@@ -33,12 +37,16 @@ query SearchForDetails($id: Int) {
         contact_name
         contact_phone
         contact_email
+        description
         ownership {
             id
             rooms
             bathrooms
             rating
             size
+            address {
+                address
+            }
             ownerships_images {
                 public_id
                 imageurl
@@ -69,6 +77,7 @@ export function buildQueryInitialPublications(filters) {
               id
               title
               price
+              description
               ownership {
                   id
                   rooms
@@ -76,6 +85,9 @@ export function buildQueryInitialPublications(filters) {
                   rating
                   ownerships_images {
                     imageurl
+                  }
+                  address {
+                    address
                   }
                   coordinate {
                     lat
@@ -122,6 +134,7 @@ export function buildSearchQueryUsingFilters(filters) {
             id
             title
             price
+            description
             ownership {
               id
               rooms
@@ -133,6 +146,9 @@ export function buildSearchQueryUsingFilters(filters) {
               coordinate {
                   lat
                   lon
+              }
+              address {
+                address
               }
             }
           }

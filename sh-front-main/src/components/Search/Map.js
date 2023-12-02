@@ -6,6 +6,7 @@ import {
   Pin,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
+import { MarkerCard } from "./MarkerCard";
 
 function getCoordinates(ownership) {
   if (
@@ -26,11 +27,17 @@ function getCoordinates(ownership) {
   return coordinates;
 }
 
-export const MapSearch = ({ markers }) => {
+export const MapSearch = ({ markers, height, width }) => {
   const center = useMemo(
     () => ({ lat: -26.830529214328564, lng: -65.20384130911128 }),
     []
   );
+
+  // if height and width are not passed, set default values
+  height = height || "400px";
+  width = width || "400px";
+
+  console.log("markers info: ", markers);
 
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
@@ -41,7 +48,7 @@ export const MapSearch = ({ markers }) => {
 
   return (
     <APIProvider apiKey="AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE">
-      <div style={{ height: "400px", width:"400px" }}>
+      <div style={{ height: height, width: width }}>
         <Map
           zoom={14}
           center={initialPosition}
@@ -66,7 +73,7 @@ export const MapSearch = ({ markers }) => {
                       setOpen(false);
                     }}
                   >
-                    Opened
+                    <MarkerCard marker={marker} />
                   </InfoWindow>
                 )}
               </AdvancedMarker>
