@@ -30,37 +30,45 @@ export const GET_INITIAL_PUBLICATIONS = gql`
 
 export const SEARCH_FOR_DETAILS = gql`
 query SearchForDetails($id: Int) {
-    sh_publications(where: {id: {_eq: $id}}) {
+  sh_publications(where: {id: {_eq: $id}}) {
+    id
+    title
+    price
+    contact_name
+    contact_phone
+    contact_email
+    description
+    is_furnished
+    created_at
+    ownership {
+      id
+      rooms
+      bathrooms
+      rating
+      size
+      ownerships_images {
+        public_id
+        imageurl
+      }
+      coordinate {
+        lat
+        lon
         id
-        title
-        price
-        contact_name
-        contact_phone
-        contact_email
+      }
+      ownerships_type {
         description
-        ownership {
-            id
-            rooms
-            bathrooms
-            rating
-            size
-            address {
-                address
-            }
-            ownerships_images {
-                public_id
-                imageurl
-            }
-            coordinate {
-                lat
-                lon
-                id
-            }
-            ownerships_type {
-                description
-            }
-        }
+      }
+      address {
+        address
+      }
+      restriction{
+        smokers
+        pets
+        children
+        renter_count
+      }
     }
+  }
 }
 `;
 

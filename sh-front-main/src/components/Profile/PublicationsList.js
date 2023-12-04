@@ -11,6 +11,7 @@ import {
   Button,
   useToast,
   Text,
+  IconButton,
 } from "@chakra-ui/react";
 
 import { useLocation } from "wouter";
@@ -29,10 +30,9 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   AlertDialogCloseButton,
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 
 export function PublicationsList() {
-  
   const [_, setLocation] = useLocation();
   const { ownerships, deleteOwnership, deletePublications, deleteImages } =
     useGetOwnershipsByOwnerId();
@@ -40,7 +40,7 @@ export function PublicationsList() {
   const dispatch = useDispatch();
 
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  console.log("ownership: ",ownerships)
+  console.log("ownership: ", ownerships);
   const [propertyToDelete, setPropertyToDelete] = useState(null);
 
   const [updateOwnership] = useMutation(UPDATE_OWNERSHIP);
@@ -143,13 +143,12 @@ export function PublicationsList() {
                   </Button>
                 </Td>
                 <Td>
-                  <Button
+                  <IconButton
+                    icon={<DeleteIcon />}
                     size="sm"
+                    _hover={{ bg: "#E70020", color: "white" }}
                     onClick={() => handleDelete(ownership?.id)}
-                    _hover={{ bg: "#E70020" }}
-                  >
-                    <DeleteIcon _hover={{ color: "white" }} />
-                  </Button>
+                  />
                 </Td>
                 <Td>
                   <Button
@@ -171,19 +170,21 @@ export function PublicationsList() {
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
               Eliminar propiedad
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              ¿Estás seguro de eliminar esta propiedad? Se eliminarán también las publicaciones asociadas.  <Text as="b">Este cambio no es reversible</Text>.
+              ¿Estás seguro de eliminar esta propiedad? Se eliminarán también
+              las publicaciones asociadas.{" "}
+              <Text as="b">Este cambio no es reversible</Text>.
             </AlertDialogBody>
-            
+
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={handleCancelDelete}>
                 Cancelar
               </Button>
-              <Button colorScheme='red' onClick={handleConfirmDelete} ml={3}>
+              <Button colorScheme="red" onClick={handleConfirmDelete} ml={3}>
                 Eliminar
               </Button>
             </AlertDialogFooter>
@@ -193,5 +194,3 @@ export function PublicationsList() {
     </>
   );
 }
-
-

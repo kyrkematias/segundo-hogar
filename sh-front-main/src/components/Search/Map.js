@@ -35,7 +35,7 @@ export const MapSearch = ({ markers, height, width }) => {
 
   // if height and width are not passed, set default values
   height = height || "400px";
-  width = width || "400px";
+  width = width || "100%";
 
   console.log("markers info: ", markers);
 

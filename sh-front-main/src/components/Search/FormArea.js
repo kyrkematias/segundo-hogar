@@ -10,11 +10,6 @@ import {MapSearch} from "./Map";
 export function FormArea({ posts }) {
   
   const { search } = sections;
-  // const markers = [
-  //   { position: { lat: -26.830529214328564, lng: -65.20384130911128 } },
-  //   { position: { lat: -26.830, lng: -65.204 } },
-  //   // Agrega más coordenadas según sea necesario
-  // ];
 
   return (
     <Flex
@@ -28,15 +23,6 @@ export function FormArea({ posts }) {
       textAlign="center"
       boxShadow="lg"
     >
-      {/* <Box width={["100%", "100%", "80%", "45%"]} pt={4}>
-        <MapSearch markers={markers} posts={posts}/>
-        <MapContainer
-          initialCenter={INITIAL_CENTER}
-          zoom={INITIAL_ZOOM}
-          isMarkerShown={true}
-          posts={posts}
-        />
-      </Box> */}
       <Box width={["100%", "100%", "80%", "45%"]} pl={8} pt={4}>
         <SectionHeader section={search.section} sectionTitle={search.title} />
         <SearchForm />
