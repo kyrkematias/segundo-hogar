@@ -12,8 +12,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLoginWithSocialNet } from "hooks/pages/SignIn/useLoginWithSocialNet.js";
 import { authSelector } from "store/slices/authSlice";
 import { GET_USER_BY_EMAIL } from "client/gql/queries/users";
+import {
+  useToast,
+} from '@chakra-ui/react'
 
 const GoogleSignIn = () => {
+  const toast = useToast();
   const { onSubmitLogginWithSocialNet } = useLoginWithSocialNet();
   const provider = new GoogleAuthProvider();
   const [_, setLocation] = useLocation();
@@ -73,10 +77,28 @@ const GoogleSignIn = () => {
             "Error al registrar o iniciar sesión con el usuario:",
             error
           );
+          toast({
+            title: "Error al iniciar sesión",
+            description: "Intente mas tarde",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
         }
       }
     } catch (error) {
       console.error("Error al iniciar sesión con Google:", error);
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        const loginError = "Ya existe una cuenta con el mismo correo electrónico pero con diferente credencial de inicio de sesión. Intente iniciar sesión con una credencial diferente.";
+        // opent toast if error
+        toast({
+          title: "Error al iniciar sesión",
+          description: loginError,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } 
     }
   };
 

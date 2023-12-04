@@ -16,8 +16,13 @@ import { USER_CATEGORIES } from "const";
 import { getAuth, signInWithPopup, OAuthProvider } from "firebase/auth";
 import { GET_STUDENT_USER_BY_ID } from "client/gql/queries/users";
 import { GET_USER_BY_EMAIL } from "client/gql/queries/users";
+import {
+  useToast,
+} from '@chakra-ui/react'
 
 const MicrosoftSignIn = () => {
+  const toast = useToast();
+
   const { onSubmitLogginWithSocialNet } = useLoginWithSocialNet();
   const provider = new OAuthProvider('microsoft.com');
   const [_, setLocation] = useLocation();
@@ -31,7 +36,7 @@ const MicrosoftSignIn = () => {
   const { isAuthenticated, user_category } = useSelector(authSelector);
   const client = useApolloClient();
 
-  const handleLoginWithGitHub = async () => {
+  const handleLoginWithMicrosoft = async () => {
     try {
       const result = await signInWithPopup(getAuth(), provider);
       const user = result.user;
@@ -79,10 +84,28 @@ const MicrosoftSignIn = () => {
             "Error al registrar o iniciar sesión con el usuario:",
             error
           );
+          toast({
+            title: "Error al iniciar sesión",
+            description: "Intente mas tarde",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
         }
       }
     } catch (error) {
-      console.error("Error al iniciar sesión con Google:", error);
+      console.error("Error al iniciar sesión con Microsoft:", error);
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        const loginError = "Ya existe una cuenta con el mismo correo electrónico pero con diferente credencial de inicio de sesión. Intente iniciar sesión con una credencial diferente.";
+        // opent toast if error
+        toast({
+          title: "Error al iniciar sesión",
+          description: loginError,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } 
     }
   };
 
@@ -106,7 +129,7 @@ const MicrosoftSignIn = () => {
 
   return (
     <AuthProvider>
-      <MicrosoftLoginButton onClick={handleLoginWithGitHub} />
+      <MicrosoftLoginButton onClick={handleLoginWithMicrosoft} />
     </AuthProvider>
   );
 };
