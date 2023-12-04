@@ -32,6 +32,9 @@ import { LoginSocialFacebook } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
 import GoogleSignIn from "./GoogleSignIn";
 import GitHubSignIn from "./GitHubSignIn";
+import FacebookSignIn from "./FacebookSignIn";
+import MicrosoftSignIn from "./MicrosoftSignIn";
+import TwitterSignIn from "./TwitterSignIn";
 
 const REDIRECT_URI = window.location.href;
 
@@ -134,19 +137,36 @@ export function SignIn() {
               }}
               redirect_uri={REDIRECT_URI}
             />
-
-            <LoginSocialFacebook
-              appId={process.env.REACT_APP_FB_APP_ID || ""}
-              redirect_uri={REDIRECT_URI}
+{/* 
+            <FacebookSignIn
               onResolve={({ provider, data }) => {
                 onSubmitLogginWithSocialNet({ data, provider });
               }}
               onReject={(err) => {
                 console.log(err);
               }}
-            >
-              <FacebookLoginButton />
-            </LoginSocialFacebook>
+              redirect_uri={REDIRECT_URI}
+            /> */}
+            
+            <MicrosoftSignIn
+              onResolve={({ provider, data }) => {
+                onSubmitLogginWithSocialNet({ data, provider });
+              }}
+              onReject={(err) => {
+                console.log(err);
+              }}
+              redirect_uri={REDIRECT_URI}
+            />
+
+            <TwitterSignIn
+              onResolve={({ provider, data }) => {
+                onSubmitLogginWithSocialNet({ data, provider });
+              }}
+              onReject={(err) => {
+                console.log(err);
+              }}
+              redirect_uri={REDIRECT_URI}
+            />
 
             <GitHubSignIn
               onResolve={({ provider, data }) => {
