@@ -93,7 +93,7 @@ const GithubSignIn = () => {
         }
       }
     } catch (error) {
-      console.error("Error al iniciar sesión con Google:", error);
+      console.error("Error al iniciar sesión con Github:", error);
       if (error.code === 'auth/account-exists-with-different-credential') {
         const loginError = "Ya existe una cuenta con el mismo correo electrónico pero con diferente credencial de inicio de sesión. Intente iniciar sesión con una credencial diferente.";
         // opent toast if error

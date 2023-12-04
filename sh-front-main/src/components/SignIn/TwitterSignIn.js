@@ -1,6 +1,7 @@
 import React from "react";
 import { AuthProvider, useAuth } from "./AuthContextGoogle";
 import { TwitterLoginButton } from "react-social-login-buttons";
+import { XLoginButton } from "components/commons/SocialNetworkButtons/XLoginButton";
 import { useMutation, useApolloClient } from "@apollo/client";
 import {
   REGISTER_STUDENT_USER_WITH_SOC_NET,
@@ -129,7 +130,7 @@ const TwitterSignIn = () => {
 
   return (
     <AuthProvider>
-      <TwitterLoginButton onClick={handleLoginWithTwitter} />
+      <XLoginButton onClick={handleLoginWithTwitter} />
     </AuthProvider>
 
   );
