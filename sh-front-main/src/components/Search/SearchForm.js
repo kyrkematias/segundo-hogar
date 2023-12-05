@@ -30,7 +30,7 @@ export function SearchForm() {
 
   const [ownershipsType, setOwnershipsType] = useState(ANY_OWNERSHIPS_TYPE);
   const [isFurnished, setIsFurnished] = useState(false);
-  const [bedrooms, setBedrooms] = useState(2);
+  const [bedrooms, setBedrooms] = useState(1);
   const [bathrooms, setBathrooms] = useState(1);
   const [size, setSize] = useState(40);
 

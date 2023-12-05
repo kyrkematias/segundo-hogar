@@ -87,21 +87,28 @@ export const IS_PUBLISHED = gql`
 `;
 
 export const GET_STUDENTS = gql`
-  query MyQuery {
-    sh_students {
-      career {
+query GetStudent {
+  sh_students {
+    career {
+      name
+      id
+    }
+    city {
+      name
+      id
+      state {
         name
         id
-      }
-      city {
-        name
-        id
-      }
-      person {
-        gender
-        id
-        birth_date
       }
     }
+    person {
+      gender
+      id
+      birth_date
+      firstname
+      lastname
+      phone
+    }
   }
+}
 `;
