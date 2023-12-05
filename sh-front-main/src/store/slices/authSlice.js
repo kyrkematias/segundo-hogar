@@ -78,6 +78,7 @@ export const signInAction = (data) => async (dispatch) => {
     console.log("sdasda")
 
     if (statusCode === 200) {
+      localStorage.setItem("userData", JSON.stringify(res.user));
       dispatch(successSignIn(res));
     }
     if (statusCode === 401) {

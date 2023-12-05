@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Center } from "@chakra-ui/react";
+import { Box, Center, Text} from "@chakra-ui/react";
 import { Loading } from "components/commons/Loading";
 import { FindRoommateForm } from "./FindRoommateForm";
 import { FormArea } from "./FormArea";
@@ -69,6 +69,10 @@ export function FindRoommate() {
                 <FindRoommateForm />
             </FormArea>
             <Box width={"100%"} my={20}>
+                {/* title */}
+                <Center>
+                    <Text fontSize="3xl" fontWeight="bold" color="gray.700">Recomendaciones segun tus preferencias</Text>
+                </Center>
                 <Center> {loading ? <Loading /> : <Results recomms={response?.data} />}
                 </Center>
             </Box>

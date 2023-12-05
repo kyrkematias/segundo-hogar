@@ -61,6 +61,8 @@ export function Card({ recomm }) {
                     {
                         tags.map(tag => {
                             return (
+                                // if tag is not empty show it
+                                tag !== "" &&
                                 <Box
                                     key={tag}
                                     fontWeight={'400'}
@@ -72,7 +74,7 @@ export function Card({ recomm }) {
                                 </Box>
                             )
                         })
-                    }
+                    }                    
                 </SimpleGrid>
 
                 <Stack mt={8} direction={'row'} spacing={4}>
