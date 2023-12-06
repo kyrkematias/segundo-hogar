@@ -1,19 +1,22 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
 import { authSelector } from "store/slices/authSlice";
-import { GET_STUDENT_USER_BY_ID } from 'client/gql/queries/users';
+import { GET_STUDENT_USER_BY_ID } from "client/gql/queries/users";
 
 export function useGetUser() {
+  const { user: currentUser } = useSelector(authSelector);
 
-    const { user: currentUser } = useSelector(authSelector);
+  let variables = { id: currentUser.id };
 
-    let variables = { "id": currentUser.id };
+  const {
+    loading,
+    error,
+    data: user,
+  } = useQuery(GET_STUDENT_USER_BY_ID, { variables });
 
-    const { loading, error, data: user } = useQuery(GET_STUDENT_USER_BY_ID, { variables });
-
-    return {
-        loading,
-        error,
-        user: user?.sh_users?.[0]
-    };
+  return {
+    loading,
+    error,
+    user: user?.sh_users?.[0],
+  };
 }
