@@ -33,43 +33,85 @@ mutation update_sh_ownerships_by_pk($id: Int!, $object: sh_ownerships_set_input!
 }
 `;
 
-export const UPDATE_ADDRESS_MUTATION = (id, address, apartment, floor, updatedAt) => `
-  mutation {
-    update_sh_addresses(
-      where: { id: { _eq: ${id} } }
-      _set: {
-        address: "${address}"
-        apartment: "${apartment}"
-        floor: "${floor}"
-        updated_at: "${updatedAt}"
-      }
-    )
-  }
-`;
 
-export const UPDATE_COORDINATES_MUTATION = (id, lat, lon, updatedAt) => `
-  mutation {
+
+export const UPDATE_COORDINATES_MUTATION = gql`
+  mutation UpdateCoordinates(
+    $id: Int!, 
+    $lat: float8!, 
+    $lon: float8!, 
+    $updatedAt: timestamp!
+  ) {
     update_sh_coordinates(
-      where: { id: { _eq: ${id} } }
+      where: { id: { _eq: $id } }
       _set: {
-        lat: "${lat}"
-        lon: "${lon}"
-        updated_at: "${updatedAt}"
+        lat: $lat
+        lon: $lon
+        updated_at: $updatedAt
       }
-    )
+    ) {
+      returning {
+        id
+        lat
+        lon
+        updated_at
+      }
+    }
   }
 `;
 
-export const UPDATE_OWNERSHIPS_MUTATION = (id, updatedAt, bathrooms, rooms, shared) => `
-  mutation {
-    update_sh_ownerships(
-      where: { id: { _eq: ${id} } }
+export const UPDATE_ADDRESS_MUTATION = gql`
+  mutation UpdateAddress($id: Int!, $address: String!, $apartment: String!, $floor: String!, $updatedAt: timestamp!) {
+    update_sh_addresses(
+      where: { id: { _eq: $id } }
       _set: {
-        updated_at: "${updatedAt}"
-        bathrooms: ${bathrooms}
-        rooms: ${rooms}
-        shared: ${shared}
+        address: $address
+        apartment: $apartment
+        floor: $floor
+        updated_at: $updatedAt
       }
-    )
+    ) {
+      returning {
+        id
+        address
+        apartment
+        floor
+        updated_at
+      }
+    }
+  }
+`;
+
+export const UPDATE_OWNERSHIPS_MUTATION = gql`
+  mutation UpdateOwnerships(
+    $id: Int!, 
+    $shared: Boolean!, 
+    $rooms: Int!, 
+    $bathrooms: Int!, 
+    $size: Int!, 
+    $rating: Int!, 
+    $updatedAt: timestamp!
+  ) {
+    update_sh_ownerships(
+      where: { id: { _eq: $id } }
+      _set: {
+        shared: $shared
+        rooms: $rooms
+        bathrooms: $bathrooms
+        size: $size
+        rating: $rating
+        updated_at: $updatedAt
+      }
+    ) {
+      returning {
+        id
+        shared
+        rooms
+        bathrooms
+        size
+        rating
+        updated_at
+      }
+    }
   }
 `;

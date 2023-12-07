@@ -24,6 +24,7 @@ import {
   Center,
   Image,
   SimpleGrid,
+  useToast,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
@@ -38,7 +39,8 @@ import {
 import Places from "components/commons/MapContainer/NewMap";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
 import { GET_OWNERSHIPS_BY_ID } from "client/gql/queries/utils";
-import { useApolloClient } from "@apollo/client";
+import { UPDATE_COORDINATES_MUTATION, UPDATE_ADDRESS_MUTATION, UPDATE_OWNERSHIPS_MUTATION } from "client/gql/queries/update/updateOwnershipById";
+import { useApolloClient, useMutation } from "@apollo/client";
 
 export function EditPublicationModal({
   isOpen,
@@ -48,8 +50,12 @@ export function EditPublicationModal({
   address,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const  { ownerships } = useGetOwnershipsByOwnerId();
-  const SOURCE = "register-ownership";
+  const [ updateCoordinates ] = useMutation(UPDATE_COORDINATES_MUTATION);
+  const [ updateAddress ] = useMutation(UPDATE_ADDRESS_MUTATION);
+  const [ updateOwnership ] = useMutation(UPDATE_OWNERSHIPS_MUTATION);
+
+  // const  { ownerships } = useGetOwnershipsByOwnerId();
+  // const SOURCE = "register-ownership";
 
   useEffect(() => {
     setIsModalOpen(isOpen);
@@ -76,20 +82,86 @@ export function EditPublicationModal({
     removeImage,
   } = useHouseRegisterForm();
 
+  const toast = useToast();
+
   const onSubmit = async (data) => {
-    onUpdatePublication(data, publicationId);
-    console.log("Datos formulario", data)
-    const ownershipId = localStorage.getItem('ownershipToEdit');
-    console.log("OWNER ship ip a editar:", ownershipId)
-    const ownership = await client.query({
-      query: GET_OWNERSHIPS_BY_ID,
-      variables: { id : ownershipId },
-      fetchPolicy: "no-cache",
-    });
-    console.log("propiedad a editar", ownership)
-    // llamadas a las mutaciones por tabla
-    //.. 
-    //..
+    try{
+      // add coordinates and address to data from localstorage
+      const lat = localStorage.getItem("lat");
+      const lng = localStorage.getItem("lng");
+      const address = localStorage.getItem("address");
+      data.coordinates = { lat, lng };
+      data.address = address;
+      console.log("Datos formulario", data)
+      const ownershipId = localStorage.getItem('ownershipToEdit');
+      console.log("OWNER ship ip a editar:", ownershipId)
+      const ownership = await client.query({
+        query: GET_OWNERSHIPS_BY_ID,
+        variables: { id : ownershipId },
+        fetchPolicy: "no-cache",
+      });
+      console.log("propiedad a editar", ownership)
+      console.log("coordenadas a editar", ownership.data.sh_ownerships[0].coordinate.id)
+      // llamadas a las mutaciones por tabla
+      // actualizar coordenadas
+      updateCoordinates({
+        variables: {
+          id: ownership.data.sh_ownerships[0].coordinate.id,
+          lat: parseFloat(data.coordinates.lat), // Ensure it's parsed as Float
+          lon: parseFloat(data.coordinates.lng), // Ensure it's parsed as Float
+          updatedAt: new Date().toISOString(),
+        },
+      }).then((result) => {
+        console.log("coordenadas actualizadas", result)
+      })
+      // actualizar dirección
+      updateAddress({
+        variables: {
+          id: ownership.data.sh_ownerships[0].address.id,
+          address: data.address,
+          floor: data.floor,
+          apartment: data.apartment,
+          updatedAt: new Date().toISOString(),
+        },
+      }).then((result) => {
+        console.log("dirección actualizada", result)
+      })
+      // actualizar propiedad
+      updateOwnership({
+        variables: {
+          id: ownershipId,
+          shared: true,
+          rooms: data.bedrooms,
+          bathrooms: data.bathrooms,
+          size: data.size,
+          rating: 1,
+          updatedAt: new Date().toISOString(),
+        },
+      }).then((result) => {
+        console.log("propiedad actualizada", result)
+      })
+      toast({
+        title: "Propiedad actualizada",
+        description: "La propiedad " + ownershipId + " se ha actualizado correctamente.", 
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      onClose()
+      closeModal()
+    }
+    catch(error){
+      console.log("error", error)
+      toast({
+        title: "Error al actualizar",
+        description: "La propiedad no se ha actualizado correctamente. Intenta mas tarde o contacta con soporte", 
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+    
+
     localStorage.removeItem("ownershipToEdit")
   };
 
@@ -233,7 +305,9 @@ export function EditPublicationModal({
                 <Flex
                   direction={["column", "column", "column", "column", "column"]}
                 >
-                  <Places />
+                  <FormControl>
+                    <Places />
+                  </FormControl>
                   <FormControl
                     w={["100%", "100%", "100%", "100%", "100%"]}
                     mt={16}

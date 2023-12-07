@@ -32,6 +32,8 @@ import {
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
 
+import { EditPublicationModal } from "components/Owneship/EditOwnershipModal";
+
 export function PublicationsList() {
   const [_, setLocation] = useLocation();
   const { ownerships, deleteOwnership, deletePublications, deleteImages } =
@@ -49,30 +51,33 @@ export function PublicationsList() {
   const toast = useToast();
 
   const updatePublication = async (data, id, address) => {
-    try {
-      const result = await updateOwnership({
-        variables: {
-          id: id,
-          object: {
-            address: storedAddress,
-            // addresses_id: data.address,
-            bathrooms: data.bathrooms,
-            size: data.size,
-            rooms: data.rooms,
-            shared: true,
-            is_published: false,
-          },
-        },
-      });
+    // try {
+    //   const result = await updateOwnership({
+    //     variables: {
+    //       id: id,
+    //       object: {
+    //         address: storedAddress,
+    //         // addresses_id: data.address,
+    //         bathrooms: data.bathrooms,
+    //         size: data.size,
+    //         rooms: data.rooms,
+    //         shared: true,
+    //         is_published: false,
+    //       },
+    //     },
+    //   });
 
-      console.log(
-        `Publicación actualizada:`,
-        result.data.update_sh_ownerships_by_pk
-      );
-      console.log(`data de dirección`, data.address);
-    } catch (error) {
-      console.error("Error al actualizar la publicación:", error);
-    }
+    //   console.log(
+    //     `Publicación actualizada:`,
+    //     result.data.update_sh_ownerships_by_pk
+    //   );
+    //   console.log(`data de dirección`, data.address);
+    // } catch (error) {
+    //   console.error("Error al actualizar la publicación:", error);
+    // }
+
+    // closeModal
+    setSelectedPublicationId(null);
 
     console.log(`Actualizando publicación con ID ${id}:`, data);
   };
@@ -81,7 +86,6 @@ export function PublicationsList() {
     console.log(id);
     localStorage.setItem("ownershipToEdit", id);
     setSelectedPublicationId(id);
-    setLocation(`editar/${id}`);
   };
 
   const cancelRef = useRef();
@@ -191,6 +195,13 @@ export function PublicationsList() {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+
+      <EditPublicationModal
+        isOpen={!!selectedPublicationId}
+        onClose={() => setSelectedPublicationId(null)}
+        onUpdate={updatePublication}
+        id={selectedPublicationId}
+      />
     </>
   );
 }

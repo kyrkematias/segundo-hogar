@@ -4,7 +4,7 @@ import { CustomButton } from "components/commons/CustomButton";
 import { paths } from "config/paths";
 import useLocation from "wouter/use-location";
 
-export const AddPublication = () => {
+export const AddOwnership = () => {
   const [_, setLocation] = useLocation();
 
   const handleClick = () => {

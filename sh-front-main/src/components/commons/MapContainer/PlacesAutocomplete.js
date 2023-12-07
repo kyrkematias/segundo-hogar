@@ -51,7 +51,13 @@ const PlacesAutocomplete = ({ setSelected }) => {
         className="comboboxInput"
         placeholder="Dirección del inmueble"
       />
-      <ComboboxPopover>
+      <ComboboxPopover
+      // set position fixed to show suggestions on top of the modal
+        style={{ 
+          position: "absolute",
+          zIndex: "9999", 
+        }}
+      >
         <ComboboxList>
           {status === "OK" &&
             data.map(({ place_id, description }) => (

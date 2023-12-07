@@ -22,7 +22,7 @@ import { Questions } from "components/Questions";
 import { sections } from "config/sections";
 import { authSelector } from "store/slices/authSlice";
 import { USER_CATEGORIES } from "const";
-import { AddPublication } from "components/PublicationRegister/AddPublication";
+import { AddOwnership } from "components/Owneship/AddOwnership";
 
 const PAGE = "profile";
 
@@ -71,7 +71,7 @@ export function AccountTabs() {
                 section={profile.section}
                 sectionTitle={profile.titleOwnerships}
               />
-              <AddPublication />
+              <AddOwnership />
               <PublicationsList />
             </TabPanel>
           ) : null}
