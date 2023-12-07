@@ -20,13 +20,18 @@ import { useGetCities } from "hooks/utils/useGetCities";
 import { useGetStates } from "hooks/utils/useGetStates";
 import { useGetCareers } from "hooks/utils/useGetCareers";
 import { GET_STUDENTS } from "client/gql/queries/utils";
+import { StudentsCards } from "./StudentsCards";
 
 export function FindRoommateForm() {
   const [ageRange, setAgeRange] = useState([18, 40]);
   const [showStartTooltip, setShowStartTooltip] = useState(false);
   const [showEndTooltip, setShowEndTooltip] = useState(false);
+  const [showStudentsCards, setShowStudentsCards] = useState(false);
+  const [filters, setFilters] = useState({});
+  const [selectedGender, setSelectedGender] = useState("");
+  const [selectedCareer, setSelectedCareer] = useState(null);
   const { loading, error, data: students } = useQuery(GET_STUDENTS);
-  
+
   const {
     handleSubmit,
     register,
@@ -35,12 +40,50 @@ export function FindRoommateForm() {
 
   const searchSubmit = async (filters) => {
     filters.ageRange = ageRange;
+    filters.gender = selectedGender;
+    filters.career = selectedCareer;
+    const parsedSelectedCareer = parseInt(selectedCareer);
+
+    // console.log("filtros", filters);
+    // console.log("estudiantes: ", students);
+
+    const studentGender = students.sh_students.map(
+      (student) => student?.person?.gender
+    );
+    const studentCareers = students.sh_students.map(
+      (student) => student?.career?.id
+    );
+
     
-    console.log(filters);
-    console.log("estudiantes: ", students)
+    console.log(
+      "Géneros: ",
+      studentGender,
+      " género filtrados ",
+      selectedGender
+    );
+    console.log(
+      "Carreras: ",
+      studentCareers,
+      ", carrera filtradas: ",
+      parsedSelectedCareer
+    );
+
+    const genderMatch = studentGender.includes(selectedGender);
+    const careerMatch = studentCareers.includes(parsedSelectedCareer);
+    const bothMatch = genderMatch && careerMatch;
+
+    console.log(genderMatch);
+    console.log(careerMatch);
+    console.log(bothMatch);
+
+    setFilters(filters);
+    setShowStudentsCards(bothMatch);
     
+    console.log("tipo selectedGender: ", typeof(selectedGender));
+    console.log("tipo genero: ", typeof(studentGender))
+    console.log("tipo selectedCareer: ", typeof parsedSelectedCareer);
+    console.log("tipo carrera: ", typeof studentCareers);
   };
-  
 
   const { states } = useGetStates();
   const { cities, setStateSelected } = useGetCities();
@@ -56,11 +99,12 @@ export function FindRoommateForm() {
             placeholder="Selecciona..."
             width={["100%", "100%", "98%", "98%", "98%"]}
             {...register("gender")}
+            onChange={(e) => setSelectedGender(e.target.value)}
             _focus={{ background: "none" }}
           >
-            <option value="Male">Masculino</option>
-            <option value="Female">Femenino</option>
-            <option value="Other">Otro</option>
+            <option value="male">Masculino</option>
+            <option value="female">Femenino</option>
+            <option value="other">Otro</option>
           </Select>
           <FormErrorMessage>
             {errors.gender && errors.gender.message}
@@ -74,6 +118,7 @@ export function FindRoommateForm() {
               name="career"
               placeholder="Selecciona..."
               {...register("career")}
+              onChange={(e) => setSelectedCareer(e.target.value)}
               _focus={{ background: "none" }}
             >
               {careers?.map((career) => {
@@ -180,7 +225,7 @@ export function FindRoommateForm() {
 
         <Center m={8}>
           <CustomButton
-            handleClick={handleSubmit(searchSubmit)}
+            handleClick={handleSubmit(() => searchSubmit(filters))}
             type="submit"
             // isLoading={isSubmitting}
             loadingText="Buscando..."
@@ -189,6 +234,9 @@ export function FindRoommateForm() {
           />
         </Center>
       </form>
+      {showStudentsCards && (
+        <StudentsCards filters={filters} students={students.sh_students}/>
+      )}
     </Box>
   );
 }
