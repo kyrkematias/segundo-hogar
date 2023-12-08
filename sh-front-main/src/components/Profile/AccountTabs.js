@@ -23,11 +23,12 @@ import { sections } from "config/sections";
 import { authSelector } from "store/slices/authSlice";
 import { USER_CATEGORIES } from "const";
 import { AddOwnership } from "components/Owneship/AddOwnership";
+import { UsersList } from "components/Admin/UsersList";
 
 const PAGE = "profile";
 
 export function AccountTabs() {
-  const { profile, tags, questions } = sections;
+  const { profile, tags, questions,  ListOfUsers} = sections;
 
   const { user_category } = useSelector(authSelector);
 
@@ -51,6 +52,13 @@ export function AccountTabs() {
           ) : (
             <></>
           )}
+          {/* Lista de usuarios. Solo visible para admin */}
+          {user_category === USER_CATEGORIES.ADMIN ? (
+            <Tab>Usuarios</Tab>
+          ) : (
+            <></>
+          )}
+
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -65,24 +73,33 @@ export function AccountTabs() {
             )}
           </TabPanel>
 
-          {user_category === USER_CATEGORIES.OWNER ? (
+          {/* Lista de usuarios. Solo visible para admin */}
+          {user_category === USER_CATEGORIES.ADMIN ? (
             <TabPanel>
               <SectionHeader
-                section={profile.section}
-                sectionTitle={profile.titleOwnerships}
+                section={ListOfUsers.section}
+                sectionTitle={ListOfUsers.title}
               />
-              <AddOwnership />
-              <PublicationsList />
+              <UsersList />
             </TabPanel>
-          ) : null}
+          ) : null }
+
+          {user_category === USER_CATEGORIES.OWNER ? (
+          <TabPanel>
+            <SectionHeader
+              section={profile.section}
+              sectionTitle={profile.titleOwnerships}
+            />
+            <AddOwnership />
+            <PublicationsList />
+          </TabPanel>
+          ) : null }
           {user_category === USER_CATEGORIES.STUDENT ? (
-            <TabPanel>
-              <SectionHeader section={tags.section} sectionTitle={tags.title} />
-              <Tags fromPage={PAGE} />
-            </TabPanel>
-          ) : (
-            <></>
-          )}
+          <TabPanel>
+            <SectionHeader section={tags.section} sectionTitle={tags.title} />
+            <Tags fromPage={PAGE} />
+          </TabPanel>
+          ) :  null }
           {user_category === USER_CATEGORIES.STUDENT ? (
             <TabPanel>
               <SectionHeader
@@ -91,9 +108,7 @@ export function AccountTabs() {
               />
               <Questions fromPage={PAGE} />
             </TabPanel>
-          ) : (
-            <></>
-          )}
+          ) : null }
         </TabPanels>
       </Tabs>
     </>

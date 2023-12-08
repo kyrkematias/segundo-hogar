@@ -55,5 +55,13 @@ export const sections = {
     findRoommate: {
         section: "FindRoommate",
         title: "Busca un compañero",
+    },
+    ListOfUsers: {
+        section: "ListOfUsers",
+        title: "Lista de usuarios",
+    },
+    requestRent: {
+        section: "RequestsRent",
+        title: "Solicitudes de renta",
     }
 };
