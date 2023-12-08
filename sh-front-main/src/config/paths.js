@@ -20,5 +20,5 @@ export const paths = {
   findRoommate: "/buscar/roommate",
   faq: "/faq",
   completeProfile: "/completatuperfil",
-  editOwnership: "/cuenta/editar/:id"
+  editOwnership: "/cuenta/editar/:id",
 };
