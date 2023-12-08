@@ -112,3 +112,25 @@ query GetStudent {
   }
 }
 `;
+
+// get publications by ownership id
+export const GET_PUBLICATIONS_BY_OWNERSHIP_ID = gql`
+  query GetPublicationsByOwnershipId($ownerships_id: bigint) {
+    sh_publications(where: { ownerships_id: { _eq: $ownerships_id } }) {
+      id
+      title
+      description
+      datetime
+      expiration_date
+      price
+      contact_phone
+      contact_email
+      publication_state
+      ownerships_id
+      created_at
+      updated_at
+    }
+  }
+`;  
+
+

@@ -14,6 +14,9 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 
+import { TbHomeDollar } from "react-icons/tb";
+import { MdOutlinePostAdd } from "react-icons/md";	
+
 import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@apollo/client";
@@ -21,6 +24,7 @@ import { EditIcon, ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
 import { setOwnershipId } from "store/slices/ownershipSlice";
 import { UPDATE_OWNERSHIP } from "client/gql/queries/update/updateOwnershipById";
+import { RequestRentModal } from "./RequestRentModal";
 import { paths } from "config/paths";
 import {
   AlertDialog,
@@ -31,15 +35,18 @@ import {
   AlertDialogOverlay,
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
-
 import { EditPublicationModal } from "components/Owneship/EditOwnershipModal";
 
 export function PublicationsList() {
+  const [isModalRequestRentOpen, setIsModalRequestRentOpen] = useState(false);
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+
   const [_, setLocation] = useLocation();
   const { ownerships, deleteOwnership, deletePublications, deleteImages } =
     useGetOwnershipsByOwnerId();
   const [selectedPublicationId, setSelectedPublicationId] = useState(null);
   const dispatch = useDispatch();
+  
 
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   console.log("ownership: ", ownerships);
@@ -51,38 +58,13 @@ export function PublicationsList() {
   const toast = useToast();
 
   const updatePublication = async (data, id, address) => {
-    // try {
-    //   const result = await updateOwnership({
-    //     variables: {
-    //       id: id,
-    //       object: {
-    //         address: storedAddress,
-    //         // addresses_id: data.address,
-    //         bathrooms: data.bathrooms,
-    //         size: data.size,
-    //         rooms: data.rooms,
-    //         shared: true,
-    //         is_published: false,
-    //       },
-    //     },
-    //   });
-
-    //   console.log(
-    //     `Publicación actualizada:`,
-    //     result.data.update_sh_ownerships_by_pk
-    //   );
-    //   console.log(`data de dirección`, data.address);
-    // } catch (error) {
-    //   console.error("Error al actualizar la publicación:", error);
-    // }
-
-    // closeModal
     setSelectedPublicationId(null);
-
     console.log(`Actualizando publicación con ID ${id}:`, data);
   };
 
   const handleEdit = (id) => {
+    setIsModalRequestRentOpen(false);
+    setIsModalEditOpen(true);
     console.log(id);
     localStorage.setItem("ownershipToEdit", id);
     setSelectedPublicationId(id);
@@ -122,6 +104,15 @@ export function PublicationsList() {
     setLocation(`/registrar/publicacion/${id}`);
   };
 
+  const handleRent = (id) => {
+    // change to true the state of the request modal
+    localStorage.setItem("ownershipId", id);
+    setIsModalEditOpen(false);
+    setIsModalRequestRentOpen(true);
+    setSelectedPublicationId(id);
+    console.log("id: ", id);
+  }
+
   return (
     <>
       <TableContainer mt={8}>
@@ -130,6 +121,7 @@ export function PublicationsList() {
             <Tr>
               <Th>ID</Th>
               <Th>Dirección</Th>
+              <Th width={"10%"}>Rentar</Th>
               <Th width={"10%"}>Editar</Th>
               <Th width={"10%"}>Eliminar</Th>
               <Th width={"10%"}>Publicar</Th>
@@ -141,10 +133,23 @@ export function PublicationsList() {
               <Tr key={ownership?.id}>
                 <Td>{ownership?.id}</Td>
                 <Td>{ownership?.address?.address}</Td>
+                {/* button for open model to send request rent to admin */}
                 <Td>
-                  <Button size="sm" onClick={() => handleEdit(ownership?.id)}>
-                    <EditIcon />
-                  </Button>
+                  <IconButton 
+                  size="sm" 
+                  icon={<TbHomeDollar />}
+                  // success green color for bg
+                  _hover={{ bg: "#00AA00", color: "white" }}
+                  onClick={() => handleRent(ownership?.id)}/>
+                </Td>
+                <Td>
+                  <IconButton 
+                    icon={<EditIcon />}
+                    size="sm" 
+                    // info color for bg
+                    _hover={{ bg: "#1AABE4", color: "white" }}
+                    onClick={() => handleEdit(ownership?.id)}
+                  />
                 </Td>
                 <Td>
                   <IconButton
@@ -155,12 +160,13 @@ export function PublicationsList() {
                   />
                 </Td>
                 <Td>
-                  <Button
+                  <IconButton 
+                    icon={<MdOutlinePostAdd />}
                     size="sm"
+                    _hover={{ bg: "#1AABE4", color: "white" }}
                     onClick={() => handlePublish(ownership?.id)}
-                  >
-                    <ArrowRightIcon />
-                  </Button>
+                    
+                  />
                 </Td>
               </Tr>
             ))}
@@ -197,7 +203,19 @@ export function PublicationsList() {
       </AlertDialog>
 
       <EditPublicationModal
-        isOpen={!!selectedPublicationId}
+        isOpen={
+          !!selectedPublicationId && !!isModalEditOpen
+        }
+        onClose={
+          () => setSelectedPublicationId(null)
+        }
+        onUpdate={updatePublication}
+        id={selectedPublicationId}
+      />
+      <RequestRentModal
+        isOpen={
+          !!selectedPublicationId && !!isModalRequestRentOpen
+        }
         onClose={() => setSelectedPublicationId(null)}
         onUpdate={updatePublication}
         id={selectedPublicationId}
