@@ -19,8 +19,6 @@ import { ProtectedRoute } from "components/commons/ProtectedRoute";
 import { paths } from "config/paths";
 import { FaqView } from "views/Faq";
 import { CompleteRegisterFormView } from "views/CompleteProfile";
-import { EditPublicationView } from "views/EditPublicatión/EditPublicationView";
-
 export function Router() {
   return (
     <Switch>
@@ -35,7 +33,6 @@ export function Router() {
       <Route path={paths.questions} component={QuestionsView} exact />
       <Route path={paths.faq} component={FaqView} exact />
       <Route path={paths.completeProfile} component={CompleteRegisterFormView} exact />
-      <Route path={paths.editOwnership} component={EditPublicationView} ></Route>
       <ProtectedRoute>
         <Route path={paths.account} component={ProfileView} exact />
         <Route path={paths.publicationDetail} component={PublicationDetailView} exact />
