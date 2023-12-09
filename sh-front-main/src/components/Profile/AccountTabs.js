@@ -24,11 +24,12 @@ import { authSelector } from "store/slices/authSlice";
 import { USER_CATEGORIES } from "const";
 import { AddOwnership } from "components/Owneship/AddOwnership";
 import { UsersList } from "components/Admin/UsersList";
+import { RequestsList } from "components/Admin/RequestsList";
 
 const PAGE = "profile";
 
 export function AccountTabs() {
-  const { profile, tags, questions,  ListOfUsers} = sections;
+  const { profile, tags, questions, ListOfUsers } = sections;
 
   const { user_category } = useSelector(authSelector);
 
@@ -52,13 +53,18 @@ export function AccountTabs() {
           ) : (
             <></>
           )}
-          {/* Lista de usuarios. Solo visible para admin */}
+          {/* Pestaña de usuarios. Solo visible para admin */}
           {user_category === USER_CATEGORIES.ADMIN ? (
             <Tab>Usuarios</Tab>
           ) : (
             <></>
           )}
-
+          {/* Pestaña de solicitudes. Solo visible para admin */}
+          {user_category === USER_CATEGORIES.ADMIN ? (
+            <Tab>Solicitudes</Tab>
+          ) : (
+            <></>
+          )}
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -73,7 +79,18 @@ export function AccountTabs() {
             )}
           </TabPanel>
 
-          {/* Lista de usuarios. Solo visible para admin */}
+          {user_category === USER_CATEGORIES.OWNER ? (
+            <TabPanel>
+              <SectionHeader
+                section={profile.section}
+                sectionTitle={profile.titleOwnerships}
+              />
+              <AddOwnership />
+              <PublicationsList />
+            </TabPanel>
+          ) : null }
+
+          {/* pestaña de usuarios. Solo visible para admin */}
           {user_category === USER_CATEGORIES.ADMIN ? (
             <TabPanel>
               <SectionHeader
@@ -81,6 +98,17 @@ export function AccountTabs() {
                 sectionTitle={ListOfUsers.title}
               />
               <UsersList />
+            </TabPanel>
+          ) : null }
+
+          {/* Pestaña de solicitudes. Solo visible para admin */}
+          {user_category === USER_CATEGORIES.ADMIN ? (
+            <TabPanel>
+              <SectionHeader
+                section={ListOfUsers.section}
+                sectionTitle={ListOfUsers.title}
+              />
+              <RequestsList />
             </TabPanel>
           ) : null }
 
@@ -94,12 +122,13 @@ export function AccountTabs() {
             <PublicationsList />
           </TabPanel>
           ) : null }
+
           {user_category === USER_CATEGORIES.STUDENT ? (
-          <TabPanel>
-            <SectionHeader section={tags.section} sectionTitle={tags.title} />
-            <Tags fromPage={PAGE} />
-          </TabPanel>
-          ) :  null }
+            <TabPanel>
+              <SectionHeader section={tags.section} sectionTitle={tags.title} />
+              <Tags fromPage={PAGE} />
+            </TabPanel>
+          ) : null }
           {user_category === USER_CATEGORIES.STUDENT ? (
             <TabPanel>
               <SectionHeader
