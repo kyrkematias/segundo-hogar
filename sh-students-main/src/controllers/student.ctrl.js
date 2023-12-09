@@ -8,12 +8,18 @@ class StudentController {
 	isValidStudent(req, res) {
 		const students = studentsData.students;
 		const targetFileNumber = req.body.file_number;
+		let msg=null;
 
 		const isValidStudent = {
 			isValidStudent: findStudentByFileNumber(students, targetFileNumber)
 		};
+		if (isValidStudent.isValidStudent == true) {
+			msg="Student is Valid";
+		} else {
+			msg="Student is Invalid"
+		}
 
-		return res.status(HttpStatusCode.OK).json(serviceResponse({ data: isValidStudent, success: true, message: "Student is valid", error: null }));
+		return res.status(HttpStatusCode.OK).json(serviceResponse({ data: isValidStudent, success: true, message:msg, error: null }));
 	}
 }
 
