@@ -14,11 +14,12 @@ import {
   FormLabel,
   Input,
   useToast,
-  Textarea
+  Textarea,
+  FormHelperText
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { REGISTER_REQUEST_RENT } from "client/gql/mutations/registerRequestRent/registerRequestRent";
-import { GET_PUBLICATIONS_BY_OWNERSHIP_ID } from "client/gql/queries/utils";
+import { GET_PUBLICATIONS_BY_OWNERSHIP_ID, GET_STUDENT_BY_EMAIL } from "client/gql/queries/utils";
 import { useApolloClient, useMutation } from "@apollo/client";
 import { useForm } from 'react-hook-form';
 
@@ -57,12 +58,27 @@ export function RequestRentModal({
         },
         fetchPolicy: "no-cache"
       })
+
+      // get the student by email,
+      const student = await client.query({
+        query: GET_STUDENT_BY_EMAIL,
+        variables: {
+          email: data.student_mail
+        },
+        fetchPolicy: "no-cache"
+      })
+
+      // if the student is not registered, throw an error
+      if (student.data.sh_students.length === 0){
+        throw new Error("El estudiante no se encuentra registrado.")
+      }
+
       console.log("last publication id", publicaciones)
 
       await registerRequestRent({
         variables: {
           publications_id: publicaciones.data.sh_publications[publicaciones.data.sh_publications.length - 1].id,
-          message: data.message + " \n Legajo del estudiante a vincular: " + data.student_id + " \n Fecha de inicio de renta: " + data.date_start + " \n Fecha de fin de renta: " + data.date_end,
+          message: data.message + " \n Legajo del estudiante a vincular: " + data.student_mail + " \n Fecha de inicio de renta: " + data.date_start + " \n Fecha de fin de renta: " + data.date_end,
           datetime: data.date_start,
         }
       }).then((result) => {
@@ -84,6 +100,15 @@ export function RequestRentModal({
         toast({
           title: "Error",
           description: "Para poder rentar una propiedad, primero debe registrar una publicación.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+      else if (error.message.includes("El estudiante no se encuentra registrado.")){
+        toast({
+          title: "Error",
+          description: "El estudiante no se encuentra registrado.",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -120,22 +145,23 @@ export function RequestRentModal({
           <ModalBody>
             <Box my={8} textAlign="left">
               <form>
-                {/* legajo del estudiante */}
+                {/* Mail del estudiante */}
                 <FormControl isInvalid={false}>
-                  <FormLabel>Legajo del estudiante</FormLabel>
+                  <FormLabel>Mail del estudiante</FormLabel>
                   <Input
-                    type="text"
-                    name="student_id"
-                    placeholder="Legajo del estudiante"
-                    {...register("student_id", {
+                    type="email"
+                    name="student_mail"
+                    placeholder="Email del estudiante"
+                    {...register("student_mail", {
                       required: "Este campo es requerido",
                     })}
                   />
+                  <FormHelperText> Debe ser un mail de un estudiante registrado para que la renta se apruebe.</FormHelperText>
                   <FormErrorMessage>
-                    {errors.student_id}
+                    {errors.student_mail}
                   </FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={false}>
+                <FormControl isInvalid={false} mt="4">
                   <FormLabel>Fecha de inicio de renta</FormLabel>
                   <Input
                     type="date"
@@ -150,7 +176,7 @@ export function RequestRentModal({
                   </FormErrorMessage>
                 </FormControl>
                 {/* fecha de fin */}
-                <FormControl isInvalid={false}>
+                <FormControl isInvalid={false} mt="4">
                   <FormLabel>Fecha de fin de renta</FormLabel>
                   <Input
                     type="date"
@@ -165,7 +191,7 @@ export function RequestRentModal({
                   </FormErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={false}>
+                <FormControl isInvalid={false} mt="4">
                   <FormLabel>Mensaje</FormLabel>
                   <Textarea
                     type="text"

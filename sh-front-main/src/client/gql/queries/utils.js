@@ -159,4 +159,21 @@ export const GET_PUBLICATIONS_BY_OWNERSHIP_ID = gql`
       updated_at
     }
   }
+
+`;  
+
+// get student by email
+export const GET_STUDENT_BY_EMAIL = gql`
+  query GetStudentByEmail($email: String) {
+    sh_students(where: {person: {users: {email: {_eq: $email}}}}) {
+      person {
+        firstname
+        lastname
+        users {
+          email
+          password
+        }
+      }
+    }
+  }
 `;
