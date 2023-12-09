@@ -87,30 +87,58 @@ export const IS_PUBLISHED = gql`
 `;
 
 export const GET_STUDENTS = gql`
-query GetStudent {
-  sh_students {
-    career {
-      name
-      id
-    }
-    city {
-      name
-      id
-      state {
+  query GetStudent {
+    sh_students {
+      career {
         name
         id
       }
-    }
-    person {
-      gender
-      id
-      birth_date
-      firstname
-      lastname
-      phone
+      city {
+        name
+        id
+        state {
+          name
+          id
+        }
+      }
+      person {
+        gender
+        id
+        birth_date
+        firstname
+        lastname
+        phone
+      }
     }
   }
-}
+`;
+
+export const GET_PERSON_BY_ID = gql`
+  query GetPersonById($id: Int!) {
+    sh_persons(where: { id: { _eq: $id  } }) {
+      id
+      firstname
+      lastname
+      gender
+      birth_date
+      phone
+      students {
+        cities_id
+        city {
+          id
+          name
+          state {
+            id
+            name
+          }
+        }
+        career {
+          id
+          name
+        }
+      }
+    }
+  }
 `;
 
 // get publications by ownership id
@@ -131,6 +159,7 @@ export const GET_PUBLICATIONS_BY_OWNERSHIP_ID = gql`
       updated_at
     }
   }
+
 `;  
 
 // get student by email
