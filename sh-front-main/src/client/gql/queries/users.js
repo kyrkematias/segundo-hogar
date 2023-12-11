@@ -65,6 +65,18 @@ export const GET_PERSON_ID_BY_USER_EMAIL = gql`
   }
 `;
 
+export const GET_STUDENT_ID_BY_USER_EMAIL = gql`
+  query GetStudentIdByUserEmail($email: String) {
+    sh_users(where: {email: {_eq: $email}}) {
+      person {
+        students {
+          id
+        }
+      }
+    }
+  }
+`;
+
 // get if user is enabled
 export const GET_USER_STATUS_BY_EMAIL = gql`
   query GetUserStatusByEmail($email: String) {

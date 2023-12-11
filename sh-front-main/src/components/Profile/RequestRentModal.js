@@ -78,7 +78,13 @@ export function RequestRentModal({
       await registerRequestRent({
         variables: {
           publications_id: publicaciones.data.sh_publications[publicaciones.data.sh_publications.length - 1].id,
-          message: data.message + " \n Legajo del estudiante a vincular: " + data.student_mail + " \n Fecha de inicio de renta: " + data.date_start + " \n Fecha de fin de renta: " + data.date_end,
+          message: (
+            "student_email: " + data.student_mail +
+            "\ndate_start: " + data.date_start +
+            "\ndate_end: " + data.date_end +
+            "\nprice: " + data.price +
+            "\nmessage: " + data.message
+          ),
           datetime: data.date_start,
         }
       }).then((result) => {
@@ -188,6 +194,22 @@ export function RequestRentModal({
                   />
                   <FormErrorMessage>
                     {errors.datetime}
+                  </FormErrorMessage>
+                </FormControl>
+
+                {/* Price */}
+                <FormControl isInvalid={false} mt="4">
+                  <FormLabel>Precio de renta</FormLabel>
+                  <Input
+                    type="number"
+                    name="price"
+                    placeholder="Precio de renta"
+                    {...register("price", {
+                      required: "Este campo es requerido",
+                    })}
+                  />
+                  <FormErrorMessage>
+                    {errors.price}
                   </FormErrorMessage>
                 </FormControl>
 
