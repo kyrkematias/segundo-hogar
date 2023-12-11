@@ -97,17 +97,20 @@ export function RequestsList() {
       // if not, throw error
       // if yes, create a rent and a price_rent
 
-      if(requestsList.find((request) => request.id === selectedRequest).message.match(/student_email: (\S+)/) === null){
-        throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir el correo del estudiante.");
-      }
-      if(requestsList.find((request) => request.id === selectedRequest).message.match(/date_start: (\S+)/) === null){
-        throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir la fecha de inicio.");
-      }
-      if(requestsList.find((request) => request.id === selectedRequest).message.match(/date_end: (\S+)/) === null){
-        throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir la fecha de fin.");
-      }
-      if(requestsList.find((request) => request.id === selectedRequest).message.match(/price: (\S+)/) === null){
-        throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir el precio.");
+
+      if(aproveRequest){
+        if(requestsList.find((request) => request.id === selectedRequest).message.match(/student_email: (\S+)/) === null){
+          throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir el correo del estudiante.");
+        }
+        if(requestsList.find((request) => request.id === selectedRequest).message.match(/date_start: (\S+)/) === null){
+          throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir la fecha de inicio.");
+        }
+        if(requestsList.find((request) => request.id === selectedRequest).message.match(/date_end: (\S+)/) === null){
+          throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir la fecha de fin.");
+        }
+        if(requestsList.find((request) => request.id === selectedRequest).message.match(/price: (\S+)/) === null){
+          throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir el precio.");
+        }
       }
 
       await stateRequest(selectedRequest, requestState)
@@ -115,7 +118,7 @@ export function RequestsList() {
           const state = aproveRequest ? "aprobado" : "rechazado";
           //  if aproved, create a rent and a price_rent
           if (aproveRequest) {
-            
+            // if aproveRequest is true, create a rent and a price_rent
             // student_id and price are not present in the request object,
             // so we need extract for the message in request object via regex
             // student_id appears after "Id del estudiante: "
