@@ -36,15 +36,12 @@ export function ProfileForm() {
   const { register, handleSubmit, onSubmit, onCancel, errors, isSubmitting } =
     useProfileForm();
 
-
-  // seteo el valor de la provincia oneffect
+  // cuando se carga el user, se setea el estado seleccionado
   useEffect(() => {
     if (user?.person.students?.[0]?.city?.state_id) {
-      setStateSelected(user.person.students[0].city.state_id);
+      setStateSelected(user?.person.students?.[0]?.city?.state_id);
     }
-  }
-  , []);
-
+  }, [user]);
 
   return (
     <>
