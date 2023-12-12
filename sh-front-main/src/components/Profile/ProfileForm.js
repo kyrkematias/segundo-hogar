@@ -34,7 +34,9 @@ export function ProfileForm() {
 
   const { register, handleSubmit, onSubmit, onCancel, errors, isSubmitting } =
     useProfileForm();
-    console.log("Data from GET_STUDENT_USER_BY_ID:", user);
+    // trae null
+    console.log("Data from GET_CITIES:", cities);
+
   return (
     <>
       <Flex justifyContent="center">
@@ -100,12 +102,14 @@ export function ProfileForm() {
                   {careers?.map((career) => {
                     return (
                       <option
-                        key={career.id}
                         value={career.id}
+                        key={career.id}
                         selected={
                           user?.person.students?.[0]?.career?.id === career.id
                         }
-                      />
+                      >
+                        {career.name}
+                      </option>
                     );
                   })}
                 </Select>
@@ -126,19 +130,19 @@ export function ProfileForm() {
                 >
                   <option
                     value="Male"
-                    selected={user?.person.gender === "male"}
+                    selected={user?.person.gender.toUpperCase() === "MALE"}
                   >
                     Masculino
                   </option>
                   <option
                     value="Female"
-                    selected={user?.person.gender === "female"}
+                    selected={user?.person.gender.toUpperCase() === "FEMALE"}
                   >
                     Femenino
                   </option>
                   <option
                     value="Other"
-                    selected={user?.person.gender === "other"}
+                    selected={user?.person.gender.toUpperCase() === "OTHER"}
                   >
                     Otro
                   </option>
@@ -165,8 +169,8 @@ export function ProfileForm() {
                         value={state.id}
                         key={state.id}
                         selected={
-                          user?.person?.students?.[0]?.state?.id === state.id &&
-                          user?.person?.students?.[0]?.state !== undefined
+                          user.person.students[0].city.state_id === state.id &&
+                          user.person?.students[0].city.state_id !== undefined
                         }
                       >
                         {state.name}
@@ -193,8 +197,8 @@ export function ProfileForm() {
                         value={city.id}
                         key={city.id}
                         selected={
-                          user?.person?.students?.[0]?.city?.id === city.id &&
-                          user?.person?.students?.[0]?.city !== undefined
+                          user.person.students[0].city.id === city.id &&
+                          user.person?.students[0].city.id !== undefined
                         }
                       >
                         {city.name}
