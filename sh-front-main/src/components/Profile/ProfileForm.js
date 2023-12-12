@@ -25,6 +25,7 @@ import { useGetCareers } from "hooks/utils/useGetCareers";
 import { useGetStates } from "hooks/utils/useGetStates";
 import { useGetCities } from "hooks/utils/useGetCities";
 import { CustomButton } from "components/commons/CustomButton";
+import { useEffect } from "react";
 
 export function ProfileForm() {
   const { user } = useGetUser();
@@ -34,8 +35,16 @@ export function ProfileForm() {
 
   const { register, handleSubmit, onSubmit, onCancel, errors, isSubmitting } =
     useProfileForm();
-    // trae null
-    console.log("Data from GET_CITIES:", cities);
+
+
+  // seteo el valor de la provincia oneffect
+  useEffect(() => {
+    if (user?.person.students?.[0]?.city?.state_id) {
+      setStateSelected(user.person.students[0].city.state_id);
+    }
+  }
+  , []);
+
 
   return (
     <>
@@ -223,6 +232,8 @@ export function ProfileForm() {
                   placeholder="Escribe tu presentación aquí..."
                   resize="none"
                   {...register("bio", validateBio)}
+                  _focus={{ background: "none" }}
+                  defaultValue={user?.bio || ""}
                 />
                 <FormErrorMessage>
                   {errors.bio && errors.bio.message}
