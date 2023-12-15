@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   APIProvider,
   Map,
@@ -7,6 +7,8 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import { MarkerCard } from "./MarkerCard";
+import { FaUniversity } from "react-icons/fa";
+
 
 function getCoordinates(ownership) {
   if (
@@ -23,17 +25,16 @@ function getCoordinates(ownership) {
     lng: +ownership.coordinate?.lon,
   };
 
-  console.log("Coordinates:", coordinates); // Agrega esta línea para imprimir en la consola
+  console.log("Coordinates:", coordinates);
   return coordinates;
 }
 
 export const MapSearch = ({ markers, height, width }) => {
   const center = useMemo(
-    () => ({ lat: -26.830529214328564, lng: -65.20384130911128 }),
+    () => ({ lat: -26.81715341828356, lng: -65.19856536761296 }),
     []
   );
 
-  // if height and width are not passed, set default values
   height = height || "400px";
   width = width || "100%";
 
@@ -50,8 +51,8 @@ export const MapSearch = ({ markers, height, width }) => {
     <APIProvider apiKey="AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE">
       <div style={{ height: height, width: width }}>
         <Map
-          zoom={14}
-          center={initialPosition}
+          zoom={16}
+          center={center}
           mapId={"50cc0d0fbf707831"}
           mapContainerStyle={{ height: "500px", width: "100%" }}
         >
@@ -78,6 +79,9 @@ export const MapSearch = ({ markers, height, width }) => {
                 )}
               </AdvancedMarker>
             ))}
+          <AdvancedMarker position={center} key="central-marker">
+            <FaUniversity fontSize={"15px"}/> 
+          </AdvancedMarker>
         </Map>
       </div>
     </APIProvider>

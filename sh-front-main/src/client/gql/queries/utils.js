@@ -115,7 +115,7 @@ export const GET_STUDENTS = gql`
 
 export const GET_PERSON_BY_ID = gql`
   query GetPersonById($id: Int!) {
-    sh_persons(where: { id: { _eq: $id  } }) {
+    sh_persons(where: { id: { _eq: $id } }) {
       id
       firstname
       lastname
@@ -141,6 +141,21 @@ export const GET_PERSON_BY_ID = gql`
   }
 `;
 
+export const GET_STUDENT_INFO_BY_PERSON_ID = gql`
+  query getStudentInfoByPersonId($id: Int!) {
+    sh_persons(where: { id: { _eq: $id } }) {
+      students {
+        shared
+      }
+      users {
+        bio
+        email
+        username
+      }
+    }
+  }
+`;
+
 // get publications by ownership id
 export const GET_PUBLICATIONS_BY_OWNERSHIP_ID = gql`
   query GetPublicationsByOwnershipId($ownerships_id: bigint) {
@@ -159,13 +174,12 @@ export const GET_PUBLICATIONS_BY_OWNERSHIP_ID = gql`
       updated_at
     }
   }
-
-`;  
+`;
 
 // get student by email
 export const GET_STUDENT_BY_EMAIL = gql`
   query GetStudentByEmail($email: String) {
-    sh_students(where: {person: {users: {email: {_eq: $email}}}}) {
+    sh_students(where: { person: { users: { email: { _eq: $email } } } }) {
       person {
         firstname
         lastname

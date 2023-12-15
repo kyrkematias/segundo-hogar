@@ -18,14 +18,13 @@ import {
   RangeSliderFilledTrack,
   RangeSliderThumb,
   Tooltip,
-  filter
+  filter,
 } from "@chakra-ui/react";
 import { CustomButton } from "components/commons/CustomButton";
 import { useSearchForm } from "hooks/pages/Search/useSearchForm";
 import { ANY_OWNERSHIPS_TYPE } from "const";
 
 export function SearchForm() {
-
   const { onSubmitSearchPublications } = useSearchForm();
 
   const [ownershipsType, setOwnershipsType] = useState(ANY_OWNERSHIPS_TYPE);
@@ -51,10 +50,10 @@ export function SearchForm() {
       bedrooms,
       bathrooms,
       size,
-      priceRange
+      priceRange,
     };
     onSubmitSearchPublications(filters);
-    console.log(filters)
+    console.log("filters: ", filters);
   };
 
   return (
@@ -150,8 +149,8 @@ export function SearchForm() {
       <FormControl m={2}>
         <FormLabel>Precio</FormLabel>
         <RangeSlider
-          aria-label={['min', 'max']}
-          colorScheme='blackAlpha'
+          aria-label={["min", "max"]}
+          colorScheme="blackAlpha"
           min={0}
           max={100000}
           defaultValue={[30000, 80000]}
@@ -163,35 +162,46 @@ export function SearchForm() {
 
           <Tooltip
             hasArrow
-            bg='black'
-            color='white'
-            placement='top'
+            bg="black"
+            color="white"
+            placement="top"
             isOpen={showStartTooltip}
             label={priceRange[0]}
           >
             <RangeSliderThumb
               index={0}
               onMouseEnter={() => setShowStartTooltip(true)}
-              onMouseLeave={() => setShowStartTooltip(false)} />
+              onMouseLeave={() => setShowStartTooltip(false)}
+            />
           </Tooltip>
 
           <Tooltip
             hasArrow
-            bg='black'
-            color='white'
-            placement='top'
+            bg="black"
+            color="white"
+            placement="top"
             isOpen={showEndTooltip}
             label={priceRange[1]}
           >
             <RangeSliderThumb
               index={1}
               onMouseEnter={() => setShowEndTooltip(true)}
-              onMouseLeave={() => setShowEndTooltip(false)} />
+              onMouseLeave={() => setShowEndTooltip(false)}
+            />
           </Tooltip>
         </RangeSlider>
       </FormControl>
-
-      <Center mt={8}>
+      <FormControl>
+        <FormLabel>Distancia máxima de la facultad (KMs)</FormLabel>
+        <NumberInput defaultValue={1} min={0} max={20} size="md" maxW={24}>
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+      </FormControl>
+      <Center my={8}>
         <CustomButton
           handleClick={handleSearch}
           type="submit"

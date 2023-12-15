@@ -70,13 +70,9 @@ export function PublicationDetail() {
 
   return (
     <Box>
-      <Stack direction={"row"} alignItems={"flex-start"} mt={16}>
-        {/* <Slider images={publication.ownership.ownerships_images} /> */}
-        {/* IMAGEN DEMOSTRATIVA */}
-        <Image
-          src="https://http2.mlstatic.com/D_NQ_NP_796897-MLM70722900073_072023-O.webp"
-          width={"700px"}
-        />
+      <Stack direction={"row"} alignItems={"flex-start"} mt={16} justifyContent={"space-between"}>
+        <Slider images={publication.ownership.ownerships_images} />
+        
         <Card width={{ base: "500px", md: "1/4" }} p={2} height={"100%"}>
           <Flex flexDirection={"column"} align={"center"} textAlign={"center"}>
             <Heading size="md" mb={5}>

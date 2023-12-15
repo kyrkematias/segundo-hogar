@@ -34,7 +34,7 @@ export function ProfileForm() {
 
   const { register, handleSubmit, onSubmit, onCancel, errors, isSubmitting } =
     useProfileForm();
-    console.log("Data from GET_STUDENT_USER_BY_ID:", user);
+  console.log("Data from GET_STUDENT_USER_BY_ID:", user);
   return (
     <>
       <Flex justifyContent="center">
@@ -78,9 +78,9 @@ export function ProfileForm() {
                   w={["100%", "100%", "100%", "100%", "100%"]}
                   _focus={{ background: "none" }}
                 >
-                  <option value="No">No</option>
+                  <option value="False">No</option>
                   <option
-                    value="Si"
+                    value="True"
                     selected={user?.person.students?.[0]?.shared || false}
                   >
                     Si

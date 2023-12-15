@@ -1,28 +1,99 @@
 import { useForm } from "react-hook-form";
+import { useMutation } from "@apollo/client";
+import { useGetUser } from "hooks/pages/Profile/useGetUser";
+import {
+  UPDATE_GENDER,
+  UPDATE_BIO,
+  UPDATE_STUDENT_BY_USER_ID,
+  UPDATE_STATES
+} from "client/gql/mutations/updateProfileInfo/updateProfileInfo";
+import { useToast } from "@chakra-ui/react"; // Importa el hook de toast
 
 export function useProfileForm() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm();
+  const { user } = useGetUser();
+  const toast = useToast();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
-    const onSubmit = (data) => {
-        console.log({ data });
-        console.log("submit");
-    };
+  const [updateGender] = useMutation(UPDATE_GENDER);
+  const [updateBio] = useMutation(UPDATE_BIO);
+  const [updateStudentByUserId] = useMutation(UPDATE_STUDENT_BY_USER_ID)
+  const [updateState] = useMutation(UPDATE_STATES)
 
-    const onCancel = (e) => {
-        e.preventDefault();
-        console.log("Cancel");
-    };
+  const onSubmit = async (data) => {
+    console.log("data: ", data);
+  
+    try {
+      // Lógica de actualización de datos
+      await updateGender({
+        variables: {
+          userId: user.id,
+          newGender: data.gender,
+        },
+      });
+  
+      await updateBio({
+        variables: {
+          userId: user.id,
+          newBio: data.bio,
+        },
+      });
+  
+      await updateStudentByUserId({
+        variables: {
+          userId: user.id,
+          newCareer: data.career,
+          newCityId: data.city,
+          newShared: data.share,
+        },
+      });
+  
+      await updateState({
+        variables: {
+          userId: user.id,
+          newState: data.state,
+        },
+      });
+  
+      // Mostrar toast de éxito
+      toast({
+        title: "Datos actualizados.",
+        description: "Los datos se han actualizado exitosamente.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error al actualizar datos:", error);
+  
+      // Mostrar toast de error
+      toast({
+        title: "Error al actualizar datos.",
+        description: "Algo salió mal. Por favor, intenta de nuevo.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      console.log("submit");
+      console.log("id usuario: ", user.id);
+    }
+  };
 
-    return {
-        register,
-        handleSubmit,
-        onSubmit,
-        onCancel,
-        errors,
-        isSubmitting
-    };
+  const onCancel = (e) => {
+    e.preventDefault();
+    console.log("Cancel");
+  };
+
+  return {
+    register,
+    handleSubmit,
+    onSubmit,
+    onCancel,
+    errors,
+    isSubmitting,
+  };
 }
