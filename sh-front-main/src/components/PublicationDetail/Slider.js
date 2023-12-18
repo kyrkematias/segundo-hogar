@@ -12,8 +12,7 @@ export function Slider({ images }) {
         <Swiper
           spaceBetween={0}
           slidesPerView={1}
-          loop
-          
+          loop={images.length > 1}  
           autoplay={{ delay: 3000 }}
           pagination={{ clickable: true }}
         >

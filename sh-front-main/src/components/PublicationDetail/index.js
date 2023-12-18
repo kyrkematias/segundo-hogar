@@ -1,15 +1,12 @@
-import React from "react";
+import { useRef, useEffect } from "react";
 import {
   Box,
-  Container,
   Flex,
   Center,
   Text,
   Heading,
-  background,
   Card,
   Stack,
-  Image,
 } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import { Divider } from "@chakra-ui/react";
@@ -19,8 +16,6 @@ import { useGetPublicationById } from "hooks/pages/PublicationDetail/useGetPubli
 import { useRoute } from "wouter";
 import { Slider } from "./Slider";
 import { paths } from "config/paths";
-import { INITIAL_CENTER, INITIAL_ZOOM } from "config/map";
-import { MapContainer } from "./MapContainer";
 import { MapSearch } from "components/Search/Map";
 import { FaWhatsapp } from "react-icons/fa";
 import { BsBuilding } from "react-icons/bs";
@@ -36,12 +31,19 @@ import { PiUsersThreeFill } from "react-icons/pi";
 import { MdOutlinePets } from "react-icons/md";
 
 export function PublicationDetail() {
-  // eslint-disable-next-line
   const [_, params] = useRoute(paths.publicationDetail);
 
   const { loading, error, publication } = useGetPublicationById({
     id: params.id,
   });
+
+  const topRef = useRef(null);
+
+  useEffect(() => {
+    if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [loading]);
 
   if (loading) return <Loading minH={"60vh"} size={"lg"} m={50} />;
   if (error) return <div>Error!</div>;
@@ -51,17 +53,6 @@ export function PublicationDetail() {
   const email = publication.contact_email;
   const { lat, lon } = publication.ownership.coordinate;
   const address = publication.ownership.address.address;
-  const description = publication.description;
-  console.log("publication id: ", idPublication);
-  console.log("contact_name: ", owner);
-  console.log("contact_phone: ", phone);
-  console.log("mail: ", email);
-  console.log("lat: ", lat);
-  console.log("lng: ", lon);
-  console.log("ownership id: ", publication.ownership.id);
-  console.log("address:", publication.ownership.address);
-  console.log("desc", publication.description);
-  console.log("restr. ", publication.ownership.restriction);
 
   const phoneLink = `https://wa.me/${phone}`;
   const emailLink = `https://mailto${email}`;
@@ -70,9 +61,14 @@ export function PublicationDetail() {
 
   return (
     <Box>
-      <Stack direction={"row"} alignItems={"flex-start"} mt={16} justifyContent={"space-between"}>
+      <Stack
+        direction={"row"}
+        alignItems={"flex-start"}
+        mt={16}
+        justifyContent={"space-between"}
+      >
         <Slider images={publication.ownership.ownerships_images} />
-        
+
         <Card width={{ base: "500px", md: "1/4" }} p={2} height={"100%"}>
           <Flex flexDirection={"column"} align={"center"} textAlign={"center"}>
             <Heading size="md" mb={5}>
@@ -136,17 +132,17 @@ export function PublicationDetail() {
           </Flex>
         </Card>
       </Stack>
-      {/* IMAGEN DEMOSTRATIVA */}
       <Stack
         direction={{ base: "column", md: "row" }}
         spacing={3}
+        px={10}
         justifyContent={{ base: "flex-start", md: "space-between" }}
       >
         <Card
           variant={"elevated"}
           p={2}
           mt={16}
-          width={{ base: "full", md: "3/4" }}
+          width={{ base: "100%", md: "1/2" }}
         >
           <Heading size="md" textAlign={"center"} my={2}>
             Características:
@@ -270,29 +266,31 @@ export function PublicationDetail() {
             </Flex>
           </Flex>
         </Card>
+        <Flex color="#000" mt={16}>
+          <Flex flex={1}>
+            <MapSearch
+              markers={[
+                {
+                  position: {
+                    lat: lat,
+                    lng: lon,
+                  },
+                },
+              ]}
+              width={"400px"}
+            />
+          </Flex>
+        </Flex>
       </Stack>
-      <Divider />
-      <Card p={2} mt={10}>
+      <Divider my={10} />
+      <Box px={10} mb={10}>
+      <Card p={5} mt={10}>
         <Heading size="md" textAlign={"center"} my={2}>
           Descripción
         </Heading>
-        <Text>{publication.description}</Text>
+        <Text textAlign={"center"}>{publication.description}</Text>
       </Card>
-      <Divider />
-      <Flex color="#000" mt={16}>
-        <Flex flex={1}>
-          <MapSearch
-            markers={[
-              {
-                position: {
-                  lat: lat,
-                  lng: lon,
-                },
-              },
-            ]}
-          />
-        </Flex>
-      </Flex>
+      </Box>
     </Box>
   );
 }

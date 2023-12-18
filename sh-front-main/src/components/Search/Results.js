@@ -4,7 +4,7 @@ import { Card } from "./Card";
 
 export function Results({ posts }) {
 
-    // if (posts.length === undefined) return <></>; 
+    if (posts.length === undefined) return <></>; 
 
     return (
         <SimpleGrid columns={[1, 1, 2, 2, 3]} spacing="40px">

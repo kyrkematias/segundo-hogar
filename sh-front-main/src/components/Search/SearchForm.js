@@ -18,7 +18,6 @@ import {
   RangeSliderFilledTrack,
   RangeSliderThumb,
   Tooltip,
-  filter,
 } from "@chakra-ui/react";
 import { CustomButton } from "components/commons/CustomButton";
 import { useSearchForm } from "hooks/pages/Search/useSearchForm";

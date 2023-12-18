@@ -137,23 +137,20 @@ export function buildSearchQueryUsingFilters(filters) {
     { ownership: { size: { _lte: ${filters.size} } } }
   `;
   console.log(where_and, ownerships_type, ownershipsType, page_opt)
+  
   const query = `
   query SearchUsingFilters {
     sh_publications(
-      limit: 6,
-      offset: 0,
+      limit: ${filters.limit},
+      offset: ${filters.offset},
       where: {
         _and: [
-          { price: { _gte: 0, _lte: 900000000 } },
-          {
-            ownership: {
-              ownerships_type: { id: { _eq: 1 } },
-              rooms: { _lte: 1 },
-              bathrooms: { _lte: 1 },
-              size: { _lte: 1 }
-            }
-          },
-          { is_furnished: { _eq: true } }
+          { price: { _gte: ${filters.pricemin}, _lte: ${filters.pricemax} } },
+          ${filters.ownerships_type === ANY_OWNERSHIPS_TYPE ? "" : ownerships_type} 
+          { is_furnished: { _eq: ${filters.is_furnished} } },
+          { ownership: { rooms: { _lte: ${filters.rooms} } } },
+          { ownership: { bathrooms: { _lte: ${filters.bathrooms} } } },
+          { ownership: { size: { _lte: ${filters.size} } } }
         ]
       }
     ) {

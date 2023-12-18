@@ -1,10 +1,10 @@
 import React from "react";
-import { Box, Center, Flex, position } from "@chakra-ui/react";
+import { Box, Center, Flex, Text } from "@chakra-ui/react";
 import { FormArea } from "./FormArea";
 import { Results } from "./Results";
 import { useInitialPublications } from "hooks/pages/Search/useInitialPublications";
 import { Loading } from "components/commons/Loading";
-import { MapSearch } from "components/Search/Map";
+import { MapSearchForm } from "./MapSearchForm";
 
 export function Search() {
   const { publications, isError, isFetching } = useInitialPublications();
@@ -13,12 +13,6 @@ export function Search() {
   if (isError) return <div>Error!</div>;
 
   console.log("publications: ", publications);
-  // publications.forEach((publication, index) => {
-  //   console.log(
-  //     `Coordinates for publication ${index + 1}: `,
-  //     publication.ownership.coordinate
-  //   );
-  // });
 
   const markers = publications.map((publication) => {
     return {
@@ -50,14 +44,20 @@ export function Search() {
         </Box>
 
         <Box flex="1">
-          <MapSearch width="100%" height="100%" 
-          markers={markers} 
-          />
+          <MapSearchForm width="100%" height="100%" markers={markers} />
         </Box>
       </Flex>
+
       <Box width={"100%"} my={20}>
         <Center>
-          <Results posts={publications} />
+          {publications.length > 0 ? (
+            <Results posts={publications} />
+          ) : (
+            <Text color={"gray"} fontSize={"22px"} fontStyle={"italic"}>
+              No se encontraron resultados de búsqueda. Intente nuevamente con otras
+              características.
+            </Text>
+          )}
         </Center>
       </Box>
     </>
