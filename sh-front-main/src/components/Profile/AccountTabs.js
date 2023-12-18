@@ -44,12 +44,12 @@ export function AccountTabs() {
             <></>
           )}
           {user_category === USER_CATEGORIES.STUDENT ? (
-            <Tab>Intereses</Tab>
+            <Tab>Preguntas</Tab>
           ) : (
             <></>
           )}
           {user_category === USER_CATEGORIES.STUDENT ? (
-            <Tab>Preguntas</Tab>
+            <Tab>Intereses</Tab>
           ) : (
             <></>
           )}
@@ -125,12 +125,6 @@ export function AccountTabs() {
 
           {user_category === USER_CATEGORIES.STUDENT ? (
             <TabPanel>
-              <SectionHeader section={tags.section} sectionTitle={tags.title} />
-              <Tags fromPage={PAGE} />
-            </TabPanel>
-          ) : null }
-          {user_category === USER_CATEGORIES.STUDENT ? (
-            <TabPanel>
               <SectionHeader
                 section={questions.section}
                 sectionTitle={questions.title}
@@ -138,6 +132,14 @@ export function AccountTabs() {
               <Questions fromPage={PAGE} />
             </TabPanel>
           ) : null }
+          
+          {user_category === USER_CATEGORIES.STUDENT ? (
+            <TabPanel>
+              <SectionHeader section={tags.section} sectionTitle={tags.title} />
+              <Tags fromPage={PAGE} />
+            </TabPanel>
+          ) : null }
+
         </TabPanels>
       </Tabs>
     </>

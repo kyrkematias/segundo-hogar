@@ -1,5 +1,6 @@
 // En el archivo PublicationsList.js
 import { useEffect, useState, useRef } from "react";
+import { useQuery, useApolloClient } from "@apollo/client";
 import {
   Table,
   Thead,
@@ -27,18 +28,34 @@ import {
 import { TbHomeCheck , TbHomeX } from "react-icons/tb";
 import { useGetRequests } from "hooks/utils/useGetRequests";
 import { useSetStateRequest } from "hooks/utils/useSetStateRequest";
+import { useCreateRents } from "hooks/utils/useCreateRents";
+import { GET_STUDENT_ID_BY_USER_EMAIL } from "client/gql/queries/users";
 
 export function RequestsList() {
+
+  const client = useApolloClient();
+
+  // function to get student id by user email
+  const getStudentIdByEmail = async (email) => {
+    const student = await client.query({
+      query: GET_STUDENT_ID_BY_USER_EMAIL,
+      variables: {
+        email: email
+      },
+      fetchPolicy: "no-cache"
+    })
+    console.log("student from function", student)
+    return student.data.sh_users[0].person.students[0].id;
+  }
  
   const [isModalRequestRentOpen, setIsModalRequestRentOpen] = useState(false);
-  const { loadingRequests, errorRequests, requests } = useGetRequests();
-
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [requestState, setRequestState] = useState(null);
   const [aproveRequest, setAproveRequest] = useState(false);
 
+  const { loadingRequests, errorRequests, requests } = useGetRequests();
+  const { createRent, createPriceRent } = useCreateRents();
   const { stateRequest, loadingDisable, errorDisable } = useSetStateRequest(selectedRequest, requestState);
-
 
   const cancelRef = useRef();
 
@@ -75,9 +92,74 @@ export function RequestsList() {
 
   const handleConfirmStateRequest = async () => {
     try {
+      // check if message has all the data
+      // student_email, date_start, date_end, price
+      // if not, throw error
+      // if yes, create a rent and a price_rent
+
+
+      if(aproveRequest){
+        if(requestsList.find((request) => request.id === selectedRequest).message.match(/student_email: (\S+)/) === null){
+          throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir el correo del estudiante.");
+        }
+        if(requestsList.find((request) => request.id === selectedRequest).message.match(/date_start: (\S+)/) === null){
+          throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir la fecha de inicio.");
+        }
+        if(requestsList.find((request) => request.id === selectedRequest).message.match(/date_end: (\S+)/) === null){
+          throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir la fecha de fin.");
+        }
+        if(requestsList.find((request) => request.id === selectedRequest).message.match(/price: (\S+)/) === null){
+          throw new Error("Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir el precio.");
+        }
+      }
+
       await stateRequest(selectedRequest, requestState)
         .then(() => {
           const state = aproveRequest ? "aprobado" : "rechazado";
+          //  if aproved, create a rent and a price_rent
+          if (aproveRequest) {
+            // if aproveRequest is true, create a rent and a price_rent
+            // student_id and price are not present in the request object,
+            // so we need extract for the message in request object via regex
+            // student_id appears after "Id del estudiante: "
+            // price appears after "Precio de renta: "
+            // const student_id = requestsList[selectedRequest].message.match(/Id del estudiante: (\d+)/)[1
+            // const price = selectedRequest.message.match(/Precio de renta: (\d+)/)[1];
+            console.log("request", requestsList.find((request) => request.id === selectedRequest))
+            const request = requestsList.find((request) => request.id === selectedRequest);
+            const student_id = getStudentIdByEmail(
+              request.message.match(/student_email: (\S+)/)[1]
+            )
+            .then((student_id) => {
+              console.log("student_id", student_id);
+              console.log("ownership_id", request.publication.ownership.id);
+              console.log("date_start", request.message.match(/date_start: (\S+)/)[1]); 
+              console.log("date_end", request.message.match(/date_end: (\S+)/)[1]);
+              console.log("price", request.message.match(/price: (\S+)/)[1]);
+              
+              createRent({
+                variables: {
+                  ownerships_id: request.publication.ownership.id,
+                  students_id: student_id,
+                  start_date: request.message.match(/date_start: (\S+)/)[1],
+                  end_date: request.message.match(/date_end: (\S+)/)[1],
+                },
+              })
+              .then((result) => {
+                console.log("result", result);
+                createPriceRent({
+                  variables: {
+                    // pass amount as float8
+                    amount: parseFloat(request.message.match(/price: (\S+)/)[1]),
+                    rents_id: result.data.insert_sh_rents.returning[0].id,
+                  },
+                })
+                .then((result) => {
+                  console.log("result", result);
+                })
+              })
+            })
+          }
           toast({
             title: "Request " + state,
             status: "success",
@@ -213,7 +295,3 @@ export function RequestsList() {
     </>
   );
 }
-
-
-
-
