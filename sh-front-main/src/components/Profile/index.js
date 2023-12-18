@@ -4,7 +4,6 @@ import { sections } from "config/sections";
 import { AccountTabs } from "./AccountTabs";
 
 export function ProfileContainer() {
-  // eslint-disable-next-line
   const { profile } = sections;
 
   return (

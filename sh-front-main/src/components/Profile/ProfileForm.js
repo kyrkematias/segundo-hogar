@@ -36,12 +36,7 @@ export function ProfileForm() {
   const { register, handleSubmit, onSubmit, onCancel, errors, isSubmitting } =
     useProfileForm();
 
-  // cuando se carga el user, se setea el estado seleccionado
-  useEffect(() => {
-    if (user?.person.students?.[0]?.city?.state_id) {
-      setStateSelected(user?.person.students?.[0]?.city?.state_id);
-    }
-  }, [user]);
+  console.log("Data from GET_STUDENT_USER_BY_ID:", user);
 
   return (
     <>
@@ -86,9 +81,9 @@ export function ProfileForm() {
                   w={["100%", "100%", "100%", "100%", "100%"]}
                   _focus={{ background: "none" }}
                 >
-                  <option value="No">No</option>
+                  <option value="False">No</option>
                   <option
-                    value="Si"
+                    value="True"
                     selected={user?.person.students?.[0]?.shared || false}
                   >
                     Si

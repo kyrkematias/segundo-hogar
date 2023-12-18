@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { useRoute } from "wouter";
@@ -32,7 +31,12 @@ import { RiGraduationCapFill } from "react-icons/ri";
 import { FaLocationDot } from "react-icons/fa6";
 import { BsPinMapFill } from "react-icons/bs";
 import { FaPhoneAlt } from "react-icons/fa";
-import { GET_PERSON_BY_ID } from "client/gql/queries/utils";
+import { MdEmail } from "react-icons/md";
+import { FcAbout } from "react-icons/fc";
+import {
+  GET_PERSON_BY_ID,
+  GET_STUDENT_INFO_BY_PERSON_ID,
+} from "client/gql/queries/utils";
 import { SkeletonLoader } from "components/commons/Loading/Skeleton";
 
 const formatDate = (birthdate) => {
@@ -43,18 +47,30 @@ const formatDate = (birthdate) => {
 
 export function RoommateProfileView() {
   const [_, params] = useRoute(paths.roommateAccount);
-  const idPerson = localStorage.getItem("idUser");
+  const idPerson = params.userid;
   const { loading, error, data } = useQuery(GET_PERSON_BY_ID, {
     variables: { id: idPerson },
   });
+  const {
+    loading: studentInfoLoading,
+    error: studentInfoError,
+    data: studentInfoData,
+  } = useQuery(GET_STUDENT_INFO_BY_PERSON_ID, {
+    variables: { id: idPerson },
+  });
 
-  if (loading) return <SkeletonLoader />;
-  if (error) return <Heading>Error: {error.message}</Heading>;
+  if (loading || studentInfoLoading) return <SkeletonLoader />;
+  if (error || studentInfoError)
+    return <Heading>Error: {error.message}</Heading>;
 
   const person = data.sh_persons[0];
+  const studentInfo = studentInfoData.sh_persons[0]?.students[0];
+  const userInfo = studentInfoData.sh_persons[0]?.users[0];
   console.log("person: ", person);
   console.log("data: ", data);
-
+  console.log("student info: ", studentInfo);
+  console.log("student share?: ", studentInfo?.shared);
+  console.log("user bio: ", userInfo?.bio);
   const phoneLink = `https://wa.me/${person.phone}`;
 
   const formattedBirthdate = formatDate(person.birth_date);
@@ -87,12 +103,19 @@ export function RoommateProfileView() {
           flexDirection={{ base: "column", md: "row" }}
           display={"flex"}
           alignItems={"center"}
-          justifyContent={"center"}  
-          textAlign={"center"}       
+          justifyContent={"center"}
+          textAlign={"center"}
           gap={{ base: "1rem", md: "2rem" }}
         >
           <Avatar size="2xl" />
-          <Heading as="h1">{`${person.firstname} ${person.lastname}`}</Heading>
+          <Box>
+            <Heading as="h1">{`${person.firstname} ${person.lastname}`}</Heading>
+            <Box>
+              <Text fontWeight={"semibold"} fontSize={"21px"} color={"gray"}>
+                ({userInfo.username || ""})
+              </Text>
+            </Box>
+          </Box>
         </Box>
         <a href={phoneLink}>
           <Button
@@ -105,6 +128,31 @@ export function RoommateProfileView() {
           </Button>
         </a>
       </Box>
+      <Divider my={10} />
+      <Stack
+        flexDirection={"row"}
+        alignItems={"flex-start"}
+        justifyContent={"space-between"}
+      >
+        <Box flex="0 0 60%">
+          <Flex alignItems={"center"} gap={".5rem"}>
+            <Heading>Acerca de {person.firstname}</Heading>
+            <FcAbout background={"gray"} fontSize={"25px"}/>
+          </Flex>
+          <Text fontWeight={"medium"} my={"10px"}>
+            {userInfo?.bio || (
+              <Heading as="h4" size="md" fontStyle="italic" color="gray">
+                {person.firstname} no ha compartido su biografía aún
+              </Heading>
+            )}
+          </Text>
+        </Box>
+        <Box flex="0 0 40%">
+          <Text fontSize={"20px"} fontWeight={"semibold"} textAlign={"right"}>
+            Compartir renta: {studentInfo?.shared ? "Si" : "No"}
+          </Text>
+        </Box>
+      </Stack>
       <Divider my={10} />
       <Container my={10} width={{ base: "100%", md: "80%" }}>
         <Card>
@@ -306,6 +354,23 @@ export function RoommateProfileView() {
                           fontWeight={"semibold"}
                         >
                           {person.phone || "No especificada"}
+                        </Text>
+                      </Flex>
+                    </Flex>
+                  </Center>
+                  <Center>
+                    <Flex alignItems={"center"} gap={2}>
+                      <Text fontSize={"18px"} fontWeight={"semibold"}>
+                        E-mail:
+                      </Text>
+                      <Flex alignItems={"center"} gap={1}>
+                        <MdEmail color="#4A5568" />
+                        <Text
+                          fontSize={"18px"}
+                          color={"gray.400"}
+                          fontWeight={"semibold"}
+                        >
+                          {userInfo.email || "No especificada"}
                         </Text>
                       </Flex>
                     </Flex>

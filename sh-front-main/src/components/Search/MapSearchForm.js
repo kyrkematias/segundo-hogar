@@ -29,7 +29,7 @@ function getCoordinates(ownership) {
   return coordinates;
 }
 
-export const MapSearch = ({ markers, height, width }) => {
+export const MapSearchForm = ({ markers, height, width }) => {
   const center = useMemo(
     () => ({ lat: -26.81715341828356, lng: -65.19856536761296 }),
     []
@@ -52,7 +52,7 @@ export const MapSearch = ({ markers, height, width }) => {
       <div style={{ height: height, width: width }}>
         <Map
           zoom={16}
-          center={initialPosition}
+          center={center}
           mapId={"50cc0d0fbf707831"}
           mapContainerStyle={{ height: "500px", width: "100%" }}
         >
