@@ -97,6 +97,12 @@ export function FindRoommateForm() {
   const { cities, setStateSelected } = useGetCities();
   const { careers } = useGetCareers();
 
+  // funcion que carga el estado seleccionado y obtiene las ciudades de ese estado
+  const selectState = (stateId) => {
+    setSelectedState(stateId);
+    setStateSelected(stateId);
+  }
+
   return (
     <Box textAlign="left">
       <form>
@@ -196,7 +202,7 @@ export function FindRoommateForm() {
               placeholder="Selecciona..."
               {...register("state")}
               _focus={{ background: "none" }}
-              onChange={(e) => setSelectedState(e.target.value)}
+              onChange={(e) => selectState(e.target.value)}
             >
               {states?.map((state) => {
                 return (
@@ -217,7 +223,7 @@ export function FindRoommateForm() {
               name="city"
               placeholder="Selecciona..."
               {...register("city")}
-              // onChange={(e) => setSelectedCity(e.target.value)}
+              onChange={(e) => setSelectedCity(e.target.value)}
               _focus={{ background: "none" }}
             >
               {cities?.map((city) => {
