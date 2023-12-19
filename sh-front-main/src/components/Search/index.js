@@ -9,7 +9,7 @@ import { MapSearchForm } from "./MapSearchForm";
 export function Search() {
   const { publications, isError, isFetching } = useInitialPublications();
 
-  // const [maxDistance, setMaxDistance] = useState(1);
+  const maxDistance = localStorage.getItem("maxDistance") || 1;
 
   if (isFetching) return <Loading minH={"60vh"} size={"lg"} m={50} />;
   if (isError) return <div>Error!</div>;
@@ -70,16 +70,20 @@ export function Search() {
     );
   });
 
-  // const filteredPublications = publications.filter((publication) => {
-  //   const distance = haversineDistance(
-  //     publication.ownership.coordinate.lat,
-  //     publication.ownership.coordinate.lon,
-  //     referenceLat,
-  //     referenceLon
-  //   );
-
-  //   return distance <= maxDistance; 
-  // });
+  // get the publications that are within the maxDistance
+  const filteredPublications = publications.filter((publication) => {
+    const distance = haversineDistance(
+      publication.ownership.coordinate.lat,
+      publication.ownership.coordinate.lon,
+      referenceLat,
+      referenceLon
+    );
+    console.log("Distance for publication: " + publication.title + " is: " + distance);
+    return distance <= maxDistance;
+  }
+  );
+  console.log("Max Distance: ", maxDistance);
+  console.log("filteredPublications: ", filteredPublications);
 
   return (
     <>

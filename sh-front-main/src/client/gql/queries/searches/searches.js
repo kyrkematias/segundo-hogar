@@ -123,36 +123,26 @@ export function buildSearchQueryUsingFilters(filters) {
       ? DEPARTMENT_OWNERSHIPS_TYPE
       : HOUSE_OWNERSHIPS_TYPE;
 
-  const ownerships_type =
-    filters.ownerships_type === ANY_OWNERSHIPS_TYPE
-      ? ""
-      : `{ ownership: { ownerships_type: { id: { _eq: ${ownershipsType} } } } },`;
-
   const where_and = `
     { price: { _gte: ${filters.pricemin}, _lte: ${filters.pricemax} } }
-    ${filters.ownerships_type === ANY_OWNERSHIPS_TYPE ? "" : ownerships_type} 
     { is_furnished: { _eq: ${filters.is_furnished} } },
-    { ownership: { rooms: { _lte: ${filters.rooms} } } },
-    { ownership: { bathrooms: { _lte: ${filters.bathrooms} } } },
-    { ownership: { size: { _lte: ${filters.size} } } }
+    { 
+      ownership: { 
+        rooms: { _lte: ${filters.rooms} }
+        bathrooms: { _lte: ${filters.bathrooms} }
+        size: { _lte: ${filters.size} }
+        ownerships_type: { id: { _eq: ${ownershipsType} } }
+      } 
+    },
   `;
-  console.log(where_and, ownerships_type, ownershipsType, page_opt)
+  // console.log(where_and, ownerships_type, ownershipsType, page_opt)
   
   const query = `
   query SearchUsingFilters {
     sh_publications(
       limit: ${filters.limit},
       offset: ${filters.offset},
-      where: {
-        _and: [
-          { price: { _gte: ${filters.pricemin}, _lte: ${filters.pricemax} } },
-          ${filters.ownerships_type === ANY_OWNERSHIPS_TYPE ? "" : ownerships_type} 
-          { is_furnished: { _eq: ${filters.is_furnished} } },
-          { ownership: { rooms: { _lte: ${filters.rooms} } } },
-          { ownership: { bathrooms: { _lte: ${filters.bathrooms} } } },
-          { ownership: { size: { _lte: ${filters.size} } } }
-        ]
-      }
+      where: { _and: [${where_and}] },
     ) {
       id
       title

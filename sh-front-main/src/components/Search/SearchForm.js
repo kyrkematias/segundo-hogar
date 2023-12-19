@@ -36,11 +36,11 @@ export function SearchForm({ onSearch }) {
   const [showStartTooltip, setShowStartTooltip] = useState(false);
   const [showEndTooltip, setShowEndTooltip] = useState(false);
 
-  // const [maxDistance, setMaxDistance] = useState(1);
+  const [maxDistance, setMaxDistance] = useState(1);
 
-  // const handleDistanceChange = (value) => {
-  //   setMaxDistance(value);
-  // };
+  const handleDistanceChange = (value) => {
+    setMaxDistance(value);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,12 +57,13 @@ export function SearchForm({ onSearch }) {
       size,
       priceRange,
     };
-    // const maxDistFilter = {
-    //   maxDistance: maxDistance,
-    // };
-    // onSearch(maxDistFilter);
+    const maxDistFilter = {
+      maxDistance: maxDistance,
+    };
+    onSearch(maxDistFilter);
     onSubmitSearchPublications(filters);
-    // console.log("Max Distance: ", maxDistFilter);
+    localStorage.setItem("maxDistance", maxDistance)
+    console.log("Max Distance: ", maxDistFilter);
     console.log("filters: ", filters);
   };
 
@@ -209,7 +210,7 @@ export function SearchForm({ onSearch }) {
           max={20}
           size="md"
           maxW={24}
-          // onChange={(value) => handleDistanceChange(value)}
+          onChange={(value) => handleDistanceChange(value)}
         >
           <NumberInputField />
           <NumberInputStepper>

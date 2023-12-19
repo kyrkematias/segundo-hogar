@@ -5,14 +5,14 @@ import { SectionHeader } from "components/commons/SectionHeader";
 import { sections } from "config/sections";
 
 export function FormArea({ posts }) {
-  // const [maxDistance, setMaxDistance] = useState(1);
+  const [maxDistance, setMaxDistance] = useState(1);
 
   const { search } = sections;
 
-  // const handleSearch = (filters) => {
-  //   setMaxDistance(filters.maxDistance); 
-  //   console.log("Filters from SearchForm:", filters);
-  // };
+  const handleSearch = (filters) => {
+    setMaxDistance(filters.maxDistance); 
+    console.log("Filters from SearchForm:", filters);
+  };
 
   return (
     <Flex
@@ -29,7 +29,7 @@ export function FormArea({ posts }) {
       <Box width={["100%", "100%", "80%", "45%"]} pl={8} pt={4}>
         <SectionHeader section={search.section} sectionTitle={search.title} />
         <SearchForm 
-        // onSearch={handleSearch}
+         onSearch={handleSearch}
         />
       </Box>
     </Flex>
