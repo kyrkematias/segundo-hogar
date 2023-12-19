@@ -99,8 +99,8 @@ export function Search() {
 
       <Box width={"100%"} my={20}>
         <Center>
-          {publications.length > 0 ? (
-            <Results posts={publications} />
+          {filteredPublications.length > 0 ? (
+            <Results posts={filteredPublications} />
           ) : (
             <Text color={"gray"} fontSize={"22px"} fontStyle={"italic"}>
               No se encontraron resultados de búsqueda. Intente nuevamente con
