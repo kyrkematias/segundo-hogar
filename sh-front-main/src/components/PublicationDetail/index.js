@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import { format } from "date-fns";
 import {
   Box,
   Flex,
@@ -75,7 +76,16 @@ export function PublicationDetail() {
               {publication.title}
             </Heading>
             <Heading color={"gray"}>${publication.price}</Heading>
-            <Text>Fecha de publicación: {publication.created_at}</Text>
+            <Text
+              fontWeight={"medium"}
+              fontSize={"15px"}
+              textDecor={"underline"}
+              cursor={"pointer"}
+              color={"gray"}
+            >
+              Publicado el{" "}
+              {format(new Date(publication.created_at), "dd-MM-yyyy")}
+            </Text>
             <Heading size="sm" textAlign={"center"} my={2}>
               Contacta con el propietario:
             </Heading>
@@ -284,12 +294,12 @@ export function PublicationDetail() {
       </Stack>
       <Divider my={10} />
       <Box px={10} mb={10}>
-      <Card p={5} mt={10}>
-        <Heading size="md" textAlign={"center"} my={2}>
-          Descripción
-        </Heading>
-        <Text textAlign={"center"}>{publication.description}</Text>
-      </Card>
+        <Card p={5} mt={10}>
+          <Heading size="md" textAlign={"center"} my={2}>
+            Descripción
+          </Heading>
+          <Text textAlign={"center"}>{publication.description}</Text>
+        </Card>
       </Box>
     </Box>
   );
