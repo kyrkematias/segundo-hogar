@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Center, Flex, Text } from "@chakra-ui/react";
 import { FormArea } from "./FormArea";
 import { Results } from "./Results";
@@ -8,6 +8,8 @@ import { MapSearchForm } from "./MapSearchForm";
 
 export function Search() {
   const { publications, isError, isFetching } = useInitialPublications();
+
+  // const [maxDistance, setMaxDistance] = useState(1);
 
   if (isFetching) return <Loading minH={"60vh"} size={"lg"} m={50} />;
   if (isError) return <div>Error!</div>;
@@ -34,7 +36,50 @@ export function Search() {
     };
   });
 
+  function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    return distance;
+  }
+
   console.log("markers: ", markers);
+
+  const referenceLat = -26.81715341828356;
+  const referenceLon = -65.19856536761296;
+
+  publications.forEach((publication) => {
+    const distance = haversineDistance(
+      publication.ownership.coordinate.lat,
+      publication.ownership.coordinate.lon,
+      referenceLat,
+      referenceLon
+    );
+
+    console.log(
+      `Distancia para la publicación "${publication.title}": ${distance} km`
+    );
+  });
+
+  // const filteredPublications = publications.filter((publication) => {
+  //   const distance = haversineDistance(
+  //     publication.ownership.coordinate.lat,
+  //     publication.ownership.coordinate.lon,
+  //     referenceLat,
+  //     referenceLon
+  //   );
+
+  //   return distance <= maxDistance; 
+  // });
 
   return (
     <>
@@ -54,8 +99,8 @@ export function Search() {
             <Results posts={publications} />
           ) : (
             <Text color={"gray"} fontSize={"22px"} fontStyle={"italic"}>
-              No se encontraron resultados de búsqueda. Intente nuevamente con otras
-              características.
+              No se encontraron resultados de búsqueda. Intente nuevamente con
+              otras características.
             </Text>
           )}
         </Center>

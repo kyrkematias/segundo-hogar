@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
-import { MapContainer } from "components/commons/MapContainer";
 import { SearchForm } from "./SearchForm";
 import { SectionHeader } from "components/commons/SectionHeader";
 import { sections } from "config/sections";
-import { INITIAL_CENTER, INITIAL_ZOOM } from "config/map";
-import {MapSearch} from "./Map";
 
 export function FormArea({ posts }) {
-  
+  // const [maxDistance, setMaxDistance] = useState(1);
+
   const { search } = sections;
+
+  // const handleSearch = (filters) => {
+  //   setMaxDistance(filters.maxDistance); 
+  //   console.log("Filters from SearchForm:", filters);
+  // };
 
   return (
     <Flex
@@ -25,7 +28,9 @@ export function FormArea({ posts }) {
     >
       <Box width={["100%", "100%", "80%", "45%"]} pl={8} pt={4}>
         <SectionHeader section={search.section} sectionTitle={search.title} />
-        <SearchForm />
+        <SearchForm 
+        // onSearch={handleSearch}
+        />
       </Box>
     </Flex>
   );

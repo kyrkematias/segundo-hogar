@@ -23,7 +23,7 @@ import { CustomButton } from "components/commons/CustomButton";
 import { useSearchForm } from "hooks/pages/Search/useSearchForm";
 import { ANY_OWNERSHIPS_TYPE } from "const";
 
-export function SearchForm() {
+export function SearchForm({ onSearch }) {
   const { onSubmitSearchPublications } = useSearchForm();
 
   const [ownershipsType, setOwnershipsType] = useState(ANY_OWNERSHIPS_TYPE);
@@ -35,6 +35,12 @@ export function SearchForm() {
   const [priceRange, setPriceRange] = useState([0, 100000]);
   const [showStartTooltip, setShowStartTooltip] = useState(false);
   const [showEndTooltip, setShowEndTooltip] = useState(false);
+
+  // const [maxDistance, setMaxDistance] = useState(1);
+
+  // const handleDistanceChange = (value) => {
+  //   setMaxDistance(value);
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +57,12 @@ export function SearchForm() {
       size,
       priceRange,
     };
+    // const maxDistFilter = {
+    //   maxDistance: maxDistance,
+    // };
+    // onSearch(maxDistFilter);
     onSubmitSearchPublications(filters);
+    // console.log("Max Distance: ", maxDistFilter);
     console.log("filters: ", filters);
   };
 
@@ -192,7 +203,14 @@ export function SearchForm() {
       </FormControl>
       <FormControl>
         <FormLabel>Distancia máxima de la facultad (KMs)</FormLabel>
-        <NumberInput defaultValue={1} min={0} max={20} size="md" maxW={24}>
+        <NumberInput
+          defaultValue={1}
+          min={0}
+          max={20}
+          size="md"
+          maxW={24}
+          // onChange={(value) => handleDistanceChange(value)}
+        >
           <NumberInputField />
           <NumberInputStepper>
             <NumberIncrementStepper />

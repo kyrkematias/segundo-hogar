@@ -9,7 +9,6 @@ import {
 import { MarkerCard } from "./MarkerCard";
 import { FaUniversity } from "react-icons/fa";
 
-
 function getCoordinates(ownership) {
   if (
     ownership === undefined ||
@@ -80,7 +79,16 @@ export const MapSearchForm = ({ markers, height, width }) => {
               </AdvancedMarker>
             ))}
           <AdvancedMarker position={center} key="central-marker">
-            <FaUniversity fontSize={"15px"}/> 
+            <div
+              style={{
+                borderRadious: "50%",
+                background: "black",
+                padding: ".3rem",
+                borderRadius: "50%",
+              }}
+            >
+              <FaUniversity fontSize={"22px"} color="white" />
+            </div>
           </AdvancedMarker>
         </Map>
       </div>
