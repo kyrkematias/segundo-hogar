@@ -31,15 +31,25 @@ export function SearchForm({ onSearch }) {
   const [bedrooms, setBedrooms] = useState(1);
   const [bathrooms, setBathrooms] = useState(1);
   const [size, setSize] = useState(40);
-
+  const [zoom, setZoom] = useState(15);
   const [priceRange, setPriceRange] = useState([0, 100000]);
   const [showStartTooltip, setShowStartTooltip] = useState(false);
   const [showEndTooltip, setShowEndTooltip] = useState(false);
 
   const [maxDistance, setMaxDistance] = useState(1);
 
+  const calculateZoom = (maxDistance) => {
+    const baseZoom = 15; 
+    const distanceFactor = 1.5; 
+    const calculatedZoom = baseZoom - Math.log2(maxDistance) * distanceFactor;
+  
+    return Math.max(1, Math.min(20, calculatedZoom));
+  };
+
   const handleDistanceChange = (value) => {
     setMaxDistance(value);
+    const newZoom = calculateZoom(value);
+    setZoom(newZoom);
   };
 
   const handleChange = (e) => {
@@ -62,7 +72,7 @@ export function SearchForm({ onSearch }) {
     };
     onSearch(maxDistFilter);
     onSubmitSearchPublications(filters);
-    localStorage.setItem("maxDistance", maxDistance)
+    localStorage.setItem("maxDistance", maxDistance);
     console.log("Max Distance: ", maxDistFilter);
     console.log("filters: ", filters);
   };

@@ -70,7 +70,6 @@ export function Search() {
     );
   });
 
-  // get the publications that are within the maxDistance
   const filteredPublications = publications.filter((publication) => {
     const distance = haversineDistance(
       publication.ownership.coordinate.lat,
@@ -78,10 +77,11 @@ export function Search() {
       referenceLat,
       referenceLon
     );
-    console.log("Distance for publication: " + publication.title + " is: " + distance);
+    console.log(
+      "Distance for publication: " + publication.title + " is: " + distance
+    );
     return distance <= maxDistance;
-  }
-  );
+  });
   console.log("Max Distance: ", maxDistance);
   console.log("filteredPublications: ", filteredPublications);
 

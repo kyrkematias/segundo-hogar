@@ -8,7 +8,16 @@ import {
 } from "@vis.gl/react-google-maps";
 import { MarkerCard } from "./MarkerCard";
 import { FaUniversity } from "react-icons/fa";
-
+import { RadiusOne } from "./RadiusArea/RadiusArea-1";
+import { RadiusTwo } from "./RadiusArea/RadiusArea-2";
+import { RadiusThree } from "./RadiusArea/RadiusArea-3";
+import { RadiusFour } from "./RadiusArea/RadiusArea-4";
+import { RadiusFive } from "./RadiusArea/RadiusArea-5";
+import { RadiusSix } from "./RadiusArea/RadiusArea-6";
+import { RadiusSeven } from "./RadiusArea/RadiusArea-7";
+import { RadiusEight } from "./RadiusArea/RadiusArea-8";
+import { RadiusNine } from "./RadiusArea/RadiusArea-9";
+import { RadiusTen } from "./RadiusArea/RadiusArea-10";
 function getCoordinates(ownership) {
   if (
     ownership === undefined ||
@@ -34,6 +43,22 @@ export const MapSearchForm = ({ markers, height, width }) => {
     []
   );
 
+  const maxDistance = localStorage.getItem("maxDistance");
+  console.log("max distance on map search", maxDistance);
+
+  const calculateZoom = (maxDistance) => {
+    const baseZoom = 15;
+    const distanceFactor = 1.1;
+    const calculatedZoom = baseZoom - Math.log2(maxDistance) * distanceFactor;
+
+    return Math.max(1, Math.min(20, calculatedZoom));
+  };
+
+  var zoom = useMemo(() => calculateZoom(maxDistance), [maxDistance ] );
+  if(!maxDistance){
+    zoom = 15
+  }
+
   height = height || "400px";
   width = width || "100%";
 
@@ -50,7 +75,7 @@ export const MapSearchForm = ({ markers, height, width }) => {
     <APIProvider apiKey="AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE">
       <div style={{ height: height, width: width }}>
         <Map
-          zoom={16}
+          zoom={zoom}
           center={center}
           mapId={"50cc0d0fbf707831"}
           mapContainerStyle={{ height: "500px", width: "100%" }}
@@ -81,14 +106,29 @@ export const MapSearchForm = ({ markers, height, width }) => {
           <AdvancedMarker position={center} key="central-marker">
             <div
               style={{
-                borderRadious: "50%",
                 background: "black",
                 padding: ".3rem",
                 borderRadius: "50%",
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
               }}
             >
               <FaUniversity fontSize={"22px"} color="white" />
             </div>
+          </AdvancedMarker>
+          <AdvancedMarker position={center}>
+            {maxDistance === "1" && <RadiusOne />}
+            {maxDistance === "2" && <RadiusTwo />}
+            {maxDistance === "3" && <RadiusThree />}
+            {maxDistance === "4" && <RadiusFour />}
+            {maxDistance === "5" && <RadiusFive />}
+            {maxDistance === "6" && <RadiusSix />}
+            {maxDistance === "7" && <RadiusSeven />}
+            {maxDistance === "8" && <RadiusEight />}
+            {maxDistance === "9" && <RadiusNine />}
+            {maxDistance === "10" && <RadiusTen />}
           </AdvancedMarker>
         </Map>
       </div>
