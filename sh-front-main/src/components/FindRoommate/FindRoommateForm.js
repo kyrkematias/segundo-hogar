@@ -36,7 +36,8 @@ export function FindRoommateForm() {
   const [selectedState, setSelectedState] = useState(null);
   const [parsedSelectedState, setParsedSelectedState] = useState(null);
   const [selectedAge, setSelectedAge] = useState(null);
-  const [selectedCity, setSelectedCity] = useState(null)
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [parsedSelectedCity, setParsedSelectedCity] = useState(null)
   const { loading, error, data: students } = useQuery(GET_STUDENTS);
 
   const {
@@ -54,8 +55,10 @@ export function FindRoommateForm() {
     filters.city = selectedCity;
     const parsedSelectedState = parseInt(selectedState);
     setParsedSelectedState(parsedSelectedState);
-    // console.log("filtros", filters);
-    // console.log("estudiantes: ", students);
+    const parsedSelectedCity = parseInt(selectedCity);
+    setParsedSelectedCity(parsedSelectedCity)
+    console.log("filtros", filters);
+    console.log("estudiantes: ", students);
 
     const studentGender = students.sh_students.map(
       (student) => student?.person?.gender
@@ -76,32 +79,39 @@ export function FindRoommateForm() {
     const genderMatch = studentGender.includes(selectedGender);
     const careerMatch = studentCareers.includes(selectedCareer);
     const statesMatch = studentStates.includes(parsedSelectedState);
-    const cityMatch = studentCity.includes(selectedCity);
-    const ageMatch = studentBirthDates.every(
-      (birthDate) => {
-        const age = differenceInYears(new Date(), birthDate);
-        return age >= ageRange[0] && age <= ageRange[1];
-      }
-    );
+    const cityMatch = studentCity.includes(parsedSelectedCity);
+    const ageMatch = studentBirthDates.every((birthDate) => {
+      const age = differenceInYears(new Date(), birthDate);
+      return age >= ageRange[0] && age <= ageRange[1];
+    });
 
-    const allMatches = genderMatch && careerMatch && statesMatch;
+    const allMatches = genderMatch && careerMatch && statesMatch && cityMatch;
 
-    console.log(allMatches);
-
+    console.log("all matches", allMatches);
+    console.log("gender match", genderMatch);
+    console.log("career match", careerMatch);
+    console.log("states match", statesMatch);
+    console.log("city match", cityMatch);
+    console.log("students cities", studentCity)
+    console.log("student city filter", parsedSelectedCity)
+    console.log("tipe city id", typeof(studentCity))
+    console.log("tipe city filter", typeof(parsedSelectedCity))
     setFilters(filters);
     setShowStudentsCards(allMatches);
     setNoResults(!allMatches);
   };
 
+  
+
   const { states } = useGetStates();
   const { cities, setStateSelected } = useGetCities();
   const { careers } = useGetCareers();
 
-  // funcion que carga el estado seleccionado y obtiene las ciudades de ese estado
   const selectState = (stateId) => {
     setSelectedState(stateId);
     setStateSelected(stateId);
-  }
+  };
+
 
   return (
     <Box textAlign="left">
@@ -256,6 +266,7 @@ export function FindRoommateForm() {
           filters={filters}
           students={students.sh_students}
           parsedSelectedState={parsedSelectedState}
+          parsedSelectedCity={parsedSelectedCity}
         />
       ) : (
         noResults && (

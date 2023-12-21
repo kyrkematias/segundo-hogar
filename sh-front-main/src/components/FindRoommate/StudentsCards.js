@@ -17,13 +17,18 @@ import { IoMaleFemaleSharp } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
 import { differenceInYears } from "date-fns";
 
-export function StudentsCards({ filters, students, parsedSelectedState }) {
+export function StudentsCards({
+  filters,
+  students,
+  parsedSelectedState,
+  parsedSelectedCity,
+}) {
   const [_, setLocation] = useLocation();
 
   const redirectToProfile = (id) => {
     setLocation(`/roommate/${id}`);
-    localStorage.setItem("idUser", id)
-    console.log("id user: ",id)
+    localStorage.setItem("idUser", id);
+    console.log("id user: ", id);
   };
 
   const buttonBgColor = useColorModeValue("#151f21", "gray.900");
@@ -38,15 +43,17 @@ export function StudentsCards({ filters, students, parsedSelectedState }) {
             (!filters.gender || student.person.gender === filters.gender) &&
             (!filters.career || student.career.name === filters.career) &&
             (!filters.state || student.city.state.id === parsedSelectedState) &&
-            (!filters.ageRange ||
-              (differenceInYears(
-                new Date(),
-                new Date(student.person.birth_date)
-              ) >= filters.ageRange[0] &&
-                differenceInYears(
+            (!filters.city || student.city.id === parsedSelectedCity) && (
+              !filters.ageRange ||
+                (differenceInYears(
                   new Date(),
                   new Date(student.person.birth_date)
-                ) <= filters.ageRange[1])) && (
+                ) >= filters.ageRange[0] &&
+                  differenceInYears(
+                    new Date(),
+                    new Date(student.person.birth_date)
+                  ) <= filters.ageRange[1])
+            ) && (
               <Box
                 key={student.person.id}
                 maxW={"330px"}
