@@ -90,7 +90,6 @@ const GoogleSignIn = () => {
       console.error("Error al iniciar sesión con Google:", error);
       if (error.code === 'auth/account-exists-with-different-credential') {
         const loginError = "Ya existe una cuenta con el mismo correo electrónico pero con diferente credencial de inicio de sesión. Intente iniciar sesión con una credencial diferente.";
-        // opent toast if error
         toast({
           title: "Error al iniciar sesión",
           description: loginError,
@@ -104,9 +103,9 @@ const GoogleSignIn = () => {
 
   useEffect(() => {
     const firebaseConfig = {
-      apiKey: "AIzaSyDv0m8GINFjvOoKmwwY114Ts0Y8CJaRDpo",
-      authDomain: "segundo-hogar.firebaseapp.com",
-      projectId: "segundo-hogar",
+      apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+      authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
     };
 
     if (!getApps().length) {

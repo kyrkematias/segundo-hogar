@@ -52,7 +52,6 @@ const PlacesAutocomplete = ({ setSelected }) => {
         placeholder="Dirección del inmueble"
       />
       <ComboboxPopover
-      // set position fixed to show suggestions on top of the modal
         style={{ 
           position: "absolute",
           zIndex: "9999", 

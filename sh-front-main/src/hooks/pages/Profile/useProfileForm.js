@@ -7,7 +7,7 @@ import {
   UPDATE_STUDENT_BY_USER_ID,
   UPDATE_STATES
 } from "client/gql/mutations/updateProfileInfo/updateProfileInfo";
-import { useToast } from "@chakra-ui/react"; // Importa el hook de toast
+import { useToast } from "@chakra-ui/react";
 
 export function useProfileForm() {
   const { user } = useGetUser();
@@ -27,7 +27,6 @@ export function useProfileForm() {
     console.log("data: ", data);
   
     try {
-      // Lógica de actualización de datos
       await updateGender({
         variables: {
           userId: user.id,
@@ -58,7 +57,6 @@ export function useProfileForm() {
         },
       });
   
-      // Mostrar toast de éxito
       toast({
         title: "Datos actualizados.",
         description: "Los datos se han actualizado exitosamente.",
@@ -69,7 +67,6 @@ export function useProfileForm() {
     } catch (error) {
       console.error("Error al actualizar datos:", error);
   
-      // Mostrar toast de error
       toast({
         title: "Error al actualizar datos.",
         description: "Algo salió mal. Por favor, intenta de nuevo.",

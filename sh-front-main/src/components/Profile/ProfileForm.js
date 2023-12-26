@@ -37,6 +37,7 @@ export function ProfileForm() {
     useProfileForm();
 
   console.log("Data from GET_STUDENT_USER_BY_ID:", user);
+  console.log("file nr. ", user?.person?.students?.[0]?.file_number);
 
   return (
     <>
@@ -56,7 +57,7 @@ export function ProfileForm() {
             >
               <Text fontSize="2xl">{`${user?.person.lastname}, ${user?.person.firstname}`}</Text>
               <Text fontSize="lg">{`Legajo: ${
-                user?.person.students?.[0]?.file_number || "-"
+                user?.person?.students?.[0]?.file_number || "-"
               }`}</Text>
               <Text fontSize="lg">{`@${user?.username}`}</Text>
               <Text fontSize="lg">{user?.email}</Text>
@@ -131,19 +132,28 @@ export function ProfileForm() {
                 >
                   <option
                     value="Male"
-                    selected={user?.person.gender.toUpperCase() === "MALE"}
+                    selected={
+                      user?.person.gender &&
+                      user?.person.gender.toUpperCase() === "MALE"
+                    }
                   >
                     Masculino
                   </option>
                   <option
                     value="Female"
-                    selected={user?.person.gender.toUpperCase() === "FEMALE"}
+                    selected={
+                      user?.person.gender &&
+                      user?.person.gender.toUpperCase() === "FEMALE"
+                    }
                   >
                     Femenino
                   </option>
                   <option
                     value="Other"
-                    selected={user?.person.gender.toUpperCase() === "OTHER"}
+                    selected={
+                      user?.person.gender &&
+                      user?.person.gender.toUpperCase() === "OTHER"
+                    }
                   >
                     Otro
                   </option>
@@ -170,8 +180,10 @@ export function ProfileForm() {
                         value={state.id}
                         key={state.id}
                         selected={
-                          user.person.students[0].city.state_id === state.id &&
-                          user.person?.students[0].city.state_id !== undefined
+                          user?.person?.students[0]?.city?.state_id ===
+                            state.id &&
+                          user?.person?.students[0]?.city?.state_id !==
+                            undefined
                         }
                       >
                         {state.name}
@@ -198,8 +210,8 @@ export function ProfileForm() {
                         value={city.id}
                         key={city.id}
                         selected={
-                          user.person.students[0].city.id === city.id &&
-                          user.person?.students[0].city.id !== undefined
+                          user.person?.students[0]?.city.id === city.id &&
+                          user.person?.students[0]?.city.id !== undefined
                         }
                       >
                         {city.name}

@@ -42,18 +42,16 @@ export function CompleteRegisterForm() {
   const {
     register,
     handleSubmit,
-    setValue, // Add this line to get access to the setValue function
+    setValue, 
     formState: { errors },
   } = useForm();
 
   const { states } = useGetStates();
   const { cities, setStateSelected } = useGetCities();
   const { careers } = useGetCareers();
-  // apollo client with void cache
   const client = useApolloClient();
   const [_, setLocation] = useLocation();
 
-  // Get values from localStorage
   const storedUserData = JSON.parse(localStorage.getItem("userData")) || {};
   const storedFirstname = storedUserData.firstname || "";
   const storedLastname = storedUserData.lastname || "";
@@ -72,7 +70,6 @@ export function CompleteRegisterForm() {
     };
     return userToSave;
 }
-  // Set default values for firstname and lastname
   useEffect(() => {
     if (storedFirstname) {
       setValue("firstname", storedFirstname);
@@ -90,7 +87,6 @@ export function CompleteRegisterForm() {
   const onSubmit = async (data) => {
     
     try {
-      // get person id by user email
       console.log("Completar perfil data.email: " + data.email)
       const personIdData = await client.query({
         query: GET_PERSON_ID_BY_USER_EMAIL,

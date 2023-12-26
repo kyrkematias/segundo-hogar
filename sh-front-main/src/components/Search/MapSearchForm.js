@@ -72,12 +72,12 @@ export const MapSearchForm = ({ markers, height, width }) => {
   }, [markers, center]);
 
   return (
-    <APIProvider apiKey="AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE">
+    <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_PLATFORM_API_KEY}>
       <div style={{ height: height, width: width }}>
         <Map
           zoom={zoom}
           center={center}
-          mapId={"50cc0d0fbf707831"}
+          mapId={process.env.REACT_APP_GOOGLE_MAPS_ID}
           mapContainerStyle={{ height: "500px", width: "100%" }}
         >
           {markers &&
