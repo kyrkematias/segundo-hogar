@@ -137,16 +137,6 @@ export function SignIn() {
               }}
               redirect_uri={REDIRECT_URI}
             />
-{/* 
-            <FacebookSignIn
-              onResolve={({ provider, data }) => {
-                onSubmitLogginWithSocialNet({ data, provider });
-              }}
-              onReject={(err) => {
-                console.log(err);
-              }}
-              redirect_uri={REDIRECT_URI}
-            /> */}
             
             <MicrosoftSignIn
               onResolve={({ provider, data }) => {

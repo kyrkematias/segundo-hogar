@@ -25,7 +25,7 @@ import { Loading } from "../Loading";
 
 export default function Places() {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_PLATFORM_API_KEY,
     libraries: ["places"],
   });
 
@@ -42,7 +42,7 @@ export const NewMap = () => {
 
   return (
     <>
-      <APIProvider apiKey="AIzaSyBYEDIX4cSpqRyO21insyza9dkUFgp9PAE">
+      <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_PLATFORM_API_KEY}>
         <div style={{ height: "500px", width: "500px", margin: "auto" }}>
           <div
             className="places-container"
@@ -53,7 +53,7 @@ export const NewMap = () => {
           <GoogleMap
             zoom={14}
             center={selected}
-            mapId={"50cc0d0fbf707831"}
+            mapId={process.env.REACT_APP_GOOGLE_MAPS_ID}
             mapContainerStyle={{ height: "500px", width: "500px" }}
           >
             {selected && <Marker position={selected} />}

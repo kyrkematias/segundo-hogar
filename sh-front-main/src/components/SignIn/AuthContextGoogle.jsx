@@ -1,6 +1,11 @@
-import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider, onAuthStateChanged } from 'firebase/auth';
-import { createContext, useContext } from 'react';
-import { useState, useEffect } from 'react';
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { createContext, useContext } from "react";
+import { useState, useEffect } from "react";
 import { auth } from "./firebase.config";
 
 export const authContext = createContext();
@@ -8,7 +13,7 @@ export const authContext = createContext();
 export const useAuth = () => {
   const context = useContext(authContext);
   if (!context) {
-    console.log('Error creating auth context');
+    console.log("Error creating auth context");
   }
   return context;
 };
@@ -20,7 +25,7 @@ export function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
         setUser(null);
-        console.log('No user subscribed');
+        console.log("No user subscribed");
       } else {
         setUser(currentUser);
       }
@@ -35,10 +40,9 @@ export function AuthProvider({ children }) {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       if (user) {
-  
       }
     } catch (error) {
-      console.error('Error al iniciar sesión con Google:', error);
+      console.error("Error al iniciar sesión con Google:", error);
     }
   };
 
@@ -50,9 +54,9 @@ export function AuthProvider({ children }) {
       if (user) {
       }
     } catch (error) {
-      console.error('Error al iniciar sesión con GitHub:', error);
+      console.error("Error al iniciar sesión con GitHub:", error);
     }
-  }
+  };
 
   return (
     <authContext.Provider value={{ loginWithGoogle, loginWithGitHub, user }}>

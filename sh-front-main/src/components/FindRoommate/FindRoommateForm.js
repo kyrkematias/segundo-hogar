@@ -20,11 +20,13 @@ import { CustomButton } from "components/commons/CustomButton";
 import { useGetCities } from "hooks/utils/useGetCities";
 import { useGetStates } from "hooks/utils/useGetStates";
 import { useGetCareers } from "hooks/utils/useGetCareers";
+import { useFindRoommateFormValidation } from "hooks/pages/FindRoomates/useFindRoommateFormValidation";
 import { differenceInYears } from "date-fns";
 import { GET_STUDENTS } from "client/gql/queries/utils";
 import { StudentsCards } from "./StudentsCards";
 
 export function FindRoommateForm() {
+  
   const [ageRange, setAgeRange] = useState([18, 40]);
   const [showStartTooltip, setShowStartTooltip] = useState(false);
   const [showEndTooltip, setShowEndTooltip] = useState(false);
@@ -37,7 +39,7 @@ export function FindRoommateForm() {
   const [parsedSelectedState, setParsedSelectedState] = useState(null);
   const [selectedAge, setSelectedAge] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
-  const [parsedSelectedCity, setParsedSelectedCity] = useState(null)
+  const [parsedSelectedCity, setParsedSelectedCity] = useState(null);
   const { loading, error, data: students } = useQuery(GET_STUDENTS);
 
   const {
@@ -56,7 +58,7 @@ export function FindRoommateForm() {
     const parsedSelectedState = parseInt(selectedState);
     setParsedSelectedState(parsedSelectedState);
     const parsedSelectedCity = parseInt(selectedCity);
-    setParsedSelectedCity(parsedSelectedCity)
+    setParsedSelectedCity(parsedSelectedCity);
     console.log("filtros", filters);
     console.log("estudiantes: ", students);
 
@@ -92,16 +94,14 @@ export function FindRoommateForm() {
     console.log("career match", careerMatch);
     console.log("states match", statesMatch);
     console.log("city match", cityMatch);
-    console.log("students cities", studentCity)
-    console.log("student city filter", parsedSelectedCity)
-    console.log("tipe city id", typeof(studentCity))
-    console.log("tipe city filter", typeof(parsedSelectedCity))
+    console.log("students cities", studentCity);
+    console.log("student city filter", parsedSelectedCity);
+    console.log("tipe city id", typeof studentCity);
+    console.log("tipe city filter", typeof parsedSelectedCity);
     setFilters(filters);
     setShowStudentsCards(allMatches);
     setNoResults(!allMatches);
   };
-
-  
 
   const { states } = useGetStates();
   const { cities, setStateSelected } = useGetCities();
@@ -111,7 +111,6 @@ export function FindRoommateForm() {
     setSelectedState(stateId);
     setStateSelected(stateId);
   };
-
 
   return (
     <Box textAlign="left">
@@ -131,7 +130,7 @@ export function FindRoommateForm() {
             <option value="other">Otro</option>
           </Select>
           <FormErrorMessage>
-            {errors.gender && errors.gender.message}
+            {errors.gender && errors.gender.message} || "Selecciona un género"
           </FormErrorMessage>
         </FormControl>
 

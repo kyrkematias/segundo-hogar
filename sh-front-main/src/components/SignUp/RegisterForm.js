@@ -35,7 +35,6 @@ import { useRegisterUser } from "hooks/pages/SignUp/useRegisterUser";
 import { CustomButton } from "components/commons/CustomButton";
 
 export function RegisterForm() {
-
   const {
     loading,
     error,
@@ -45,9 +44,8 @@ export function RegisterForm() {
     handleSubmit,
     errors,
     showPass,
-    handleShowPass
+    handleShowPass,
   } = useRegisterUser();
-
 
   const { states } = useGetStates();
   const { cities, setStateSelected } = useGetCities();
