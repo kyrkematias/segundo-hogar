@@ -43,17 +43,16 @@ export function StudentsCards({
             (!filters.gender || student.person.gender === filters.gender) &&
             (!filters.career || student.career.name === filters.career) &&
             (!filters.state || student.city.state.id === parsedSelectedState) &&
-            (!filters.city || student.city.id === parsedSelectedCity) && (
-              !filters.ageRange ||
-                (differenceInYears(
+            (!filters.city || student.city.id === parsedSelectedCity) &&
+            (!filters.ageRange ||
+              (differenceInYears(
+                new Date(),
+                new Date(student.person.birth_date)
+              ) >= filters.ageRange[0] &&
+                differenceInYears(
                   new Date(),
                   new Date(student.person.birth_date)
-                ) >= filters.ageRange[0] &&
-                  differenceInYears(
-                    new Date(),
-                    new Date(student.person.birth_date)
-                  ) <= filters.ageRange[1])
-            ) && (
+                ) <= filters.ageRange[1])) && (
               <Box
                 key={student.person.id}
                 maxW={"330px"}

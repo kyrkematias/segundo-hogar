@@ -112,7 +112,7 @@ export function RoommateProfileView() {
             <Heading as="h1">{`${person.firstname} ${person.lastname}`}</Heading>
             <Box>
               <Text fontWeight={"semibold"} fontSize={"21px"} color={"gray"}>
-                ({userInfo.username || ""})
+                {userInfo?.username || ""}
               </Text>
             </Box>
           </Box>
@@ -137,7 +137,7 @@ export function RoommateProfileView() {
         <Box flex="0 0 60%">
           <Flex alignItems={"center"} gap={".5rem"}>
             <Heading>Acerca de {person.firstname}</Heading>
-            <FcAbout background={"gray"} fontSize={"25px"}/>
+            <FcAbout background={"gray"} fontSize={"25px"} />
           </Flex>
           <Text fontWeight={"medium"} my={"10px"}>
             {userInfo?.bio || (
@@ -370,7 +370,7 @@ export function RoommateProfileView() {
                           color={"gray.400"}
                           fontWeight={"semibold"}
                         >
-                          {userInfo.email || "No especificada"}
+                          {userInfo?.email || "-"}
                         </Text>
                       </Flex>
                     </Flex>

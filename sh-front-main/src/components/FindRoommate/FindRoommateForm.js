@@ -26,7 +26,6 @@ import { GET_STUDENTS } from "client/gql/queries/utils";
 import { StudentsCards } from "./StudentsCards";
 
 export function FindRoommateForm() {
-  
   const [ageRange, setAgeRange] = useState([18, 40]);
   const [showStartTooltip, setShowStartTooltip] = useState(false);
   const [showEndTooltip, setShowEndTooltip] = useState(false);
@@ -40,7 +39,7 @@ export function FindRoommateForm() {
   const [selectedAge, setSelectedAge] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
 
-  const [parsedSelectedCity, setParsedSelectedCity] = useState(null)
+  const [parsedSelectedCity, setParsedSelectedCity] = useState(null);
 
   const { loading, error, data: students } = useQuery(GET_STUDENTS);
 
@@ -61,7 +60,7 @@ export function FindRoommateForm() {
     setParsedSelectedState(parsedSelectedState);
     const parsedSelectedCity = parseInt(selectedCity);
 
-    setParsedSelectedCity(parsedSelectedCity)
+    setParsedSelectedCity(parsedSelectedCity);
 
     console.log("filtros", filters);
     console.log("estudiantes: ", students);
@@ -99,17 +98,15 @@ export function FindRoommateForm() {
     console.log("states match", statesMatch);
     console.log("city match", cityMatch);
 
-    console.log("students cities", studentCity)
-    console.log("student city filter", parsedSelectedCity)
-    console.log("tipe city id", typeof(studentCity))
-    console.log("tipe city filter", typeof(parsedSelectedCity))
+    console.log("students cities", studentCity);
+    console.log("student city filter", parsedSelectedCity);
+    console.log("tipe city id", typeof studentCity);
+    console.log("tipe city filter", typeof parsedSelectedCity);
 
     setFilters(filters);
     setShowStudentsCards(allMatches);
     setNoResults(!allMatches);
   };
-
-  
 
   const { states } = useGetStates();
   const { cities, setStateSelected } = useGetCities();
