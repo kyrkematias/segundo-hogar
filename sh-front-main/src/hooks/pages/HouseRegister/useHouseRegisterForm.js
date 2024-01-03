@@ -9,12 +9,14 @@ import Geocode from "react-geocode";
 import { useGetOwnerId } from "hooks/utils/useGetOwnerId";
 import { postImagesService } from "services/ownership/postImagesService";
 import { authSelector } from "store/slices/authSlice";
+import { useToast } from '@chakra-ui/react'
 
 Geocode.setApiKey(process.env.REACT_APP_API_KEY_GEOCODER);
 Geocode.setLanguage("es");
 Geocode.setLocationType("ROOFTOP");
 
 export function useHouseRegisterForm() {
+  const toast = useToast()
   const [initialCenter, setInitialCenter] = useState({
     lat: -26.83033687159553,
     lng: -65.20379811655849,
@@ -42,14 +44,6 @@ export function useHouseRegisterForm() {
 
   /**************************************************************************************/
   
-
-  // const getCoordinates = () => {
-  //   const storedLat = parseFloat(localStorage.getItem("lat"));
-  //   const storedLng = parseFloat(localStorage.getItem("lng"));
-  //   setCoordinates({ lat: storedLat, lng: storedLng });
-  //   setInitialCenter({ lat: -26.83002230629563, lng: -65.20258569223947 });
-  //   setZoom(16);
-  // };
 
   /**************************************************************************************/
 
@@ -91,7 +85,15 @@ export function useHouseRegisterForm() {
       console.log("response: ",response);
 
       if (response?.success === true) {
+        toast({
+          title: "Propiedad creada",
+          description: "La propiedad ha sido creada con éxito.",
+          status: "success",
+          duration: 5000, 
+          isClosable: true,
+        });
         setLocation(`/cuenta/${user.id}`);
+        window.location.reload();
       }
 
       setLoading(false);

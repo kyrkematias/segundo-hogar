@@ -63,14 +63,17 @@ export function PublicationDetail() {
   return (
     <Box>
       <Stack
-        direction={"row"}
+        direction={{ base: "column", md: "row" }}
         alignItems={"flex-start"}
         mt={16}
         justifyContent={"space-between"}
       >
-        <Slider images={publication.ownership.ownerships_images} />
+        <Slider
+          images={publication.ownership.ownerships_images}
+          width="100vw"
+        />
 
-        <Card width={{ base: "500px", md: "1/4" }} p={2} height={"100%"}>
+        <Card width={{ base: "100%", md: "1/4" }} p={2} height={"100%"}>
           <Flex flexDirection={"column"} align={"center"} textAlign={"center"}>
             <Heading size="md" mb={5}>
               {publication.title}
@@ -145,7 +148,7 @@ export function PublicationDetail() {
       <Stack
         direction={{ base: "column", md: "row" }}
         spacing={3}
-        px={10}
+        px={{ base: "0", md: "10" }}
         justifyContent={{ base: "flex-start", md: "space-between" }}
       >
         <Card
@@ -157,8 +160,14 @@ export function PublicationDetail() {
           <Heading size="md" textAlign={"center"} my={2}>
             Características:
           </Heading>
-          <Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+          <Flex flexDirection={{ base: "column", md: "row" }}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <BsBuilding
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -167,7 +176,13 @@ export function PublicationDetail() {
               </Text>
               {publication.ownership.ownerships_type?.description}
             </Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <CiLocationOn
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -177,8 +192,14 @@ export function PublicationDetail() {
               {address}
             </Flex>
           </Flex>
-          <Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+          <Flex flexDirection={{ base: "column", md: "row" }}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <MdOutlineBedroomParent
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -187,7 +208,13 @@ export function PublicationDetail() {
               </Text>
               {publication.ownership.rooms}
             </Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <FaRestroom
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -197,8 +224,14 @@ export function PublicationDetail() {
               {publication.ownership.bathrooms}
             </Flex>
           </Flex>
-          <Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+          <Flex flexDirection={{ base: "column", md: "row" }}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <LiaRulerCombinedSolid
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -207,7 +240,13 @@ export function PublicationDetail() {
               </Text>
               {publication.ownership.rooms}
             </Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <FaCouch
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -217,8 +256,14 @@ export function PublicationDetail() {
               {publication.is_furnished ? <Text>Si</Text> : <Text>No</Text>}
             </Flex>
           </Flex>
-          <Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+          <Flex flexDirection={{ base: "column", md: "row" }}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <PiUsersThreeFill
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -232,8 +277,14 @@ export function PublicationDetail() {
           <Heading size="md" textAlign={"center"} my={2}>
             Restricciones:
           </Heading>
-          <Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+          <Flex flexDirection={{ base: "column", md: "row" }}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <GiCigarette
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -246,7 +297,13 @@ export function PublicationDetail() {
                 <Text>No</Text>
               )}
             </Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <MdOutlinePets
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -260,8 +317,14 @@ export function PublicationDetail() {
               )}
             </Flex>
           </Flex>
-          <Flex>
-            <Flex alignItems={"center"} p={2} gap={1} w={"50%"}>
+          <Flex flexDirection={{ base: "column", md: "row" }}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={{ base: "center", md: "flex-start" }}
+              p={2}
+              gap={1}
+              w={{ base: "100%", md: "50%" }}
+            >
               <LuBaby
                 style={{ display: "inline", color: "gray", fontSize: "17px" }}
               />
@@ -293,7 +356,7 @@ export function PublicationDetail() {
         </Flex>
       </Stack>
       <Divider my={10} />
-      <Box px={10} mb={10}>
+      <Box px={{ base: "0", md: "10" }} mb={10}>
         <Card p={5} mt={10}>
           <Heading size="md" textAlign={"center"} my={2}>
             Descripción

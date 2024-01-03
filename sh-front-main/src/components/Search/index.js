@@ -87,7 +87,7 @@ export function Search() {
 
   return (
     <>
-      <Flex width={"full"} flexDir="row">
+      <Flex width={"full"} flexDir={{base: "column", md:"row"}}>
         <Box flex="1">
           <FormArea posts={publications} />
         </Box>

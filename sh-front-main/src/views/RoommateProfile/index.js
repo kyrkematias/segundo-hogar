@@ -92,7 +92,7 @@ export function RoommateProfileView() {
   };
 
   return (
-    <Box px={20}>
+    <Box px={{ base: "0", md: "20" }}>
       <Box
         flexDirection={{ base: "column", md: "row" }}
         display={"flex"}
@@ -128,40 +128,53 @@ export function RoommateProfileView() {
           </Button>
         </a>
       </Box>
-      <Divider my={10} />
+      <Divider my={{ base: "5", md: "10" }} />
       <Stack
-        flexDirection={"row"}
-        alignItems={"flex-start"}
-        justifyContent={"space-between"}
+        direction={{ base: "column", md: "row" }}
+        alignItems={{ base: "flex-start", md: "center" }}
+        justifyContent={{ base: "space-around", md: "space-between" }}
       >
-        <Box flex="0 0 60%">
-          <Flex alignItems={"center"} gap={".5rem"}>
+        <Box flex={{ base: "1", md: "0 0 60%" }}>
+          <Flex alignItems="center" gap=".5rem">
             <Heading>Acerca de {person.firstname}</Heading>
-            <FcAbout background={"gray"} fontSize={"25px"} />
+            <FcAbout background="gray" fontSize="25px" />
           </Flex>
-          <Text fontWeight={"medium"} my={"10px"}>
+          <Text fontWeight="medium" my="10px">
             {userInfo?.bio || (
-              <Heading as="h4" size="md" fontStyle="italic" color="gray">
+              <Heading
+                as="h4"
+                size="md"
+                fontStyle="italic"
+                color="gray"
+                fontWeight="medium"
+              >
                 {person.firstname} no ha compartido su biografía aún
               </Heading>
             )}
           </Text>
         </Box>
-        <Box flex="0 0 40%">
-          <Text fontSize={"20px"} fontWeight={"semibold"} textAlign={"right"}>
+        <Box flex={{ base: "1", md: "0 0 40%" }}>
+          <Text
+            fontSize={{base: "16px", md: "20px"}}
+            fontWeight="semibold"
+            textAlign={{ base: "center", md: "right" }}
+          >
             Compartir renta: {studentInfo?.shared ? "Si" : "No"}
           </Text>
         </Box>
       </Stack>
-      <Divider my={10} />
-      <Container my={10} width={{ base: "100%", md: "80%" }}>
-        <Card>
-          <Tabs>
+
+      <Divider my={{base: "2", md: "10"}} />
+      <Container my={10} width={{ base: "100%", md: "100%" }}>
+        <Card width={{ base: "100%", md: "100%" }}>
+          <Tabs width={{ base: "100%", md: "100%" }}>
             <TabList>
               <Tab
                 _selected={{ color: "black", bg: "#EDF2F7" }}
                 fontWeight={"medium"}
                 transition={".5s"}
+                fontSize={{ base: "12px", md: "18px" }}
+                width={"33.3%"}
               >
                 Información General
               </Tab>
@@ -169,6 +182,8 @@ export function RoommateProfileView() {
                 _selected={{ color: "black", bg: "#EDF2F7" }}
                 fontWeight={"medium"}
                 transition={".5s"}
+                fontSize={{ base: "12px", md: "18px" }}
+                width={"33.3%"}
               >
                 Información Académica
               </Tab>
@@ -176,27 +191,36 @@ export function RoommateProfileView() {
                 _selected={{ color: "black", bg: "#EDF2F7" }}
                 fontWeight={"medium"}
                 transition={".5s"}
+                fontSize={{ base: "12px", md: "18px" }}
+                width={"33.3%"}
               >
                 Contacto
               </Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
-                <Heading py={5} textAlign={"center"} size="lg">
+                <Heading
+                  py={{ base: "1", md: "5" }}
+                  textAlign={"center"}
+                  size={{ base: "md", md: "lg" }}
+                >
                   Información general
                 </Heading>
                 <Divider />
                 <Stack py={4}>
                   <Center>
                     <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={"18px"} fontWeight={"semibold"}>
+                      <Text
+                        fontSize={{ base: "12px", md: "18px" }}
+                        fontWeight={"semibold"}
+                      >
                         Género:
                       </Text>
                       {person.gender === "male" && (
                         <Flex alignItems={"center"} gap={1}>
                           <IoMdMale color={"#4299E1"} fontWeight={"medium"} />
                           <Text
-                            fontSize={"18px"}
+                            fontSize={{ base: "12px", md: "18px" }}
                             color={"gray.400"}
                             fontWeight={"semibold"}
                           >
@@ -209,7 +233,7 @@ export function RoommateProfileView() {
                         <Flex alignItems={"center"} gap={1}>
                           <IoMdFemale color={"#F56565"} fontWeight={"medium"} />
                           <Text
-                            fontSize={"18px"}
+                            fontSize={{ base: "12px", md: "18px" }}
                             color={"gray.400"}
                             fontWeight={"semibold"}
                           >
@@ -226,7 +250,7 @@ export function RoommateProfileView() {
                               fontWeight={"medium"}
                             />
                             <Text
-                              fontSize={"18px"}
+                              fontSize={{ base: "12px", md: "18px" }}
                               color={"gray.400"}
                               fontWeight={"semibold"}
                             >
@@ -238,13 +262,16 @@ export function RoommateProfileView() {
                   </Center>
                   <Center>
                     <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={"18px"} fontWeight={"semibold"}>
+                      <Text
+                        fontSize={{ base: "12px", md: "18px" }}
+                        fontWeight={"semibold"}
+                      >
                         Cumpleaños:
                       </Text>
                       <Flex alignItems={"center"} gap={1}>
                         <FaBirthdayCake color="pink" />
                         <Text
-                          fontSize={"18px"}
+                          fontSize={{ base: "12px", md: "18px" }}
                           color={"gray.400"}
                           fontWeight={"semibold"}
                         >
@@ -255,13 +282,16 @@ export function RoommateProfileView() {
                   </Center>
                   <Center>
                     <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={"18px"} fontWeight={"semibold"}>
+                      <Text
+                        fontSize={{ base: "12px", md: "18px" }}
+                        fontWeight={"semibold"}
+                      >
                         Edad:
                       </Text>
                       <Flex alignItems={"center"} gap={1}>
                         <FaUserClock color="#4A5568" />
                         <Text
-                          fontSize={"18px"}
+                          fontSize={{ base: "12px", md: "18px" }}
                           color={"gray.400"}
                           fontWeight={"semibold"}
                         >
@@ -273,20 +303,24 @@ export function RoommateProfileView() {
                 </Stack>
               </TabPanel>
               <TabPanel>
-                <Heading py={5} textAlign={"center"} size="lg">
+                <Heading
+                  py={{ base: "1", md: "5" }}
+                  textAlign={"center"}
+                  size={{ base: "md", md: "lg" }}
+                >
                   Información Académica
                 </Heading>
                 <Divider />
                 <Stack py={4}>
                   <Center>
                     <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={"18px"} fontWeight={"semibold"}>
+                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
                         Carrera:
                       </Text>
                       <Flex alignItems={"center"} gap={1}>
                         <RiGraduationCapFill color="#4A5568" />
                         <Text
-                          fontSize={"18px"}
+                          fontSize={{base: "12px", md:"18px"}}
                           color={"gray.400"}
                           fontWeight={"semibold"}
                         >
@@ -300,13 +334,13 @@ export function RoommateProfileView() {
                   </Center>
                   <Center>
                     <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={"18px"} fontWeight={"semibold"}>
+                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
                         Provincia:
                       </Text>
                       <Flex alignItems={"center"} gap={1}>
                         <FaLocationDot color="#F56565" />
                         <Text
-                          fontSize={"18px"}
+                          fontSize={{base: "12px", md:"18px"}}
                           color={"gray.400"}
                           fontWeight={"semibold"}
                         >
@@ -318,13 +352,13 @@ export function RoommateProfileView() {
                   </Center>
                   <Center>
                     <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={"18px"} fontWeight={"semibold"}>
+                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
                         Ciudad:
                       </Text>
                       <Flex alignItems={"center"} gap={1}>
                         <BsPinMapFill color="#4A5568" />
                         <Text
-                          fontSize={"18px"}
+                          fontSize={{base: "12px", md:"18px"}}
                           color={"gray.400"}
                           fontWeight={"semibold"}
                         >
@@ -336,20 +370,24 @@ export function RoommateProfileView() {
                 </Stack>
               </TabPanel>
               <TabPanel>
-                <Heading py={5} textAlign={"center"} size="lg">
+                <Heading
+                  py={{ base: "1", md: "5" }}
+                  textAlign={"center"}
+                  size={{ base: "md", md: "lg" }}
+                >
                   Información de Contacto
                 </Heading>
                 <Divider />
                 <Stack py={4}>
                   <Center>
                     <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={"18px"} fontWeight={"semibold"}>
+                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
                         Telefono de contacto:
                       </Text>
                       <Flex alignItems={"center"} gap={1}>
                         <FaPhoneAlt color="#4A5568" />
                         <Text
-                          fontSize={"18px"}
+                          fontSize={{base: "12px", md:"18px"}}
                           color={"gray.400"}
                           fontWeight={"semibold"}
                         >
@@ -360,13 +398,13 @@ export function RoommateProfileView() {
                   </Center>
                   <Center>
                     <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={"18px"} fontWeight={"semibold"}>
+                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
                         E-mail:
                       </Text>
                       <Flex alignItems={"center"} gap={1}>
                         <MdEmail color="#4A5568" />
                         <Text
-                          fontSize={"18px"}
+                          fontSize={{base: "12px", md:"18px"}}
                           color={"gray.400"}
                           fontWeight={"semibold"}
                         >

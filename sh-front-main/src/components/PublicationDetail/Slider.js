@@ -7,7 +7,7 @@ SwiperCore.use([Autoplay, Pagination, Navigation]);
 
 export function Slider({ images }) {
   return (
-    <Box bg={"blackAlpha.300"} maxWidth={"650px"} mx="auto">
+    <Box bg={"blackAlpha.300"} maxWidth={{base: "100%", md: "650px"}} mx="auto">
       {images.length > 0 && (
         <Swiper
           spaceBetween={0}

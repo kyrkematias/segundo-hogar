@@ -27,10 +27,10 @@ export function StepperProfile({ initialStep }) {
   });
 
   return (
-    <Center >
+    <Center>
       <Stepper index={activeStep} >
         {steps.map((step, index) => (
-          <Step key={index}>
+          <Step key={index} >
             <StepIndicator >
               <StepStatus
                 complete={<StepIcon />}
@@ -39,7 +39,7 @@ export function StepperProfile({ initialStep }) {
               />
             </StepIndicator>
 
-            <Box flexShrink="0">
+            <Box flexShrink={{base: "1", md: "0"}}>
               <StepTitle>{step.title}</StepTitle>
               <StepDescription>{step.description}</StepDescription>
             </Box>

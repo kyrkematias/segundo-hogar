@@ -113,12 +113,12 @@ export function ProfileFormOwner() {
 
       </Flex>
 
-      <Flex justifyContent="center" margin={"10"}>
+      <Flex justifyContent="center" margin={{base: "0", md:"10"}}>
         <Button
           onClick={onCancel}
           type="submit"
           isLoading={false}
-          width="20%"
+          width={{base: "100%", md: "20%"}}
           margin={2}
         >
           Cancelar
@@ -128,7 +128,7 @@ export function ProfileFormOwner() {
           type="submit"
           isLoading={isSubmitting}
           loadingText="Guardando"
-          width="20%"
+          width={{base: "100%", md: "20%"}}
           textButton="Guardar"
           margin={2}
         />

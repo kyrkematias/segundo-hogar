@@ -1,7 +1,6 @@
 import { Link } from "wouter";
 import { Box, Heading, Text, Image } from '@chakra-ui/react';
 import { StarIcon } from "@chakra-ui/icons";
-// Componente de Tarjeta para Marcador
 export const MarkerCard = ({ marker }) => {
   return (
     <Link href={`/publicaciones/detalle/${marker.infoMarker.id}`}>
@@ -11,8 +10,8 @@ export const MarkerCard = ({ marker }) => {
         borderRadius="lg"
         overflow="hidden"
         _hover={{
-          bg: "gray.100", // Estilo para el hover (opcional)
-          cursor: "pointer", // Cambia el cursor a pointer
+          bg: "gray.100", 
+          cursor: "pointer", 
         }}
       >
         <Image
@@ -22,7 +21,6 @@ export const MarkerCard = ({ marker }) => {
           objectFit="cover"
           width="100%"
           height="200px"
-          // boxSize="200px"
         />
 
         <Box p="6">

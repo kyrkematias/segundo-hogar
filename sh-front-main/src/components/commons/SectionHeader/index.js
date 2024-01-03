@@ -10,7 +10,7 @@ export function SectionHeader({ section, sectionTitle, isOwner }) {
   if (section === "Login") {
     title = (<Heading>{sectionTitle}</Heading>);
     subTitle = (
-      <Text mt={4}>
+      <Text mt={4} fontSize="md" fontWeight="400" color="gray">
         ¿Todavía no tenés cuenta en Segundo Hogar?{" "}
         <Link to={paths.register}>
           <LinkChakra color={'blue.400'}>Clic aquí</LinkChakra>
@@ -27,7 +27,7 @@ export function SectionHeader({ section, sectionTitle, isOwner }) {
     );
     subTitle = (
       <>
-        <Text mt={4}>
+        <Text mt={4} fontSize="md" fontWeight="400" color="gray">
           ¿Ya tenés cuenta con Segundo Hogar?{" "}
           <Link to={paths.login}>
             <LinkChakra color={'blue.400'}>Clic aquí</LinkChakra>
