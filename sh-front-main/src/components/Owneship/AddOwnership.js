@@ -12,11 +12,16 @@ export const AddOwnership = () => {
   };
 
   return (
-    <Flex justifyContent="space-around" alignItems="center" my="5" onClick={handleClick}>
-      <CustomButton width="20%"
-          textButton="Agregar Propiedad" >
-         
-      </CustomButton>
+    <Flex
+      justifyContent="space-around"
+      alignItems="center"
+      my="5"
+      onClick={handleClick}
+    >
+      <CustomButton
+        width={{ base: "100%", md: "20%" }}
+        textButton="Agregar Propiedad"
+      ></CustomButton>
     </Flex>
   );
 };

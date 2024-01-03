@@ -82,8 +82,8 @@ export function Questions({ fromPage }) {
             boxShadow={"lg"}
             p={8}
           >
-            <SimpleGrid columns={2} spacing={20}>
-              <Box pt={6} pb={2} w="md">
+            <SimpleGrid columns={{base: "1", md: "2"}} spacing={20}>
+              <Box pt={6} pb={2} w={{base: "100%", md:"md"}}>
                 <Text fontSize="lg">¿Que tan ordenado eres?</Text>
                 <Slider
                   defaultValue={3}
@@ -91,7 +91,7 @@ export function Questions({ fromPage }) {
                   max={5}
                   step={1}
                   aria-label="slider-ex-6"
-                  size="md"
+                  size={{base:"md"}}
                   onChange={(val) => setTidyLevel(val)}
                 >
                   <SliderMark value={1} {...labelStyles}>
@@ -116,7 +116,7 @@ export function Questions({ fromPage }) {
                 </Slider>
               </Box>
 
-              <Box pt={6} pb={2} w="md">
+              <Box pt={6} pb={2} w={{base: "100%", md:"md"}}>
                 <Text fontSize="lg">¿Con qué frecuencia recibes visitas?</Text>
                 <Slider
                   defaultValue={3}
@@ -149,7 +149,7 @@ export function Questions({ fromPage }) {
                 </Slider>
               </Box>
 
-              <Box pt={6} pb={2} w="md">
+              <Box pt={6} pb={2} w={{base: "100%", md:"md"}}>
                 <Text fontSize="lg">
                   ¿Con qué frecuencia realizas salidas nocturnas?
                 </Text>
@@ -184,7 +184,7 @@ export function Questions({ fromPage }) {
                 </Slider>
               </Box>
 
-              <Box pt={6} pb={2} w="md">
+              <Box pt={6} pb={2} w={{base: "100%", md:"md"}}>
                 <Text fontSize="lg">
                   ¿En qué horario estudias frecuentemente?
                 </Text>
@@ -219,7 +219,7 @@ export function Questions({ fromPage }) {
                 </Slider>
               </Box>
 
-              <Box pt={6} pb={2} w="md">
+              <Box pt={6} pb={2} w={{base: "100%", md:"md"}}>
                 <Text fontSize="lg">¿Eres fumador?</Text>
                 <Slider
                   defaultValue={3}
@@ -252,7 +252,7 @@ export function Questions({ fromPage }) {
                 </Slider>
               </Box>
 
-              <Box pt={6} pb={2} w="md">
+              <Box pt={6} pb={2} w={{base: "100%", md:"md"}}>
                 <Text fontSize="lg">¿Te gustan las mascotas?</Text>
                 <Slider
                   defaultValue={3}

@@ -51,12 +51,6 @@ export function HouseRegisterForm() {
     removeImage,
   } = useHouseRegisterForm();
 
-  // const center = useMemo(
-  //   () => ({ lat: -26.830529214328564, lng: -65.20384130911128 }),
-  //   []
-  // );
-  // const [selected, setSelected] = useState(center);
-
   return (
     <>
       <Box my={8} textAlign="left">

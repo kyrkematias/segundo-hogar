@@ -41,12 +41,17 @@ export function ProfileForm() {
 
   return (
     <>
-      <Flex justifyContent="center">
+      <Flex
+        justifyContent="center"
+        flexDirection={{ base: "column", md: "row" }}
+        alignItems={"baseline"}
+      >
         <Flex
           direction={["column", "column", "row", "row", "row"]}
           mr={["50px"]}
+          justifyContent={"center"}
         >
-          <Box w="100%" mt="8">
+          <Box w="100%" mt="8" justifySelf={"center"}>
             <Avatar
               size="xl"
               name={`${user?.person.lastname}, ${user?.person.firstname}`}
@@ -56,11 +61,18 @@ export function ProfileForm() {
               direction={["column", "column", "column", "column", "column"]}
             >
               <Text fontSize="2xl">{`${user?.person.lastname}, ${user?.person.firstname}`}</Text>
-              <Text fontSize="lg">{`Legajo: ${
+              <Text fontSize="lg">{`Legajo Nro.: ${
                 user?.person?.students?.[0]?.file_number || "-"
               }`}</Text>
-              <Text fontSize="lg">{`@${user?.username}`}</Text>
-              <Text fontSize="lg">{user?.email}</Text>
+              <Text fontSize="lg" color={"gray.500"}>{`@${user?.username}`}</Text>
+              <Text
+                fontSize="lg"
+                color={"blue.400"}
+                as={"u"}
+                cursor={"pointer"}
+              >
+                {user?.email}
+              </Text>
             </Flex>
           </Box>
         </Flex>
@@ -227,9 +239,13 @@ export function ProfileForm() {
 
             <Flex
               direction={["column", "column", "row", "row", "row"]}
-              w="900px"
+              w={{ base: "100%", md: "900px" }}
             >
-              <FormControl m={2} isInvalid={errors.bio}>
+              <FormControl
+                m={2}
+                isInvalid={errors.bio}
+                flexDirection={"column"}
+              >
                 <FormLabel>Presentación</FormLabel>
                 <Textarea
                   id="bio"
@@ -252,7 +268,7 @@ export function ProfileForm() {
           onClick={onCancel}
           type="submit"
           isLoading={false}
-          width="20%"
+          width={{ base: "100%", md: "20%" }}
           margin={2}
         >
           Cancelar
@@ -262,7 +278,7 @@ export function ProfileForm() {
           type="submit"
           isLoading={isSubmitting}
           loadingText="Guardando"
-          width="20%"
+          width={{ base: "100%", md: "20%" }}
           textButton="Guardar"
           margin={2}
         />

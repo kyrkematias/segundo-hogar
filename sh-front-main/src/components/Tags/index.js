@@ -104,11 +104,11 @@ export function Tags({ fromPage }) {
             boxShadow={"lg"}
             p={8}
           >
-            <SimpleGrid columns={6} spacing={10}>
+            <SimpleGrid columns={{base: "2", md: "6"}} spacing={10}>
               {allTags?.map((tg) => (
                 <Box
                   id={`tag-${tg?.id}`}
-                  size="lg"
+                  size={{base: "md", md: "lg"}}
                   padding={3}
                   key={tg?.id}
                   borderRadius="full"
