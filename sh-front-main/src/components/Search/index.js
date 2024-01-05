@@ -14,6 +14,11 @@ export function Search() {
   if (isFetching) return <Loading minH={"60vh"} size={"lg"} m={50} />;
   if (isError) return <div>Error!</div>;
 
+  if (!Array.isArray(publications)) {
+    console.error("Error: publications no es un array", publications);
+    return <div>Error en la carga de datos</div>;
+  }
+
   console.log("publications: ", publications);
 
   const markers = publications.map((publication) => {
