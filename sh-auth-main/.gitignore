@@ -2,3 +2,5 @@ node_modules/
 build/
 .env
 src/keys
+**/docker-compose.yml
+
