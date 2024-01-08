@@ -3,7 +3,7 @@ FROM node:18-alpine AS react_dev
 WORKDIR /app
 COPY package*.json ./
 
-RUN npm install --force
+RUN npm install --legacy-peer-deps
 # RUN npm ci -qy
 COPY . .
 

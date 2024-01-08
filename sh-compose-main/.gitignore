@@ -3,3 +3,5 @@ hasura/hasura.env
 pgadmin/pgadmin.env
 postgresql/postgres.env
 pgadmin/pgpass
+**/docker-compose.yml
+
