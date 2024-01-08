@@ -16,8 +16,10 @@ import { getRandomTags } from "utils/getRandomTags";
 export function Card({ recomm }) {
   const [_, setLocation] = useLocation();
 
-  const redirectToProfile = () => {
-    setLocation(`/roommate/${recomm.username}`);
+  const redirectToProfile = (id) => {
+    setLocation(`/roommate/${id}`);
+    localStorage.setItem("idUser", id);
+    console.log("id user: ", id);
   };
 
   const tags = getRandomTags(recomm.preferences);
@@ -60,7 +62,6 @@ export function Card({ recomm }) {
         <SimpleGrid columns={2} spacing={4}>
           {tags.map((tag) => {
             return (
-              // if tag is not empty show it
               tag !== "" && (
                 <Box
                   key={tag}
