@@ -13,14 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { getRandomTags } from "utils/getRandomTags";
 
-export function Card({ recomm }) {
+export function Card({ recomm, redirectToProfile }) {
   const [_, setLocation] = useLocation();
-
-  const redirectToProfile = (id) => {
-    setLocation(`/roommate/${id}`);
-    localStorage.setItem("idUser", id);
-    console.log("id user: ", id);
-  };
 
   const tags = getRandomTags(recomm.preferences);
 
@@ -85,7 +79,7 @@ export function Card({ recomm }) {
             bg={useColorModeValue("#151f21", "gray.900")}
             color={"white"}
             rounded={"md"}
-            onClick={redirectToProfile}
+            onClick={() => redirectToProfile(recomm.id_person)}
             _hover={{
               transform: "translateY(-2px)",
               boxShadow: "lg",

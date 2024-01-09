@@ -7,6 +7,7 @@ import { Results } from "./Results";
 import { SectionHeader } from "components/commons/SectionHeader";
 import { sections } from "config/sections";
 import { useAxios } from "hooks/utils/useAxios";
+import { useLocation } from "wouter";
 import { GET_PERSON_ID_BY_USER_EMAIL } from "client/gql/queries/users";
 import { useQuery, useApolloClient } from "@apollo/client";
 import axios from "axios";
@@ -16,7 +17,14 @@ export function FindRoommate() {
   const [idPerson, setIdPerson] = useState(null);
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState(null);
+  const [_, setLocation] = useLocation();
   const client = useApolloClient();
+
+  const redirectToProfileById = (id_person) => {
+    setLocation(`/roommate/${id_person}`);
+    // localStorage.setItem("idUser", id);
+    console.log("id user: ", id_person);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -81,7 +89,14 @@ export function FindRoommate() {
         </Center>
         <Center>
           {" "}
-          {loading ? <Loading /> : <Results recomms={response?.data} />}
+          {loading ? (
+            <Loading />
+          ) : (
+            <Results
+              recomms={response?.data}
+              redirectToProfile={redirectToProfileById}
+            />
+          )}
         </Center>
       </Box>
     </>
