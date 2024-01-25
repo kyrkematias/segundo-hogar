@@ -22,7 +22,7 @@ export function FindRoommate() {
 
   const redirectToProfileById = (id_person) => {
     setLocation(`/roommate/${id_person}`);
-    // localStorage.setItem("idUser", id);
+    // localStorage.setItem("idUser", id) ;
     console.log("id user: ", id_person);
   };
 
@@ -31,6 +31,7 @@ export function FindRoommate() {
       const email = localStorage.getItem("userData")
         ? JSON.parse(localStorage.getItem("userData")).email
         : null;
+        console.log("User Data: ", email)
       try {
         const { data } = await client.query({
           query: GET_PERSON_ID_BY_USER_EMAIL,
