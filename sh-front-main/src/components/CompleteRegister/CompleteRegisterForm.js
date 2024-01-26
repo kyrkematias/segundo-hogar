@@ -91,7 +91,6 @@ export function CompleteRegisterForm() {
 
   const onSubmit = async (data) => {
     try {
-      // Validar el número de legajo con la API
       const validationResponse = await fetch(
         "http://localhost:5000/api/v1/student/",
         {
@@ -107,13 +106,11 @@ export function CompleteRegisterForm() {
 
       const validationData = await validationResponse.json();
 
-      // Verificar si el estudiante es válido según la respuesta de la API
       if (
         validationData.success &&
         validationData.data &&
         validationData.data.isValidStudent
       ) {
-        // Si es válido, continuar con el registro
         const personIdData = await client.query({
           query: GET_PERSON_ID_BY_USER_EMAIL,
           variables: {
@@ -151,7 +148,6 @@ export function CompleteRegisterForm() {
         dispatch(createNodeAction(person));
         setLocation(paths.questions);
       } else {
-        // Si el estudiante no es válido, mostrar mensajes de error
         setError("numberSumary", {
           type: "manual",
           message: "El legajo no es válido.",
