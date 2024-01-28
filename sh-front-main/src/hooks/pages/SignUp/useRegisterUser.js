@@ -96,7 +96,7 @@ export function useRegisterUser() {
   const onSubmitStudentUser = async (data) => {
     try {
       const validationResponse = await fetch(
-        "http://localhost:5000/api/v1/student/",
+        process.env.REACT_APP_API_STUDENTS,
         {
           method: "POST",
           headers: {

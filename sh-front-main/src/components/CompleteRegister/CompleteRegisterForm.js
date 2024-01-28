@@ -92,7 +92,7 @@ export function CompleteRegisterForm() {
   const onSubmit = async (data) => {
     try {
       const validationResponse = await fetch(
-        "http://localhost:5000/api/v1/student/",
+        process.env.REACT_APP_API_STUDENTS,
         {
           method: "POST",
           headers: {
@@ -105,7 +105,7 @@ export function CompleteRegisterForm() {
       );
 
       const validationData = await validationResponse.json();
-
+      console.log(validationData.data.isValidStudent);
       if (
         validationData.success &&
         validationData.data &&
