@@ -99,7 +99,7 @@ export function CompleteRegisterForm() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            file_number: data.numberSumary,
+            file_number: Number(data.numberSumary),
           }),
         }
       );
