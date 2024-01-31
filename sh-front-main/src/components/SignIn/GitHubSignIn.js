@@ -73,6 +73,13 @@ const GithubSignIn = () => {
             });
 
             dispatch(signInSocialNetAction(user.email));
+            toast({
+              title: "Registrado con éxito.",
+              description: "El usuario se ha registrado con éxito.",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+            });
             console.log("está registrando");
             setLocation(paths.completeProfile);
           }

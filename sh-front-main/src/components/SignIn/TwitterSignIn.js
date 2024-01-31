@@ -17,10 +17,7 @@ import { USER_CATEGORIES } from "const";
 import { getAuth, signInWithPopup, TwitterAuthProvider } from "firebase/auth";
 import { GET_STUDENT_USER_BY_ID } from "client/gql/queries/users";
 import { GET_USER_BY_EMAIL } from "client/gql/queries/users";
-import {
-  useToast,
-} from '@chakra-ui/react'
-
+import { useToast } from "@chakra-ui/react";
 
 const TwitterSignIn = () => {
   const toast = useToast();
@@ -77,6 +74,13 @@ const TwitterSignIn = () => {
             });
 
             dispatch(signInSocialNetAction(user.email));
+            toast({
+              title: "Registrado con éxito.",
+              description: "El usuario se ha registrado con éxito.",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+            });
             console.log("está registrando");
             setLocation(paths.completeProfile);
           }
@@ -96,8 +100,9 @@ const TwitterSignIn = () => {
       }
     } catch (error) {
       console.error("Error al iniciar sesión con Twitter:", error);
-      if (error.code === 'auth/account-exists-with-different-credential') {
-        const loginError = "Ya existe una cuenta con el mismo correo electrónico pero con diferente credencial de inicio de sesión. Intente iniciar sesión con una credencial diferente.";
+      if (error.code === "auth/account-exists-with-different-credential") {
+        const loginError =
+          "Ya existe una cuenta con el mismo correo electrónico pero con diferente credencial de inicio de sesión. Intente iniciar sesión con una credencial diferente.";
         // opent toast if error
         toast({
           title: "Error al iniciar sesión",
@@ -106,7 +111,7 @@ const TwitterSignIn = () => {
           duration: 5000,
           isClosable: true,
         });
-      } 
+      }
     }
   };
 
@@ -121,7 +126,7 @@ const TwitterSignIn = () => {
 
       console.log(data);
       console.log("existe person? ", data?.sh_users.length > 0);
-      return data?.sh_users.length > 0; 
+      return data?.sh_users.length > 0;
     } catch (error) {
       console.error("Error al verificar el correo electrónico:", error);
       return false;
@@ -132,7 +137,6 @@ const TwitterSignIn = () => {
     <AuthProvider>
       <XLoginButton onClick={handleLoginWithTwitter} />
     </AuthProvider>
-
   );
 };
 

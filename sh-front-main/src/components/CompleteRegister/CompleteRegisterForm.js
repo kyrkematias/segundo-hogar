@@ -29,7 +29,11 @@ import { useGetCities } from "hooks/utils/useGetCities";
 import { useGetStates } from "hooks/utils/useGetStates";
 import { useGetCareers } from "hooks/utils/useGetCareers";
 import { CustomButton } from "components/commons/CustomButton";
-import { REGISTER_STUDENT_USER_WITH_SOC_NET, UPDATE_STUDENT_USER_WITH_SOC_NET, GET_PE } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
+import {
+  REGISTER_STUDENT_USER_WITH_SOC_NET,
+  UPDATE_STUDENT_USER_WITH_SOC_NET,
+  GET_PE,
+} from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
 import { GET_PERSON_ID_BY_USER_EMAIL } from "client/gql/queries/users";
 import { paths } from "config/paths";
 import { createNodeAction } from "store/slices/recommSlice";
@@ -42,7 +46,8 @@ export function CompleteRegisterForm() {
   const {
     register,
     handleSubmit,
-    setValue, 
+    setError,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -58,18 +63,18 @@ export function CompleteRegisterForm() {
   const storedEmail = storedUserData.email || "";
   const makePersonToSave = (user) => {
     const userToSave = {
-        "id": user.id,
-        "fullname": `${user.lastname}, ${user.firstname}`,
-        "username": user.users.at(0).username,
-        "career": user.students.at(0).career.id,
-        "gender": user.gender,
-        "age": getAgeFromBirthDate(user.birth_date),
-        "state": user.students.at(0).city.state_id,
-        "city": user.students.at(0).city.id,
-        "bio": user.users.at(0).bio
+      id: user.id,
+      fullname: `${user.lastname}, ${user.firstname}`,
+      username: user.users.at(0).username,
+      career: user.students.at(0).career.id,
+      gender: user.gender,
+      age: getAgeFromBirthDate(user.birth_date),
+      state: user.students.at(0).city.state_id,
+      city: user.students.at(0).city.id,
+      bio: user.users.at(0).bio,
     };
     return userToSave;
-}
+  };
   useEffect(() => {
     if (storedFirstname) {
       setValue("firstname", storedFirstname);
@@ -85,49 +90,72 @@ export function CompleteRegisterForm() {
   console.log(storedFirstname, storedLastname, storedEmail);
 
   const onSubmit = async (data) => {
-    
     try {
-      console.log("Completar perfil data.email: " + data.email)
-      const personIdData = await client.query({
-        query: GET_PERSON_ID_BY_USER_EMAIL,
-        variables: {
-          email: data.email,
-        },
-        fetchPolicy: 'no-cache',
-      });
+      const validationResponse = await fetch(
+        process.env.REACT_APP_API_STUDENTS,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            file_number: Number(data.numberSumary),
+          }),
+        }
+      );
 
-      console.log("Person id data:")
-      console.log(personIdData);
-      console.log(personIdData.data.sh_users[0].persons_id);
+      const validationData = await validationResponse.json();
+      console.log(validationData.data.isValidStudent);
+      if (
+        validationData.success &&
+        validationData.data &&
+        validationData.data.isValidStudent
+      ) {
+        const personIdData = await client.query({
+          query: GET_PERSON_ID_BY_USER_EMAIL,
+          variables: {
+            email: data.email,
+          },
+          fetchPolicy: "no-cache",
+        });
 
-      const result = await registerStudentUser({
-        variables: {
-          gender: data.gender,
-          birth_date: data.dateOfBirth,
-          phone: data.phone,
-          cities_id: data.city,
-          file_number: data.numberSumary,
-          careers_id: data.career,
-          shared: true,
-          username: data.username,
-          bio: "Información de biografía aquí",
-          created_with_sn: true,
-          user_status: true,
-          user_categories_id: 2,
-          avatar: "URL_del_avatar_aquí",
-          lastname: data.lastname,
-          firstname: data.firstname,
-          email: data.email,
-          id: personIdData.data.sh_users[0].persons_id,
-        },
-      });
+        const result = await registerStudentUser({
+          variables: {
+            gender: data.gender,
+            birth_date: data.dateOfBirth,
+            phone: data.phone,
+            cities_id: data.city,
+            file_number: data.numberSumary,
+            careers_id: data.career,
+            shared: true,
+            username: data.username,
+            bio: "Información de biografía aquí",
+            created_with_sn: true,
+            user_status: true,
+            user_categories_id: 2,
+            avatar: "URL_del_avatar_aquí",
+            lastname: data.lastname,
+            firstname: data.firstname,
+            email: data.email,
+            id: personIdData.data.sh_users[0].persons_id,
+          },
+        });
 
-      console.log("Mutation result:", result);
-      const person = makePersonToSave(result.data.insert_sh_persons.returning.at(0));
-      dispatch(createNodeAction(person));
-      setLocation(paths.questions);
-    } catch (mutationError) {
-      console.error("Error al realizar la mutación:", mutationError);
+        console.log("Mutation result:", result);
+        const person = makePersonToSave(
+          result.data.insert_sh_persons.returning.at(0)
+        );
+        dispatch(createNodeAction(person));
+        setLocation(paths.questions);
+      } else {
+        setError("numberSumary", {
+          type: "manual",
+          message: "El legajo no es válido.",
+        });
+        return
+      }
+    } catch (error) {
+      console.error("Error al realizar la validación:", error);
       setLocation(paths.questions);
     }
   };
@@ -139,14 +167,14 @@ export function CompleteRegisterForm() {
       </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex>
-        <FormControl m={2} isInvalid={errors.numberSumary}>
+          <FormControl m={2} isInvalid={errors.numberSumary}>
             <FormLabel>Ingresá tu email</FormLabel>
             <Input
               id="lastname"
               type="text"
               placeholder="Apellido"
               {...register("email")}
-              isDisabled 
+              isDisabled
             />
           </FormControl>
         </Flex>
@@ -181,30 +209,30 @@ export function CompleteRegisterForm() {
 
         <Flex direction={["column", "column", "row", "row", "row"]}>
           <FormControl m={2} isInvalid={errors.lastname}>
-              <FormLabel>Ingresá tu apellido</FormLabel>
-              <Input
-                id="lastname"
-                type="text"
-                placeholder="Apellido"
-                {...register("lastname", validateLastname)}
-              />
-              <FormErrorMessage>
-                {errors.lastname && errors.lastname.message}
-              </FormErrorMessage>
-            </FormControl>
+            <FormLabel>Ingresá tu apellido</FormLabel>
+            <Input
+              id="lastname"
+              type="text"
+              placeholder="Apellido"
+              {...register("lastname", validateLastname)}
+            />
+            <FormErrorMessage>
+              {errors.lastname && errors.lastname.message}
+            </FormErrorMessage>
+          </FormControl>
 
-            <FormControl m={2} isInvalid={errors.firstname}>
-              <FormLabel>Ingresá tu nombre</FormLabel>
-              <Input
-                id="firstname"
-                type="text"
-                placeholder="Nombre"
-                {...register("firstname", validateFirstname)}
-              />
-              <FormErrorMessage>
-                {errors.firstname && errors.firstname.message}
-              </FormErrorMessage>
-            </FormControl>
+          <FormControl m={2} isInvalid={errors.firstname}>
+            <FormLabel>Ingresá tu nombre</FormLabel>
+            <Input
+              id="firstname"
+              type="text"
+              placeholder="Nombre"
+              {...register("firstname", validateFirstname)}
+            />
+            <FormErrorMessage>
+              {errors.firstname && errors.firstname.message}
+            </FormErrorMessage>
+          </FormControl>
         </Flex>
 
         <Flex direction={["column", "column", "row", "row", "row"]}>
