@@ -34,7 +34,10 @@ import {
   UPDATE_STUDENT_USER_WITH_SOC_NET,
   GET_PE,
 } from "client/gql/mutations/registerUser/registerStudentUserSocialNetwork";
-import { GET_PERSON_ID_BY_USER_EMAIL } from "client/gql/queries/users";
+import {
+  GET_PERSON_ID_BY_USER_EMAIL,
+  GET_ALL_FILES_NUMBERS,
+} from "client/gql/queries/users";
 import { paths } from "config/paths";
 import { createNodeAction } from "store/slices/recommSlice";
 import { getAgeFromBirthDate } from "utils/getAgeFromBirthDate";
@@ -50,6 +53,8 @@ export function CompleteRegisterForm() {
     setValue,
     formState: { errors },
   } = useForm();
+
+  const { data: allFilesData } = useQuery(GET_ALL_FILES_NUMBERS);
 
   const { states } = useGetStates();
   const { cities, setStateSelected } = useGetCities();
@@ -105,12 +110,24 @@ export function CompleteRegisterForm() {
       );
 
       const validationData = await validationResponse.json();
+
       console.log(validationData.data.isValidStudent);
       if (
         validationData.success &&
         validationData.data &&
         validationData.data.isValidStudent
       ) {
+        const isLegajoAlreadyRegistered = allFilesData?.sh_students.some(
+          (student) => student.file_number === Number(data.numberSumary)
+        );
+
+        if (isLegajoAlreadyRegistered) {
+          setError("numberSumary", {
+            type: "manual",
+            message: "El legajo ya está registrado.",
+          });
+          return;
+        }
         const personIdData = await client.query({
           query: GET_PERSON_ID_BY_USER_EMAIL,
           variables: {
@@ -152,7 +169,7 @@ export function CompleteRegisterForm() {
           type: "manual",
           message: "El legajo no es válido.",
         });
-        return
+        return;
       }
     } catch (error) {
       console.error("Error al realizar la validación:", error);

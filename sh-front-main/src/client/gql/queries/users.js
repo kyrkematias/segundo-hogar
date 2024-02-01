@@ -77,7 +77,6 @@ export const GET_STUDENT_ID_BY_USER_EMAIL = gql`
   }
 `;
 
-// get if user is enabled
 export const GET_USER_STATUS_BY_EMAIL = gql`
   query GetUserStatusByEmail($email: String) {
     sh_users(where: { email: { _eq: $email } }) {
@@ -112,6 +111,14 @@ export const GET_SHARED_BY_PERSON_ID = gql`
       students {
         shared
       }
+    }
+  }
+`;
+
+export const GET_ALL_FILES_NUMBERS = gql`
+  query GetFilenumber {
+    sh_students {
+      file_number
     }
   }
 `;
