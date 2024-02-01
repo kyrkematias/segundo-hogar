@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useToast } from "@chakra-ui/react";
 import { useLocation } from "wouter";
@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { REGISTER_STUDENT_USER } from "client/gql/mutations/registerUser/registerStudentUser";
 import { REGISTER_OWNER_USER } from "client/gql/mutations/registerUser/registerOwnerUser";
 import { getVarStudentUser } from "client/gql/mutations/registerUser/getVarStudentUser";
+import { GET_ALL_FILES_NUMBERS } from "client/gql/queries/users";
 import { getVarOwnerUser } from "client/gql/mutations/registerUser/getVarOwnerUser";
 import { encryptPassword } from "utils/encryptPassword";
 import { paths } from "config/paths";
@@ -22,6 +23,7 @@ export function useRegisterUser() {
   // eslint-disable-next-line
   const [_, setLocation] = useLocation();
   const toast = useToast();
+  const { data: allFilesData } = useQuery(GET_ALL_FILES_NUMBERS);
 
   /**************************************************************************************/
   const [registerStudentUser, { loading, error, data: newStudentUser }] =
@@ -115,6 +117,17 @@ export function useRegisterUser() {
         validationData.data &&
         validationData.data.isValidStudent
       ) {
+        const isLegajoAlreadyRegistered = allFilesData?.sh_students.some(
+          (student) => student.file_number === Number(data.numberSumary)
+        );
+
+        if (isLegajoAlreadyRegistered) {
+          setError("numberSumary", {
+            type: "manual",
+            message: "El legajo ya está registrado.",
+          });
+          return;
+        }
         let variables = getVarStudentUser(data);
         variables.password = await encryptPassword(variables.password);
         registerStudentUser({ variables }).then(({ data }) => {
@@ -127,12 +140,13 @@ export function useRegisterUser() {
           message: "El legajo ingresado no es válido.",
         });
         toast({
-            title: "Error",
-            description: "Ha ocurrido un error. Por favor, revisa los campos marcados en rojo.",
-            status: "error",
-            duration: 3000, 
-            isClosable: true,
-          });
+          title: "Error",
+          description:
+            "Ha ocurrido un error. Por favor, revisa los campos marcados en rojo.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
         return;
       }
     } catch (error) {
