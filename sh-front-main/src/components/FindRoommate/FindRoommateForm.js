@@ -38,6 +38,7 @@ export function FindRoommateForm() {
   const [parsedSelectedState, setParsedSelectedState] = useState(null);
   const [selectedAge, setSelectedAge] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
   const [parsedSelectedCity, setParsedSelectedCity] = useState(null);
 
@@ -106,6 +107,10 @@ export function FindRoommateForm() {
     setFilters(filters);
     setShowStudentsCards(allMatches);
     setNoResults(!allMatches);
+    setHasAttemptedSubmit(true);
+    if (!selectedGender) {
+      return;
+    }
   };
 
   const { states } = useGetStates();
@@ -120,7 +125,7 @@ export function FindRoommateForm() {
   return (
     <Box textAlign="left">
       <form>
-        <FormControl m={2} isInvalid={errors.gender}>
+        <FormControl m={2} isInvalid={hasAttemptedSubmit && !selectedGender}>
           <FormLabel>Genero</FormLabel>
           <Select
             name="gender"
@@ -135,7 +140,8 @@ export function FindRoommateForm() {
             <option value="other">Otro</option>
           </Select>
           <FormErrorMessage>
-            {errors.gender && errors.gender.message} || "Selecciona un género"
+            {errors.gender && errors.gender.message} Selecciona un género
+            para realizar la búsqueda
           </FormErrorMessage>
         </FormControl>
 
@@ -260,7 +266,7 @@ export function FindRoommateForm() {
             type="submit"
             // isLoading={isSubmitting}
             loadingText="Buscando..."
-            width={{base: "100%", md:"20%"}}
+            width={{ base: "100%", md: "20%" }}
             textButton="Buscar"
           />
         </Center>
