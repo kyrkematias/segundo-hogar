@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Center,
   Select,
   RadioGroup,
@@ -26,7 +27,7 @@ import { ANY_OWNERSHIPS_TYPE } from "const";
 export function SearchForm({ onSearch }) {
   const { onSubmitSearchPublications } = useSearchForm();
 
-  const [ownershipsType, setOwnershipsType] = useState(ANY_OWNERSHIPS_TYPE);
+  const [ownershipsType, setOwnershipsType] = useState(null);
   const [isFurnished, setIsFurnished] = useState(false);
   const [bedrooms, setBedrooms] = useState(1);
   const [bathrooms, setBathrooms] = useState(1);
@@ -38,11 +39,13 @@ export function SearchForm({ onSearch }) {
 
   const [maxDistance, setMaxDistance] = useState(1);
 
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+
   const calculateZoom = (maxDistance) => {
-    const baseZoom = 15; 
-    const distanceFactor = 1.5; 
+    const baseZoom = 15;
+    const distanceFactor = 1.5;
     const calculatedZoom = baseZoom - Math.log2(maxDistance) * distanceFactor;
-  
+
     return Math.max(1, Math.min(20, calculatedZoom));
   };
 
@@ -54,11 +57,17 @@ export function SearchForm({ onSearch }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "ownershipsType") setOwnershipsType(value);
+    if (name === "ownershipsType") {
+      setOwnershipsType(value === "Todos" ? ANY_OWNERSHIPS_TYPE : value || null);
+    } 
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setHasAttemptedSubmit(true);
+    if (ownershipsType === null) {
+      return;
+    }
     const filters = {
       ownershipsType,
       isFurnished,
@@ -75,11 +84,15 @@ export function SearchForm({ onSearch }) {
     localStorage.setItem("maxDistance", maxDistance);
     console.log("Max Distance: ", maxDistFilter);
     console.log("filters: ", filters);
+    console.log("ownership type: ", ownershipsType);
   };
 
   return (
     <form>
-      <FormControl>
+      <FormControl
+        isInvalid={hasAttemptedSubmit && ownershipsType === null}
+        isRequired="true"
+      >
         <FormLabel>Tipo de inmueble</FormLabel>
         <Select
           onChange={handleChange}
@@ -89,7 +102,11 @@ export function SearchForm({ onSearch }) {
         >
           <option>Casa</option>
           <option>Departamento</option>
+          <option>Todos</option>
         </Select>
+        <FormErrorMessage>
+          Por favor, selecciona un tipo de inmueble
+        </FormErrorMessage>
       </FormControl>
 
       <Flex w="100%" justifyContent="center" flexDir="column">
