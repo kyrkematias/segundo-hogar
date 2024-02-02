@@ -43,6 +43,7 @@ export function Questions({ fromPage }) {
 
   const handleSubmit = () => console.log("for update question values");
 
+
   const setValuesAndRedirect = () => {
     const questionsArr = [
       tidyLevel,
@@ -51,9 +52,10 @@ export function Questions({ fromPage }) {
       studyLevel,
       smokerLevel,
       petsLevel,
-    ];
+    ].map(value => (value !== null ? value : 3));;
     window.localStorage.setItem("questionsValue", JSON.stringify(questionsArr));
     setLocation(paths.tags);
+    console.log("respuestas: ", questionsArr)
   };
 
   const textButton = fromPage !== "profile" ? SIGUIENTE : GUARDAR;

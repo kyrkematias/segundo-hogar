@@ -27,8 +27,8 @@ import { StudentsCards } from "./StudentsCards";
 
 export function FindRoommateForm() {
   const [ageRange, setAgeRange] = useState([18, 40]);
-  const [showStartTooltip, setShowStartTooltip] = useState(false);
-  const [showEndTooltip, setShowEndTooltip] = useState(false);
+  const [showStartTooltip, setShowStartTooltip] = useState(true);
+  const [showEndTooltip, setShowEndTooltip] = useState(true);
   const [noResults, setNoResults] = useState(false);
   const [showStudentsCards, setShowStudentsCards] = useState(false);
   const [filters, setFilters] = useState({});
@@ -192,7 +192,7 @@ export function FindRoommateForm() {
                 <RangeSliderThumb
                   index={0}
                   onMouseEnter={() => setShowStartTooltip(true)}
-                  onMouseLeave={() => setShowStartTooltip(false)}
+                  onMouseLeave={() => setShowStartTooltip(true)}
                 />
               </Tooltip>
 
@@ -207,7 +207,7 @@ export function FindRoommateForm() {
                 <RangeSliderThumb
                   index={1}
                   onMouseEnter={() => setShowEndTooltip(true)}
-                  onMouseLeave={() => setShowEndTooltip(false)}
+                  onMouseLeave={() => setShowEndTooltip(true)}
                 />
               </Tooltip>
             </RangeSlider>

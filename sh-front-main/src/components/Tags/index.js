@@ -79,6 +79,7 @@ export function Tags({ fromPage }) {
 
     dispatch(createRelationsAction(body));
     setLocation(paths.landing);
+    console.log("respuestas: ", questionArr)
   };
 
   const { tags } = sections;
