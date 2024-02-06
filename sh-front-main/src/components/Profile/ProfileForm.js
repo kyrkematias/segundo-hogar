@@ -64,7 +64,10 @@ export function ProfileForm() {
               <Text fontSize="lg">{`Legajo Nro.: ${
                 user?.person?.students?.[0]?.file_number || "-"
               }`}</Text>
-              <Text fontSize="lg" color={"gray.500"}>{`@${user?.username}`}</Text>
+              <Text
+                fontSize="lg"
+                color={"gray.500"}
+              >{`@${user?.username}`}</Text>
               <Text
                 fontSize="lg"
                 color={"blue.400"}
@@ -213,18 +216,24 @@ export function ProfileForm() {
                 <Select
                   name="city"
                   placeholder="Selecciona..."
+                  defaultValue={user?.person?.students[0]?.city.name || ""} // Establecer el valor por defecto
                   {...register("city", validateCity)}
                   _focus={{ background: "none" }}
                 >
+                  {user?.person?.students[0]?.city.name && (
+                    <option
+                      value={user?.person?.students[0]?.city.name}
+                      selected
+                    >
+                      {user?.person?.students[0]?.city.name}
+                    </option>
+                  )}
                   {cities?.map((city) => {
                     return (
                       <option
                         value={city.id}
                         key={city.id}
-                        selected={
-                          user.person?.students[0]?.city.id === city.id &&
-                          user.person?.students[0]?.city.id !== undefined
-                        }
+                        selected={user.person?.students[0]?.city.id === city.id}
                       >
                         {city.name}
                       </option>
