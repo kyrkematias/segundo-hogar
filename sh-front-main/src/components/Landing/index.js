@@ -1,10 +1,13 @@
 import { Button, Flex, Heading, Image, Stack, Text } from "@chakra-ui/react";
 import { useLocation } from "wouter";
 import { paths } from "config/paths";
+import { useSelector } from "react-redux";
+import { authSelector } from "store/slices/authSlice";
 
 export function Landing() {
   // eslint-disable-next-line
   const [_, setLocation] = useLocation();
+  const { isAuthenticated, user_category } = useSelector(authSelector);
 
   const handleSearch = () => {
     setLocation(paths.search);
@@ -31,26 +34,30 @@ export function Landing() {
               perfect for freelancers, agencies, and moonlighters.
             </Text>
             <Stack direction={{ base: "column", md: "row" }} spacing={4}>
-              <Button
-                onClick={handleSearch}
-                color={"white"}
-                bg="black"
-                _focus={{ outline: "none", border: "none " }}
-                _hover={{ background: "#36393f" }}
-                rounded={"full"}
-              >
-                Buscar mi hogar
-              </Button>
-              <Button
-                onClick={handlePost}
-                color={"white"}
-                bg="blue.400"
-                _focus={{ outline: "none", border: "none " }}
-                _hover={{ background: "#36393f" }}
-                rounded={"full"}
-              >
-                Publicar un inmueble
-              </Button>
+              {(isAuthenticated && user_category === 2) || !isAuthenticated || user_category === -1 || user_category === 1 ? (
+                <Button
+                  onClick={handleSearch}
+                  color={"white"}
+                  bg="black"
+                  _focus={{ outline: "none", border: "none " }}
+                  _hover={{ background: "#36393f" }}
+                  rounded={"full"}
+                >
+                  Buscar mi hogar
+                </Button>
+              ) : null}
+              {(isAuthenticated && user_category === 3) || !isAuthenticated || user_category === -1 || user_category === 1 ? (
+                <Button
+                  onClick={handlePost}
+                  color={"white"}
+                  bg="blue.400"
+                  _focus={{ outline: "none", border: "none " }}
+                  _hover={{ background: "#36393f" }}
+                  rounded={"full"}
+                >
+                  Publicar un inmueble
+                </Button>
+              ) : null}
             </Stack>
           </Stack>
         </Flex>
