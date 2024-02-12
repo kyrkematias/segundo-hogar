@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Checkbox,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -39,8 +40,13 @@ import {
 import Places from "components/commons/MapContainer/NewMap";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
 import { GET_OWNERSHIPS_BY_ID } from "client/gql/queries/utils";
-import { UPDATE_COORDINATES_MUTATION, UPDATE_ADDRESS_MUTATION, UPDATE_OWNERSHIPS_MUTATION } from "client/gql/queries/update/updateOwnershipById";
-import { useApolloClient, useMutation } from "@apollo/client";
+import {
+  UPDATE_COORDINATES_MUTATION,
+  UPDATE_ADDRESS_MUTATION,
+  UPDATE_OWNERSHIPS_MUTATION,
+} from "client/gql/queries/update/updateOwnershipById";
+import { useApolloClient, useMutation, useQuery } from "@apollo/client";
+import { ownership } from "services";
 
 export function EditPublicationModal({
   isOpen,
@@ -50,12 +56,17 @@ export function EditPublicationModal({
   address,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ updateCoordinates ] = useMutation(UPDATE_COORDINATES_MUTATION);
-  const [ updateAddress ] = useMutation(UPDATE_ADDRESS_MUTATION);
-  const [ updateOwnership ] = useMutation(UPDATE_OWNERSHIPS_MUTATION);
+  const [updateCoordinates] = useMutation(UPDATE_COORDINATES_MUTATION);
+  const [updateAddress] = useMutation(UPDATE_ADDRESS_MUTATION);
+  const [updateOwnership] = useMutation(UPDATE_OWNERSHIPS_MUTATION);
 
   // const  { ownerships } = useGetOwnershipsByOwnerId();
   // const SOURCE = "register-ownership";
+  const [showPlaces, setShowPlaces] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setShowPlaces(!showPlaces);
+  };
 
   useEffect(() => {
     setIsModalOpen(isOpen);
@@ -83,38 +94,41 @@ export function EditPublicationModal({
   } = useHouseRegisterForm();
 
   const toast = useToast();
-
+  const ownershipId = localStorage.getItem("ownershipToEdit");
+  const { data } = useQuery(GET_OWNERSHIPS_BY_ID, {
+    variables: { id: parseInt(ownershipId) },
+  });
+  console.log("Datos de la propiedad:", data?.sh_ownerships);
   const onSubmit = async (data) => {
-    try{
-      // add coordinates and address to data from localstorage
+    try {
       const lat = localStorage.getItem("lat");
       const lng = localStorage.getItem("lng");
       const address = localStorage.getItem("address");
       data.coordinates = { lat, lng };
       data.address = address;
-      console.log("Datos formulario", data)
-      const ownershipId = localStorage.getItem('ownershipToEdit');
-      console.log("OWNER ship ip a editar:", ownershipId)
+      console.log("Datos formulario", data);
+      const ownershipId = localStorage.getItem("ownershipToEdit");
+      console.log("OWNER ship ip a editar:", ownershipId);
       const ownership = await client.query({
         query: GET_OWNERSHIPS_BY_ID,
-        variables: { id : ownershipId },
+        variables: { id: ownershipId },
         fetchPolicy: "no-cache",
       });
-      console.log("propiedad a editar", ownership)
-      console.log("coordenadas a editar", ownership.data.sh_ownerships[0].coordinate.id)
-      // llamadas a las mutaciones por tabla
-      // actualizar coordenadas
+      console.log("propiedad a editar", ownership);
+      console.log(
+        "coordenadas a editar",
+        ownership.data.sh_ownerships[0].coordinate.id
+      );
       updateCoordinates({
         variables: {
           id: ownership.data.sh_ownerships[0].coordinate.id,
-          lat: parseFloat(data.coordinates.lat), // Ensure it's parsed as Float
-          lon: parseFloat(data.coordinates.lng), // Ensure it's parsed as Float
+          lat: parseFloat(data.coordinates.lat),
+          lon: parseFloat(data.coordinates.lng),
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
-        console.log("coordenadas actualizadas", result)
-      })
-      // actualizar dirección
+        console.log("coordenadas actualizadas", result);
+      });
       updateAddress({
         variables: {
           id: ownership.data.sh_ownerships[0].address.id,
@@ -124,9 +138,8 @@ export function EditPublicationModal({
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
-        console.log("dirección actualizada", result)
-      })
-      // actualizar propiedad
+        console.log("dirección actualizada", result);
+      });
       updateOwnership({
         variables: {
           id: ownershipId,
@@ -138,32 +151,34 @@ export function EditPublicationModal({
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
-        console.log("propiedad actualizada", result)
-      })
+        console.log("propiedad actualizada", result);
+      });
       toast({
         title: "Propiedad actualizada",
-        description: "La propiedad " + ownershipId + " se ha actualizado correctamente.", 
+        description:
+          "La propiedad " + ownershipId + " se ha actualizado correctamente.",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
-      onClose()
-      closeModal()
-    }
-    catch(error){
-      console.log("error", error)
+      onClose();
+      closeModal();
+    } catch (error) {
+      console.log("error", error);
       toast({
         title: "Error al actualizar",
-        description: "La propiedad no se ha actualizado correctamente. Intenta mas tarde o contacta con soporte", 
+        description:
+          "La propiedad no se ha actualizado correctamente. Intenta mas tarde o contacta con soporte",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
     }
-    
 
-    localStorage.removeItem("ownershipToEdit")
+    localStorage.removeItem("ownershipToEdit");
   };
+
+  console.log("ownership type: ", data?.sh_ownerships[0].ownerships_type.id);
 
   return (
     <>
@@ -198,6 +213,14 @@ export function EditPublicationModal({
                       {...register("typeHouse", validateTypeHouse)}
                       placeholder="Selecciona el tipo de inmueble"
                       _focus={{ background: "none" }}
+                      defaultValue={
+                        data &&
+                        data.sh_ownerships &&
+                        data.sh_ownerships.length > 0 &&
+                        data.sh_ownerships[0].ownerships_type.id === 1
+                          ? "1"
+                          : "2"
+                      }
                     >
                       <option value="1">Casa</option>
                       <option value="2">Departamento</option>
@@ -228,7 +251,7 @@ export function EditPublicationModal({
                       m={2}
                       min={1}
                       max={15}
-                      defaultValue={1}
+                      defaultValue={data?.sh_ownerships[0]?.rooms || 1}
                     >
                       <NumberInputField
                         {...register("bedrooms", validateBedrooms)}
@@ -252,7 +275,7 @@ export function EditPublicationModal({
                     <NumberInput
                       size="sm"
                       m={2}
-                      defaultValue={1}
+                      defaultValue={data?.sh_ownerships[0]?.bathrooms || 1}
                       min={1}
                       max={10}
                     >
@@ -280,7 +303,7 @@ export function EditPublicationModal({
                     <NumberInput
                       size="sm"
                       m={2}
-                      defaultValue={40}
+                      defaultValue={data?.sh_ownerships[0]?.size || 40}
                       min={0}
                       max={100}
                     >
@@ -306,7 +329,25 @@ export function EditPublicationModal({
                   direction={["column", "column", "column", "column", "column"]}
                 >
                   <FormControl>
-                    <Places />
+                    <FormLabel>
+                      Dirección: {data?.sh_ownerships[0]?.address?.address}
+                    </FormLabel>
+                    <Checkbox
+                      mb={4}
+                      textDecoration="underline"
+                      color={"teal.700"}
+                      onChange={handleCheckboxChange}
+                    >
+                      Corregir dirección
+                    </Checkbox>
+                    {showPlaces && (
+                      <Places
+                        coordinates={{
+                          lat: data?.sh_ownerships[0]?.coordinate?.lat,
+                          lng: data?.sh_ownerships[0]?.coordinate?.lon,
+                        }}
+                      />
+                    )}
                   </FormControl>
                   <FormControl
                     w={["100%", "100%", "100%", "100%", "100%"]}
@@ -320,6 +361,9 @@ export function EditPublicationModal({
                       type="text"
                       placeholder="Piso"
                       size="sm"
+                      defaultValue={
+                        data?.sh_ownerships[0]?.address?.floor || ""
+                      }
                       {...register("floor")}
                     />
                     <FormErrorMessage>
@@ -332,12 +376,15 @@ export function EditPublicationModal({
                     m={2}
                     isInvalid={errors.apartment}
                   >
-                    <FormLabel>Departmento</FormLabel>
+                    <FormLabel>Departamento</FormLabel>
                     <Input
                       id="apartment"
                       type="text"
                       placeholder="Dpto"
                       size="sm"
+                      defaultValue={
+                        data?.sh_ownerships[0]?.address?.apartment || ""
+                      }
                       {...register("apartment")}
                     />
                     <FormErrorMessage>
@@ -346,17 +393,18 @@ export function EditPublicationModal({
                   </FormControl>
                 </Flex>
 
-                <Box textAlign="center" mt={10} mb={8}>
-                  <Heading as="h4" size="md">
-                    Fotos
-                  </Heading>
-                </Box>
+                <Flex
+                  direction={["column", "column", "column", "column", "column"]}
+                >
+                  <Box textAlign="center" mt={10} mb={8}>
+                    <Heading as="h4" size="md">
+                      Fotos
+                    </Heading>
+                  </Box>
 
-                <SimpleGrid columns={[1, 1, 2, 3, 3]}>
-                  {images.length > 0 &&
-                    images.map((image, index) => {
-                      const preview = URL.createObjectURL(image);
-                      return (
+                  <SimpleGrid columns={[1, 1, 2, 3, 3]}>
+                    {data?.sh_ownerships[0]?.ownerships_images?.map(
+                      (image, index) => (
                         <Box key={index} position="relative">
                           <Button
                             background="rgba(0, 0, 0, 0.1)"
@@ -373,53 +421,98 @@ export function EditPublicationModal({
                               color: "white",
                               background: "rgba(0, 0, 0, 0.5)",
                             }}
-                            onClick={() => removeImage(index)}
+                            onClick={() => {
+                              // Captura el valor del índice y lo muestra en la consola
+                              const imageIndex = index;
+                              console.log("Índice de la imagen:", imageIndex);
+                              removeImage(imageIndex);
+                            }}
                           >
                             X
                           </Button>
                           <Image
-                            src={preview}
-                            alt="Imagen"
+                            src={image.imageurl}
+                            alt={`Imagen ${index}`}
                             width="200px"
                             height="180px"
                             objectFit="cover"
                             p={2}
                           />
                         </Box>
-                      );
-                    })}
-                  <Box>
-                    <FormControl id="img" isInvalid={errorsImage.message}>
-                      <FormLabel
-                        w="170px"
-                        py="5px"
-                        px="10px"
-                        color="white"
-                        bg="black"
-                        _hover={{
-                          background: "#36393f",
-                        }}
-                        border="0px solid #fff"
-                        textAlign="center"
-                        borderRadius="xl"
-                        disabled={images.length >= 6 ? true : false}
+                      )
+                    )}
+                    {/* Mostrar imágenes subidas */}
+                    {images.map((image, index) => (
+                      <Box
+                        key={
+                          index +
+                          data?.sh_ownerships[0]?.ownerships_images?.length
+                        }
+                        position="relative"
                       >
-                        <i className="fas fa-cloud-upload-alt" /> Subir imagen
-                      </FormLabel>
-                      <Input
-                        type="file"
-                        onChange={onFileChange}
-                        accept="image/x-png,image/jpeg,image/jpg"
-                        size="5000"
-                        disabled={images.length >= 6 ? true : false}
-                        display="none"
-                      />
-                      <FormErrorMessage>
-                        {errorsImage && errorsImage.message}
-                      </FormErrorMessage>
-                    </FormControl>
-                  </Box>
-                </SimpleGrid>
+                        <Button
+                          background="rgba(0, 0, 0, 0.1)"
+                          border="0"
+                          borderRadius="999px"
+                          color="white"
+                          fontSize="16px"
+                          width="32px"
+                          height="32px"
+                          position="absolute"
+                          top="15px"
+                          right={["120px", "490px", "220px", "95px"]}
+                          _hover={{
+                            color: "white",
+                            background: "rgba(0, 0, 0, 0.5)",
+                          }}
+                          onClick={() => removeImage(index)}
+                        >
+                          X
+                        </Button>
+                        <Image
+                          src={URL.createObjectURL(image)}
+                          alt={`Nueva Imagen ${index}`}
+                          width="200px"
+                          height="180px"
+                          objectFit="cover"
+                          p={2}
+                        />
+                      </Box>
+                    ))}
+                    {/* Botón para subir imágenes */}
+                    <Box>
+                      <FormControl id="img" isInvalid={errorsImage.message}>
+                        <FormLabel
+                          w="170px"
+                          py="5px"
+                          px="10px"
+                          color="white"
+                          bg="black"
+                          _hover={{
+                            background: "#36393f",
+                          }}
+                          border="0px solid #fff"
+                          textAlign="center"
+                          borderRadius="xl"
+                          disabled={images.length >= 6 ? true : false}
+                        >
+                          <i className="fas fa-cloud-upload-alt" /> Subir imagen
+                        </FormLabel>
+                        <Input
+                          type="file"
+                          onChange={onFileChange}
+                          accept="image/x-png,image/jpeg,image/jpg"
+                          size="5000"
+                          disabled={images.length >= 6 ? true : false}
+                          display="none"
+                        />
+                        <FormErrorMessage>
+                          {errorsImage && errorsImage.message}
+                        </FormErrorMessage>
+                      </FormControl>
+                    </Box>
+                  </SimpleGrid>
+                </Flex>
               </form>
             </Box>
           </ModalBody>

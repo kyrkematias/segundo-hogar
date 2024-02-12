@@ -33,10 +33,10 @@ export default function Places() {
   return <NewMap />;
 }
 
-export const NewMap = () => {
+export const NewMap = ({ coordinates }) => {
   const center = useMemo(
-    () => ({ lat: -26.830529214328564, lng: -65.20384130911128 }),
-    []
+    () => coordinates || { lat: -26.81715341828356, lng: -65.19856536761296 },
+    [coordinates]
   );
   const [selected, setSelected] = useState(center);
 
@@ -48,11 +48,11 @@ export const NewMap = () => {
             className="places-container"
             style={{ width: "500px", height: "40px" }}
           >
-            <PlacesAutocomplete setSelected={setSelected}/>
+            <PlacesAutocomplete setSelected={setSelected} />
           </div>
           <GoogleMap
             zoom={14}
-            center={selected}
+            center={selected || coordinates}
             mapId={process.env.REACT_APP_GOOGLE_MAPS_ID}
             mapContainerStyle={{ height: "500px", width: "500px" }}
           >

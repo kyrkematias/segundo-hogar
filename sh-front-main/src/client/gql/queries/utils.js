@@ -74,6 +74,15 @@ export const GET_OWNERSHIPS_BY_ID = gql`
         lon
         id
       }
+      bathrooms
+      rooms
+      size
+      ownerships_type {
+        id
+      }
+      ownerships_images {
+        imageurl
+      }
     }
   }
 `;
