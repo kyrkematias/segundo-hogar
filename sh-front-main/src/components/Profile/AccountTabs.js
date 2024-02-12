@@ -43,7 +43,7 @@ export function AccountTabs() {
           ) : (
             <></>
           )}
-          {user_category === USER_CATEGORIES.STUDENT ? (
+          {/* {user_category === USER_CATEGORIES.STUDENT ? (
             <Tab>Preguntas</Tab>
           ) : (
             <></>
@@ -52,7 +52,7 @@ export function AccountTabs() {
             <Tab>Intereses</Tab>
           ) : (
             <></>
-          )}
+          )} */}
           {/* Pestaña de usuarios. Solo visible para admin */}
           {user_category === USER_CATEGORIES.ADMIN ? (
             <Tab>Usuarios</Tab>

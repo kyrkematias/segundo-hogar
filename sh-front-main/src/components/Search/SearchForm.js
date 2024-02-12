@@ -190,8 +190,8 @@ export function SearchForm({ onSearch }) {
           aria-label={["min", "max"]}
           colorScheme="blackAlpha"
           min={0}
-          max={100000}
-          defaultValue={[30000, 80000]}
+          max={250000}
+          defaultValue={[60000, 130000]}
           onChangeEnd={(range) => setPriceRange(range)}
         >
           <RangeSliderTrack>

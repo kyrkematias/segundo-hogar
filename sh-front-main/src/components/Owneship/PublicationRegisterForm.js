@@ -104,7 +104,7 @@ export function PublicationRegisterForm() {
             isInvalid={errors.price}
           >
             <FormLabel>Precio ($)</FormLabel>
-            <NumberInput size="md" m={2} defaultValue={0} min={0} max={50000}>
+            <NumberInput size="md" m={2} defaultValue={0} min={0}>
               <NumberInputField {...register("price", validatePrice)} />
               <NumberInputStepper>
                 <NumberIncrementStepper />
