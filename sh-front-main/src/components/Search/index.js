@@ -89,7 +89,10 @@ export function Search() {
   });
   console.log("Max Distance: ", maxDistance);
   console.log("filteredPublications: ", filteredPublications);
-  localStorage.removeItem("maxDistance");
+  const handleRemove = (id) => {
+    localStorage.removeItem("maxDistance");
+  }
+  
   return (
     <>
       <Flex width={"full"} flexDir={{base: "column", md:"row"}}>
@@ -105,7 +108,7 @@ export function Search() {
       <Box width={"100%"} my={20}>
         <Center>
           {filteredPublications?.length > 0 ? (
-            <Results posts={filteredPublications} />
+            <Results posts={filteredPublications} onChange = {handleRemove}/>
           ) : (
             <Text color={"gray"} fontSize={"22px"} fontStyle={"italic"}>
               No se encontraron resultados de búsqueda. Intente nuevamente con
@@ -114,11 +117,6 @@ export function Search() {
           )}
         </Center>
       </Box>
-      {/* <Box width={"100%"} my={20}>
-        <Center>
-          <Results />
-        </Center>
-      </Box> */}
     </>
   );
 }
