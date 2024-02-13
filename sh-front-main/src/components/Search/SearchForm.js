@@ -37,7 +37,7 @@ export function SearchForm({ onSearch }) {
   const [showStartTooltip, setShowStartTooltip] = useState(false);
   const [showEndTooltip, setShowEndTooltip] = useState(false);
 
-  const [maxDistance, setMaxDistance] = useState(1);
+  const [maxDistance, setMaxDistance] = useState(5);
 
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 

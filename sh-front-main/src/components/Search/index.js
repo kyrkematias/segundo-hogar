@@ -9,7 +9,7 @@ import { MapSearchForm } from "./MapSearchForm";
 export function Search() {
   const { publications, isError, isFetching } = useInitialPublications();
 
-  const maxDistance = localStorage.getItem("maxDistance") || 1;
+  const maxDistance = localStorage.getItem("maxDistance") || 10;
 
   if (isFetching) return <Loading minH={"60vh"} size={"lg"} m={50} />;
   if (isError) return <div>Error!</div>;
@@ -89,7 +89,7 @@ export function Search() {
   });
   console.log("Max Distance: ", maxDistance);
   console.log("filteredPublications: ", filteredPublications);
-
+  localStorage.removeItem("maxDistance");
   return (
     <>
       <Flex width={"full"} flexDir={{base: "column", md:"row"}}>
@@ -104,7 +104,7 @@ export function Search() {
 
       <Box width={"100%"} my={20}>
         <Center>
-          {filteredPublications.length > 0 ? (
+          {filteredPublications?.length > 0 ? (
             <Results posts={filteredPublications} />
           ) : (
             <Text color={"gray"} fontSize={"22px"} fontStyle={"italic"}>
@@ -114,6 +114,11 @@ export function Search() {
           )}
         </Center>
       </Box>
+      {/* <Box width={"100%"} my={20}>
+        <Center>
+          <Results />
+        </Center>
+      </Box> */}
     </>
   );
 }

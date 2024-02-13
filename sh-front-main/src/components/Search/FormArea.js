@@ -5,12 +5,12 @@ import { SectionHeader } from "components/commons/SectionHeader";
 import { sections } from "config/sections";
 
 export function FormArea({ posts }) {
-  const [maxDistance, setMaxDistance] = useState(1);
+  const [maxDistance, setMaxDistance] = useState(5);
 
   const { search } = sections;
 
   const handleSearch = (filters) => {
-    setMaxDistance(filters.maxDistance); 
+    setMaxDistance(filters.maxDistance || 5); 
     console.log("Filters from SearchForm:", filters);
   };
 
