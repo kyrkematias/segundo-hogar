@@ -119,24 +119,32 @@ export function buildSearchQueryUsingFilters(filters) {
   `;
 
   const ownershipsType =
-    filters.ownerships_type === "Departamento"
+    filters.ownerships_type === "Todos"
+      ? null
+      : filters.ownerships_type === "Departamento"
       ? DEPARTMENT_OWNERSHIPS_TYPE
-      : HOUSE_OWNERSHIPS_TYPE;
+      : filters.ownerships_type === "Casa"
+      ? HOUSE_OWNERSHIPS_TYPE
+      : null;
 
   const where_and = `
-    { price: { _gte: ${filters.pricemin}, _lte: ${filters.pricemax} } }
-    { is_furnished: { _eq: ${filters.is_furnished} } },
-    { 
-      ownership: { 
-        rooms: { _lte: ${filters.rooms} }
-        bathrooms: { _lte: ${filters.bathrooms} }
-        size: { _lte: ${filters.size} }
-        ownerships_type: { id: { _eq: ${ownershipsType} } }
-      } 
-    },
-  `;
-  // console.log(where_and, ownerships_type, ownershipsType, page_opt)
-  
+  { price: { _gte: ${filters.pricemin}, _lte: ${filters.pricemax} } }
+  { is_furnished: { _eq: ${filters.is_furnished} } },
+  ${
+    ownershipsType !== null
+      ? `{ ownership: { ownerships_type: { id: { _eq: ${ownershipsType} } } } },`
+      : ""
+  }
+  { 
+    ownership: { 
+      rooms: { _lte: ${filters.rooms} }
+      bathrooms: { _lte: ${filters.bathrooms} }
+      size: { _lte: ${filters.size} }
+    } 
+  },
+`;
+  console.log("ownershipsType: ", ownershipsType);
+
   const query = `
   query SearchUsingFilters {
     sh_publications(
@@ -171,32 +179,32 @@ export function buildSearchQueryUsingFilters(filters) {
 }
 
 export const GET_ALL_REQUESTS = gql`
-query GetAllRequests {
-  sh_requests {
-    id
-    message
-    publications_id
-    request_state
-    publication {
-      ownership {
-        id
-        owner {
+  query GetAllRequests {
+    sh_requests {
+      id
+      message
+      publications_id
+      request_state
+      publication {
+        ownership {
           id
-          persons_id
-          person {
-            users {
-              id
-              email
+          owner {
+            id
+            persons_id
+            person {
+              users {
+                id
+                email
+              }
             }
           }
+          coordinates_id
+          addresses_id
         }
-        coordinates_id
-        addresses_id
+        contact_email
+        price
       }
-      contact_email
-      price
+      datetime
     }
-    datetime
   }
-}
 `;

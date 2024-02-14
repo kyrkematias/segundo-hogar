@@ -22,7 +22,11 @@ import {
 } from "@chakra-ui/react";
 import { CustomButton } from "components/commons/CustomButton";
 import { useSearchForm } from "hooks/pages/Search/useSearchForm";
-import { ANY_OWNERSHIPS_TYPE } from "const";
+import {
+  ANY_OWNERSHIPS_TYPE,
+  HOUSE_OWNERSHIPS_TYPE,
+  DEPARTMENT_OWNERSHIPS_TYPE,
+} from "const";
 
 export function SearchForm({ onSearch }) {
   const { onSubmitSearchPublications } = useSearchForm();
@@ -58,8 +62,8 @@ export function SearchForm({ onSearch }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "ownershipsType") {
-      setOwnershipsType(value === "Todos" ? ANY_OWNERSHIPS_TYPE : value || null);
-    } 
+      setOwnershipsType(value === -1 ? ANY_OWNERSHIPS_TYPE : value || null);
+    }
   };
 
   const handleSearch = (e) => {
