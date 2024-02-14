@@ -171,30 +171,32 @@ export function buildSearchQueryUsingFilters(filters) {
 }
 
 export const GET_ALL_REQUESTS = gql`
-  query GetAllRequests {
-    sh_requests {
-      id
-      message
-      publications_id
-      request_state
-      publication {
-        ownership {
+query GetAllRequests {
+  sh_requests {
+    id
+    message
+    publications_id
+    request_state
+    publication {
+      ownership {
+        id
+        owner {
           id
-          owner {
-            id
-            persons_id
-            person {
-              users {
-                id
-                email
-              }
+          persons_id
+          person {
+            users {
+              id
+              email
             }
           }
-          coordinates_id
-          addresses_id
         }
-        contact_email
+        coordinates_id
+        addresses_id
       }
+      contact_email
+      price
     }
+    datetime
   }
+}
 `;

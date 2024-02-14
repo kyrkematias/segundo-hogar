@@ -15,26 +15,30 @@ import {
   Input,
   useToast,
   Textarea,
-  FormHelperText
+  FormHelperText,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { REGISTER_REQUEST_RENT } from "client/gql/mutations/registerRequestRent/registerRequestRent";
-import { GET_PUBLICATIONS_BY_OWNERSHIP_ID, GET_STUDENT_BY_EMAIL } from "client/gql/queries/utils";
+import {
+  GET_PUBLICATIONS_BY_OWNERSHIP_ID,
+  GET_STUDENT_BY_EMAIL,
+} from "client/gql/queries/utils";
 import { useApolloClient, useMutation } from "@apollo/client";
-import { useForm } from 'react-hook-form';
+import { useForm } from "react-hook-form";
 
 const handleSubmit = (onSubmit) => (e) => {
   e.preventDefault();
   onSubmit();
 };
 
-export function RequestRentModal({
-  isOpen,
-  onClose,
-}) {
+export function RequestRentModal({ isOpen, onClose }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ registerRequestRent ] = useMutation(REGISTER_REQUEST_RENT);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [registerRequestRent] = useMutation(REGISTER_REQUEST_RENT);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     setIsModalOpen(isOpen);
@@ -47,71 +51,80 @@ export function RequestRentModal({
   const toast = useToast();
 
   const onSubmit = async (data) => {
-    try{
-      console.log("data request", data)
+    try {
+      console.log("data request", data);
       // get the last publication
-      console.log("ownershipId", localStorage.getItem("ownershipId")) 
+      console.log("ownershipId", localStorage.getItem("ownershipId"));
       const publicaciones = await client.query({
         query: GET_PUBLICATIONS_BY_OWNERSHIP_ID,
         variables: {
-          ownerships_id: localStorage.getItem("ownershipId")
+          ownerships_id: localStorage.getItem("ownershipId"),
         },
-        fetchPolicy: "no-cache"
-      })
+        fetchPolicy: "no-cache",
+      });
 
       // get the student by email,
       const student = await client.query({
         query: GET_STUDENT_BY_EMAIL,
         variables: {
-          email: data.student_mail
+          email: data.student_mail,
         },
-        fetchPolicy: "no-cache"
-      })
+        fetchPolicy: "no-cache",
+      });
 
       // if the student is not registered, throw an error
-      if (student.data.sh_students.length === 0){
-        throw new Error("El estudiante no se encuentra registrado.")
+      if (student.data.sh_students.length === 0) {
+        throw new Error("El estudiante no se encuentra registrado.");
       }
 
-      console.log("last publication id", publicaciones)
+      console.log("last publication id", publicaciones);
 
       await registerRequestRent({
         variables: {
-          publications_id: publicaciones.data.sh_publications[publicaciones.data.sh_publications.length - 1].id,
-          message: (
-            "student_email: " + data.student_mail +
-            "\ndate_start: " + data.date_start +
-            "\ndate_end: " + data.date_end +
-            "\nprice: " + data.price +
-            "\nmessage: " + data.message
-          ),
+          publications_id:
+            publicaciones.data.sh_publications[
+              publicaciones.data.sh_publications.length - 1
+            ].id,
+          message:
+            // "student_email: " +
+            // data.student_mail +
+            // "\ndate_start: " +
+            // data.date_start +
+            // "\ndate_end: " +
+            // data.date_end +
+            // "\nprice: " +
+            // data.price +
+            // "\nmessage: " +
+            data.message,
           datetime: data.date_start,
-        }
+        },
       }).then((result) => {
-        console.log("result", result)
+        console.log("result", result);
         toast({
           title: "Solicitud enviada",
-          description: "La solicitud fue enviada con exito, espere la respuesta del propietario.",
+          description:
+            "La solicitud fue enviada con exito, espere la respuesta del Administrador.",
           status: "success",
           duration: 5000,
           isClosable: true,
         });
-      })
+      });
       onClose();
       closeModal();
-    }
-    catch(error){
-      console.log("error", error)
-      if (error.message.includes("Cannot read properties of undefined")){
+    } catch (error) {
+      console.log("error", error);
+      if (error.message.includes("Cannot read properties of undefined")) {
         toast({
           title: "Error",
-          description: "Para poder rentar una propiedad, primero debe registrar una publicación.",
+          description:
+            "Para poder rentar una propiedad, primero debe registrar una publicación.",
           status: "error",
           duration: 5000,
           isClosable: true,
         });
-      }
-      else if (error.message.includes("El estudiante no se encuentra registrado.")){
+      } else if (
+        error.message.includes("El estudiante no se encuentra registrado.")
+      ) {
         toast({
           title: "Error",
           description: "El estudiante no se encuentra registrado.",
@@ -119,8 +132,7 @@ export function RequestRentModal({
           duration: 5000,
           isClosable: true,
         });
-      }
-      else{
+      } else {
         toast({
           title: "Error",
           description: "Ocurrio un error al enviar la solicitud.",
@@ -132,7 +144,7 @@ export function RequestRentModal({
       onClose();
       closeModal();
     }
-  }
+  };
   return (
     <>
       <Modal
@@ -146,7 +158,9 @@ export function RequestRentModal({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Solicitar al administrar rentar esta propiedad</ModalHeader>
+          <ModalHeader>
+            Solicitar al administrar rentar esta propiedad
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Box my={8} textAlign="left">
@@ -162,10 +176,12 @@ export function RequestRentModal({
                       required: "Este campo es requerido",
                     })}
                   />
-                  <FormHelperText> Debe ser un mail de un estudiante registrado para que la renta se apruebe.</FormHelperText>
-                  <FormErrorMessage>
-                    {errors.student_mail}
-                  </FormErrorMessage>
+                  <FormHelperText>
+                    {" "}
+                    Debe ser un mail de un estudiante registrado para que la
+                    renta se apruebe.
+                  </FormHelperText>
+                  <FormErrorMessage>{errors.student_mail}</FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={false} mt="4">
                   <FormLabel>Fecha de inicio de renta</FormLabel>
@@ -177,9 +193,7 @@ export function RequestRentModal({
                       required: "Este campo es requerido",
                     })}
                   />
-                  <FormErrorMessage>
-                    {errors.datetime}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.datetime}</FormErrorMessage>
                 </FormControl>
                 {/* fecha de fin */}
                 <FormControl isInvalid={false} mt="4">
@@ -192,9 +206,7 @@ export function RequestRentModal({
                       required: "Este campo es requerido",
                     })}
                   />
-                  <FormErrorMessage>
-                    {errors.datetime}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.datetime}</FormErrorMessage>
                 </FormControl>
 
                 {/* Price */}
@@ -208,9 +220,7 @@ export function RequestRentModal({
                       required: "Este campo es requerido",
                     })}
                   />
-                  <FormErrorMessage>
-                    {errors.price}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.price}</FormErrorMessage>
                 </FormControl>
 
                 <FormControl isInvalid={false} mt="4">
@@ -223,9 +233,7 @@ export function RequestRentModal({
                       required: "Este campo es requerido",
                     })}
                   />
-                  <FormErrorMessage>
-                    {errors.message }
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.message}</FormErrorMessage>
                 </FormControl>
               </form>
             </Box>
@@ -248,7 +256,7 @@ export function RequestRentModal({
               color="white"
               onClick={handleSubmit(onSubmit)}
             >
-               Enviar solicitud de renta
+              Enviar solicitud de renta
             </Button>
           </ModalFooter>
         </ModalContent>
