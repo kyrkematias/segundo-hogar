@@ -156,16 +156,16 @@ export function EditPublicationModal({
       }).then((result) => {
         console.log("propiedad actualizada", result);
       });
-      updateImages({
-        variables: {
-          ownerships_id: ownershipId,
-          imageurl:
-            "https://www.facebook.com/photo/?fbid=10160261246416664&set=a.429427646663", // Aquí debes pasar la URL de la imagen desde el formulario
-          updated_at: new Date().toISOString(),
-        },
-      }).then((result) => {
-        console.log("Imágenes actualizadas", result);
-      });
+      // updateImages({
+      //   variables: {
+      //     ownerships_id: ownershipId,
+      //     imageurl:
+      //       "https://www.facebook.com/photo/?fbid=10160261246416664&set=a.429427646663", // Aquí debes pasar la URL de la imagen desde el formulario
+      //     updated_at: new Date().toISOString(),
+      //   },
+      // }).then((result) => {
+      //   console.log("Imágenes actualizadas", result);
+      // });
       toast({
         title: "Propiedad actualizada",
         description:
