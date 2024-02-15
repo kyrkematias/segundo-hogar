@@ -9,14 +9,14 @@ import Geocode from "react-geocode";
 import { useGetOwnerId } from "hooks/utils/useGetOwnerId";
 import { postImagesService } from "services/ownership/postImagesService";
 import { authSelector } from "store/slices/authSlice";
-import { useToast } from '@chakra-ui/react'
+import { useToast } from "@chakra-ui/react";
 
 Geocode.setApiKey(process.env.REACT_APP_API_KEY_GEOCODER);
 Geocode.setLanguage("es");
 Geocode.setLocationType("ROOFTOP");
 
 export function useHouseRegisterForm() {
-  const toast = useToast()
+  const toast = useToast();
   const [initialCenter, setInitialCenter] = useState({
     lat: -26.83033687159553,
     lng: -65.20379811655849,
@@ -43,7 +43,6 @@ export function useHouseRegisterForm() {
   } = useForm();
 
   /**************************************************************************************/
-  
 
   /**************************************************************************************/
 
@@ -62,8 +61,8 @@ export function useHouseRegisterForm() {
 
     setLoading(true);
 
-    console.log("data: ",data);
-    console.log("Coordinates",coordinates)
+    console.log("data: ", data);
+    console.log("Coordinates", coordinates);
     let variables = getVarOwnerships(data);
 
     variables.owners_id = owner_id;
@@ -82,14 +81,14 @@ export function useHouseRegisterForm() {
       formData.append("idHouse", idHouse);
 
       const response = await postImagesService({ formData });
-      console.log("response: ",response);
+      console.log("response: ", response);
 
       if (response?.success === true) {
         toast({
           title: "Propiedad creada",
           description: "La propiedad ha sido creada con éxito.",
           status: "success",
-          duration: 5000, 
+          duration: 5000,
           isClosable: true,
         });
         setLocation(`/cuenta/${user.id}`);
@@ -106,11 +105,15 @@ export function useHouseRegisterForm() {
 
   const onFileChange = (e) => {
     const img = e.target.files[0];
-    setImages([...images, img]);
-    setErrorsImage({
-      ...errorsImage,
-      message: "",
-    });
+    if (img) {
+      setImages([...images, img]);
+      setErrorsImage({
+        ...errorsImage,
+        message: "",
+      });
+    } else {
+      console.log("No se seleccionó ningún archivo.");
+    }
   };
 
   const removeImage = (index) => {

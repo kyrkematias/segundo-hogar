@@ -24,8 +24,6 @@ import { CustomButton } from "components/commons/CustomButton";
 import { useSearchForm } from "hooks/pages/Search/useSearchForm";
 import {
   ANY_OWNERSHIPS_TYPE,
-  HOUSE_OWNERSHIPS_TYPE,
-  DEPARTMENT_OWNERSHIPS_TYPE,
 } from "const";
 
 export function SearchForm({ onSearch }) {

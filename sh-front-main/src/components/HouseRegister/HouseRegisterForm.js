@@ -68,8 +68,8 @@ export function HouseRegisterForm() {
                 placeholder="Selecciona el tipo de inmueble"
                 _focus={{ background: "none" }}
               >
-                <option value="1">Casa</option>
-                <option value="2">Departamento</option>
+                <option value="2">Casa</option>
+                <option value="1">Departamento</option>
               </Select>
               <FormErrorMessage>
                 {errors.typeHouse && errors.typeHouse.message}

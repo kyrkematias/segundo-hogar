@@ -44,6 +44,7 @@ import {
   UPDATE_COORDINATES_MUTATION,
   UPDATE_ADDRESS_MUTATION,
   UPDATE_OWNERSHIPS_MUTATION,
+  UPDATE_OWNERSHIP_IMAGES,
 } from "client/gql/queries/update/updateOwnershipById";
 import { useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { ownership } from "services";
@@ -59,6 +60,7 @@ export function EditPublicationModal({
   const [updateCoordinates] = useMutation(UPDATE_COORDINATES_MUTATION);
   const [updateAddress] = useMutation(UPDATE_ADDRESS_MUTATION);
   const [updateOwnership] = useMutation(UPDATE_OWNERSHIPS_MUTATION);
+  const [updateImages] = useMutation(UPDATE_OWNERSHIP_IMAGES);
 
   // const  { ownerships } = useGetOwnershipsByOwnerId();
   // const SOURCE = "register-ownership";
@@ -132,9 +134,10 @@ export function EditPublicationModal({
       updateAddress({
         variables: {
           id: ownership.data.sh_ownerships[0].address.id,
-          address: data.address,
-          floor: data.floor,
-          apartment: data.apartment,
+          address: data.address || data?.sh_ownerships[0]?.address?.address,
+          floor: data.floor || data?.sh_ownerships[0]?.address?.floor,
+          apartment:
+            data.apartment || data?.sh_ownerships[0]?.address?.apartment,
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
@@ -142,16 +145,26 @@ export function EditPublicationModal({
       });
       updateOwnership({
         variables: {
-          id: ownershipId,
+          id: ownershipId || data.sh_ownerships[0].ownerships_type.id,
           shared: true,
-          rooms: data.bedrooms,
-          bathrooms: data.bathrooms,
-          size: data.size,
+          rooms: data.bedrooms || data?.sh_ownerships[0]?.rooms,
+          bathrooms: data.bathrooms || data?.sh_ownerships[0]?.bathrooms,
+          size: data.size || data?.sh_ownerships[0]?.size,
           rating: 1,
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
         console.log("propiedad actualizada", result);
+      });
+      updateImages({
+        variables: {
+          ownerships_id: ownershipId,
+          imageurl:
+            "https://www.facebook.com/photo/?fbid=10160261246416664&set=a.429427646663", // Aquí debes pasar la URL de la imagen desde el formulario
+          updated_at: new Date().toISOString(),
+        },
+      }).then((result) => {
+        console.log("Imágenes actualizadas", result);
       });
       toast({
         title: "Propiedad actualizada",
@@ -222,8 +235,8 @@ export function EditPublicationModal({
                           : "2"
                       }
                     >
-                      <option value="1">Casa</option>
-                      <option value="2">Departamento</option>
+                      <option value="2">Casa</option>
+                      <option value="1">Departamento</option>
                     </Select>
                     <FormErrorMessage>
                       {errors.typeHouse && errors.typeHouse.message}
