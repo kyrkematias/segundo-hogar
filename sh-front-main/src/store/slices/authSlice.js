@@ -107,6 +107,7 @@ export const signInSocialNetAction = (data) => async (dispatch) => {
   } catch (error) {
     dispatch(authFailed(error.message));
   }
+  console.log("info: ", data)
 };
 
 export const signOutAction = () => async (dispatch) => {

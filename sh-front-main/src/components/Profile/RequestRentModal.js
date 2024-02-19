@@ -71,31 +71,32 @@ export function RequestRentModal({ isOpen, onClose }) {
         },
         fetchPolicy: "no-cache",
       });
-
+      
       // if the student is not registered, throw an error
       if (student.data.sh_students.length === 0) {
         throw new Error("El estudiante no se encuentra registrado.");
       }
 
       console.log("last publication id", publicaciones);
-
+      const studentId = student.data.sh_students[0].person.students[0].id;
+      const message = `${data.message}.Se requiere la aprobación para el usuario con correo electrónico ${data.student_mail} con id ${studentId} el cual comenzará el día ${data.date_start} y finalizará el día ${data.date_end} con un precio de ${data.price}.`;
       await registerRequestRent({
         variables: {
           publications_id:
             publicaciones.data.sh_publications[
               publicaciones.data.sh_publications.length - 1
             ].id,
-          message:
-            // "student_email: " +
-            // data.student_mail +
-            // "\ndate_start: " +
-            // data.date_start +
-            // "\ndate_end: " +
-            // data.date_end +
-            // "\nprice: " +
-            // data.price +
-            // "\nmessage: " +
-            data.message,
+          message: message,
+          // "student_email: " +
+          // data.student_mail +
+          // "\ndate_start: " +
+          // data.date_start +
+          // "\ndate_end: " +
+          // data.date_end +
+          // "\nprice: " +
+          // data.price +
+          // "\nmessage: " +
+
           datetime: data.date_start,
         },
       }).then((result) => {

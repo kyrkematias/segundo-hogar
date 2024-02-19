@@ -86,7 +86,7 @@ export function RequestsList() {
       "Estado del request: ",
       request.request_state,
       " Estado nuevo: ",
-      !request.request_state
+      request.request_state
     );
     setRequestState(!request.request_state);
     setIsModalRequestRentOpen(true);
@@ -103,7 +103,7 @@ export function RequestsList() {
         if (
           requestsList
             .find((request) => request.id === selectedRequest)
-            .message.match(/student_email: (\S+)/) === null
+            .message.match(/correo electrónico (\S+)/) === null
         ) {
           throw new Error(
             "Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir el correo del estudiante."
@@ -112,7 +112,7 @@ export function RequestsList() {
         if (
           requestsList
             .find((request) => request.id === selectedRequest)
-            .message.match(/date_start: (\S+)/) === null
+            .message.match(/comenzará el día (\S+)/) === null
         ) {
           throw new Error(
             "Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir la fecha de inicio."
@@ -121,7 +121,7 @@ export function RequestsList() {
         if (
           requestsList
             .find((request) => request.id === selectedRequest)
-            .message.match(/date_end: (\S+)/) === null
+            .message.match(/finalizará el día (\S+)/) === null
         ) {
           throw new Error(
             "Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir la fecha de fin."
@@ -130,7 +130,7 @@ export function RequestsList() {
         if (
           requestsList
             .find((request) => request.id === selectedRequest)
-            .message.match(/price: (\S+)/) === null
+            .message.match(/un precio de (\S+)/) === null
         ) {
           throw new Error(
             "Error al crear la renta, revise que esten todos los datos en el mensaje. Favor de incluir el precio."
@@ -157,33 +157,33 @@ export function RequestsList() {
             (request) => request.id === selectedRequest
           );
           const student_id = getStudentIdByEmail(
-            request.message.match(/student_email: (\S+)/)[1]
+            request.message.match(/correo electrónico (\S+)/)[1]
           ).then((student_id) => {
             console.log("student_id", student_id);
             console.log("ownership_id", request.publication.ownership.id);
             console.log(
               "date_start",
-              request.message.match(/date_start: (\S+)/)[1]
+              request.message.match(/comenzará el día (\S+)/)[1]
             );
             console.log(
               "date_end",
-              request.message.match(/date_end: (\S+)/)[1]
+              request.message.match(/finalizará el día (\S+)/)[1]
             );
-            console.log("price", request.message.match(/price: (\S+)/)[1]);
+            console.log("price", request.message.match(/un precio de (\S+)/)[1]);
 
             createRent({
               variables: {
                 ownerships_id: request.publication.ownership.id,
-                students_id: student_id,
-                start_date: request.message.match(/date_start: (\S+)/)[1],
-                end_date: request.message.match(/date_end: (\S+)/)[1],
+                students_id: request.message.match(/con id (\S+)/)[1],
+                start_date: request.message.match(/comenzará el día (\S+)/)[1],
+                end_date: request.message.match(/finalizará el día (\S+)/)[1],
               },
             }).then((result) => {
               console.log("result", result);
               createPriceRent({
                 variables: {
                   // pass amount as float8
-                  amount: parseFloat(request.message.match(/price: (\S+)/)[1]),
+                  amount: parseFloat(request.message.match(/un precio de (\S+)/)[1]),
                   rents_id: result.data.insert_sh_rents.returning[0].id,
                 },
               }).then((result) => {
@@ -226,7 +226,7 @@ export function RequestsList() {
     setIsModalRequestRentOpen(false);
   };
 
-  console.log("request.message")
+  console.log("request.message");
 
   return (
     <>
@@ -260,7 +260,9 @@ export function RequestsList() {
                       </Tooltip>
                     </Td>
                     <Td>{request.publication.contact_email}</Td>
-                    <Td justifySelf="center">{request.publication.ownership.owner.id}</Td>
+                    <Td justifySelf="center">
+                      {request.publication.ownership.owner.id}
+                    </Td>
                     <Td>{request.datetime}</Td>
                     <Td>$ {request.publication.price}</Td>
                     <Td>

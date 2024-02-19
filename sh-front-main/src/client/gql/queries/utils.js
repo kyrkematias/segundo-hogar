@@ -165,7 +165,6 @@ export const GET_STUDENT_INFO_BY_PERSON_ID = gql`
   }
 `;
 
-// get publications by ownership id
 export const GET_PUBLICATIONS_BY_OWNERSHIP_ID = gql`
   query GetPublicationsByOwnershipId($ownerships_id: bigint) {
     sh_publications(where: { ownerships_id: { _eq: $ownerships_id } }) {
@@ -185,7 +184,6 @@ export const GET_PUBLICATIONS_BY_OWNERSHIP_ID = gql`
   }
 `;
 
-// get student by email
 export const GET_STUDENT_BY_EMAIL = gql`
   query GetStudentByEmail($email: String) {
     sh_students(where: { person: { users: { email: { _eq: $email } } } }) {
@@ -196,7 +194,21 @@ export const GET_STUDENT_BY_EMAIL = gql`
           email
           password
         }
+        students {
+          id
+        }
       }
     }
   }
+`;
+
+
+
+
+export const GET_RENTS_BY_OWNERSHIP_ID = gql`
+query MyQuery($ownershipId: bigint) {
+  sh_rents(where: {ownerships_id: {_eq: $ownershipId}}) {
+    students_id
+  }
+}
 `;

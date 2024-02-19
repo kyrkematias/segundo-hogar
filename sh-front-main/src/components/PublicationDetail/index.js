@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { format } from "date-fns";
 import {
   Box,
@@ -15,6 +15,7 @@ import { Loading } from "components/commons/Loading";
 import "swiper/swiper-bundle.min.css";
 import { useGetPublicationById } from "hooks/pages/PublicationDetail/useGetPublicationById";
 import { useRoute } from "wouter";
+import { useQuery } from "@apollo/client";
 import { Slider } from "./Slider";
 import { paths } from "config/paths";
 import { MapSearch } from "components/Search/Map";
@@ -30,13 +31,36 @@ import { GiCigarette } from "react-icons/gi";
 import { LuBaby } from "react-icons/lu";
 import { PiUsersThreeFill } from "react-icons/pi";
 import { MdOutlinePets } from "react-icons/md";
+import { GET_RENTS_BY_OWNERSHIP_ID } from "client/gql/queries/utils";
 
+const getAuthState = (state) => state.persistedReducer.auth;
 export function PublicationDetail() {
+  const userData = localStorage.getItem("userData");
+  console.log("userData: ", userData);
+  console.log("logeado con redes? ", userData.lastname)
+
   const [_, params] = useRoute(paths.publicationDetail);
+
+  const [hoverRating, setHoverRating] = useState(0);
 
   const { loading, error, publication } = useGetPublicationById({
     id: params.id,
   });
+
+  const ownershipId =
+    publication && publication.ownership ? publication.ownership.id : null;
+
+  const { data } = useQuery(GET_RENTS_BY_OWNERSHIP_ID, {
+    variables: {
+      ownershipId: ownershipId,
+    },
+  });
+
+  useEffect(() => {
+    if (!loading && !error) {
+      console.log("datos de renta: ", data);
+    }
+  }, [loading, error, data]);
 
   const topRef = useRef(null);
 
@@ -115,6 +139,21 @@ export function PublicationDetail() {
               {/* <Box as="span" ml="2" color="gray.600" fontSize="sm">
               {publication.reviews} valoraciones
             </Box> */}
+            </Box>
+            <Box d="flex" mt="2" alignItems="center">
+              {Array(5)
+                .fill("")
+                .map((_, index) => (
+                  <StarIcon
+                    key={index}
+                    onMouseEnter={() => setHoverRating(index + 1)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    color={index < hoverRating ? "teal.500" : "gray.300"}
+                  />
+                ))}
+              {/* <Box as="span" ml="2" color="gray.600" fontSize="sm">
+        {publication.reviews} valoraciones
+      </Box> */}
             </Box>
             <Center my={3} gap={5}>
               <a href={phoneLink}>
