@@ -36,9 +36,9 @@ export const sections = {
         section: "Register",
         title: "Registrarme como ",
     },
-    questions: {
-        section: "Questions",
-        title: "Estilo de vida",
+    rents: {
+        section: "Rents",
+        title: "Mis rentas",
     },
     tags: {
         section: "Tags",

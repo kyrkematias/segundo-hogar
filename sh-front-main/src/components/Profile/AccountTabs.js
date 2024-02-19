@@ -18,13 +18,13 @@ import { ProfileForm } from "./ProfileForm";
 import { ProfileFormOwner } from "./ProfileFormOwner";
 import { PublicationsList } from "./PublicationsList";
 import { Tags } from "components/Tags";
-import { Questions } from "components/Questions";
 import { sections } from "config/sections";
 import { authSelector } from "store/slices/authSlice";
 import { USER_CATEGORIES } from "const";
 import { AddOwnership } from "components/Owneship/AddOwnership";
 import { UsersList } from "components/Admin/UsersList";
 import { RequestsList } from "components/Admin/RequestsList";
+import { StudentRents } from "components/StudentRents";
 
 const PAGE = "profile";
 
@@ -43,16 +43,11 @@ export function AccountTabs() {
           ) : (
             <></>
           )}
-          {/* {user_category === USER_CATEGORIES.STUDENT ? (
-            <Tab>Preguntas</Tab>
+          {user_category === USER_CATEGORIES.STUDENT ? (
+            <Tab>Mis Rentas</Tab>
           ) : (
             <></>
           )}
-          {user_category === USER_CATEGORIES.STUDENT ? (
-            <Tab>Intereses</Tab>
-          ) : (
-            <></>
-          )} */}
           {/* Pestaña de usuarios. Solo visible para admin */}
           {user_category === USER_CATEGORIES.ADMIN ? (
             <Tab>Usuarios</Tab>
@@ -125,11 +120,11 @@ export function AccountTabs() {
 
           {user_category === USER_CATEGORIES.STUDENT ? (
             <TabPanel>
-              <SectionHeader
+              {/* <SectionHeader
                 section={questions.section}
                 sectionTitle={questions.title}
-              />
-              <Questions fromPage={PAGE} />
+              /> */}
+              <StudentRents />
             </TabPanel>
           ) : null }
           

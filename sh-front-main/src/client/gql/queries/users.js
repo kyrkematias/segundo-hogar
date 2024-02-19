@@ -37,6 +37,7 @@ export const GET_STUDENT_USER_BY_ID = gql`
           }
           shared
           file_number
+          id
         }
       }
       user_category {
@@ -119,6 +120,22 @@ export const GET_ALL_FILES_NUMBERS = gql`
   query GetFilenumber {
     sh_students {
       file_number
+    }
+  }
+`;
+
+export const GET_RENTS_BY_STUDENT_ID = gql`
+  query GetRentsByStudentId($id: bigint) {
+    sh_rents(where: { students_id: { _eq: $id } }) {
+      id
+      ownership {
+        address {
+          address
+          apartment
+          floor
+        }
+        rating
+      }
     }
   }
 `;
