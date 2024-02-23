@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import {
   Box,
   Heading,
@@ -16,52 +16,67 @@ import {
 import { StarIcon } from "@chakra-ui/icons";
 import { useGetUser } from "hooks/pages/Profile/useGetUser";
 import { GET_RENTS_BY_STUDENT_ID } from "client/gql/queries/users";
+import { REGISTER_RENT_RATING } from "client/gql/mutations/registerRentRating/registerRentRating";
 
 export function StudentRents() {
   const toast = useToast();
-
+  const { user } = useGetUser();
   const [hoverRating, setHoverRating] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
-
-  const { user } = useGetUser();
-
-  console.log("Data from GET_STUDENT_USER_BY_ID:", user);
-
   const studentId = user?.person?.students?.[0]?.id;
-  console.log("id del student ", studentId);
 
   const { loading, error, data } = useQuery(GET_RENTS_BY_STUDENT_ID, {
     variables: { id: studentId },
     fetchPolicy: "no-cache",
   });
 
+  console.log("data from rents: ", data);
+  // console.log("rating: ", data.sh_rents[0].updated_at);
+
+  const [registerRentRating] = useMutation(REGISTER_RENT_RATING);
+
   if (!studentId) {
     return <p>No se ha encontrado información del estudiante.</p>;
   }
-  console.log("Data from GET_RENTS_BY_STUDENT_ID:", data);
 
   if (loading) return <Spinner />;
 
   const handleRating = (rating) => {
-    // TODO lógica para enviar la calificación a la base de datos
-
-    toast({
-      title: "Calificación de renta enviada",
-      description: "¡Gracias por tu calificación!",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-
-    toast({
-      title: "Error!",
-      description:
-        "Hubo un problema al enviar la calificación. Inténtalo de nuevo más tarde.",
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
+    registerRentRating({
+      variables: {
+        rating: rating,
+        start_date: data.sh_rents[0].start_date,
+        end_date: data.sh_rents[0].end_date,
+        ownerships_id: data.sh_rents[0].ownerships_id,
+        students_id: studentId,
+        created_at: data.sh_rents[0].created_at,
+        id: data.sh_rents[0].id,
+        updated_at: new Date().toISOString(),
+      },
+    })
+      .then(() => {
+        toast({
+          title: "Calificación de renta enviada",
+          description: "¡Gracias por tu calificación!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        console.error("Error al enviar la calificación:", error);
+        toast({
+          title: "Error!",
+          description:
+            "Hubo un problema al enviar la calificación. Inténtalo de nuevo más tarde.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        console.log(error)
+      });
   };
+
   return (
     <div>
       <Heading as="h1">Mis rentas</Heading>
