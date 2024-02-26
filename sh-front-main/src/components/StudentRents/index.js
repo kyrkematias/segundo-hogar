@@ -17,6 +17,7 @@ import { StarIcon } from "@chakra-ui/icons";
 import { useGetUser } from "hooks/pages/Profile/useGetUser";
 import { GET_RENTS_BY_STUDENT_ID } from "client/gql/queries/users";
 import { REGISTER_RENT_RATING } from "client/gql/mutations/registerRentRating/registerRentRating";
+import { GET_AVG_RATING_BY_OWNERSHIPS_ID } from "client/gql/queries/utils";
 
 export function StudentRents() {
   const toast = useToast();
@@ -30,9 +31,18 @@ export function StudentRents() {
     fetchPolicy: "no-cache",
   });
 
-  console.log("data from rents: ", data);
-  // console.log("rating: ", data.sh_rents[0].updated_at);
+  const ownerships_id = data?.sh_rents[0]?.ownerships_id
 
+  const { data: avgRatingData } = useQuery(GET_AVG_RATING_BY_OWNERSHIPS_ID, {
+    variables: { ownerships_id: ownerships_id },
+  });
+
+  const avgRating = avgRatingData?.sh_rents_aggregate?.aggregate?.avg?.rating;
+
+  console.log("avr rating:", avgRating)
+
+  console.log("data from rents: ", data);
+  console.log("ownership id: ", ownerships_id);
   const [registerRentRating] = useMutation(REGISTER_RENT_RATING);
 
   if (!studentId) {
@@ -73,7 +83,7 @@ export function StudentRents() {
           duration: 3000,
           isClosable: true,
         });
-        console.log(error)
+        console.log(error);
       });
   };
 
@@ -105,7 +115,7 @@ export function StudentRents() {
                             i <
                             (hoverRating ||
                               selectedRating ||
-                              rent.ownership.rating)
+                              avgRating)
                               ? "teal.500"
                               : "gray.300"
                           }
