@@ -177,6 +177,7 @@ export function RequestsList() {
                 students_id: request.message.match(/con id (\S+)/)[1],
                 start_date: request.message.match(/comenzará el día (\S+)/)[1],
                 end_date: request.message.match(/finalizará el día (\S+)/)[1],
+                rating: 0
               },
             }).then((result) => {
               console.log("result", result);

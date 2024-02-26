@@ -31,10 +31,7 @@ import { GiCigarette } from "react-icons/gi";
 import { LuBaby } from "react-icons/lu";
 import { PiUsersThreeFill } from "react-icons/pi";
 import { MdOutlinePets } from "react-icons/md";
-import {
-  GET_RENTS_BY_OWNERSHIP_ID,
-  GET_AVG_RATING_BY_OWNERSHIPS_ID,
-} from "client/gql/queries/utils";
+import { GET_AVG_RATING_BY_OWNERSHIPS_ID } from "client/gql/queries/utils";
 
 export function PublicationDetail() {
   const userData = localStorage.getItem("userData");
@@ -158,9 +155,15 @@ export function PublicationDetail() {
               fontWeight="bold"
               color={getColorForRating(avgRating)}
             >
-              {avgRating !== null && avgRating !== undefined && avgRating !== 0
-                ? avgRating
-                : <Text fontSize="15px">Esta propiedad no tiene calificaciones aún</Text>}
+              {avgRating !== null &&
+              avgRating !== undefined &&
+              avgRating !== 0 ? (
+                avgRating
+              ) : (
+                <Text fontSize="15px">
+                  Esta propiedad no tiene calificaciones aún
+                </Text>
+              )}
             </Text>
 
             <Center my={3} gap={5}>

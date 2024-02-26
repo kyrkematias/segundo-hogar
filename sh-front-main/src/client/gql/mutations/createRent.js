@@ -5,14 +5,16 @@ mutation CreateRent(
     $ownerships_id: bigint!, 
     $students_id: bigint!, 
     $start_date: date!, 
-    $end_date: date!
+    $end_date: date!,
+    $rating: Int
   ) {
     insert_sh_rents(
       objects: {
         ownerships_id: $ownerships_id, 
         students_id: $students_id, 
         start_date: $start_date, 
-        end_date: $end_date
+        end_date: $end_date,
+        rating: $rating,
       }
     ) {
       returning {

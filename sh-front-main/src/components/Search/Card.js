@@ -2,6 +2,8 @@ import React from "react";
 import { Box, Image } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import { Link } from "wouter";
+import { useQuery } from "@apollo/client";
+import { GET_AVG_RATING_BY_OWNERSHIPS_ID } from "client/gql/queries/utils";
 
 export function Card({ post }) {
   let image = "#";
@@ -11,6 +13,16 @@ export function Card({ post }) {
   ) {
     image = post.ownership.ownerships_images[0].imageurl;
   }
+
+  console.log(post);
+
+  const { data: avgRatingData } = useQuery(GET_AVG_RATING_BY_OWNERSHIPS_ID, {
+    variables: { ownerships_id: post.ownership.id },
+  });
+
+  const avgRating = avgRatingData?.sh_rents_aggregate?.aggregate?.avg?.rating;
+
+  console.log("rating: ",avgRating);
 
   return (
     <Link href={`/publicaciones/detalle/${post?.id}`}>
@@ -65,12 +77,9 @@ export function Card({ post }) {
               .map((_, i) => (
                 <StarIcon
                   key={i}
-                  color={i < post.ownership?.rating ? "blue.400" : "gray.300"}
+                  color={i < avgRating ? "blue.400" : "gray.300"}
                 />
               ))}
-            {/* <Box as="span" ml="2" color="gray.600" fontSize="sm">
-                            {post?.reviews} valoraciones
-                        </Box> */}
           </Box>
         </Box>
       </Box>
