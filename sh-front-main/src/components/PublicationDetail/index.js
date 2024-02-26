@@ -31,7 +31,10 @@ import { GiCigarette } from "react-icons/gi";
 import { LuBaby } from "react-icons/lu";
 import { PiUsersThreeFill } from "react-icons/pi";
 import { MdOutlinePets } from "react-icons/md";
-import { GET_RENTS_BY_OWNERSHIP_ID } from "client/gql/queries/utils";
+import {
+  GET_RENTS_BY_OWNERSHIP_ID,
+  GET_AVG_RATING_BY_OWNERSHIPS_ID,
+} from "client/gql/queries/utils";
 
 export function PublicationDetail() {
   const userData = localStorage.getItem("userData");
@@ -42,6 +45,13 @@ export function PublicationDetail() {
   const { loading, error, publication } = useGetPublicationById({
     id: params.id,
   });
+
+  const { data: avgRatingData } = useQuery(GET_AVG_RATING_BY_OWNERSHIPS_ID, {
+    variables: { ownerships_id: publication?.ownership?.id },
+  });
+
+  console.log(avgRatingData);
+  const avgRating = avgRatingData?.sh_rents_aggregate?.aggregate?.avg?.rating;
 
   const ownershipId =
     publication && publication.ownership ? publication.ownership.id : null;
@@ -65,8 +75,32 @@ export function PublicationDetail() {
 
   const phoneLink = `https://wa.me/${phone}`;
   const emailLink = `https://mailto${email}`;
-  console.log(phoneLink);
-  console.log(emailLink);
+  console.log(publication.ownership.id);
+
+  const getColorForRating = (rating) => {
+    if (rating === null || rating === undefined) {
+      return "#718096";
+    } else if (rating === 0) {
+      return "#718096";
+    } else if (rating >= 1 && rating <= 5) {
+      switch (rating) {
+        case 1:
+          return "#E53E3E";
+        case 2:
+          return "#DD6B20";
+        case 3:
+          return "#D69E2E";
+        case 4:
+          return "#38A169";
+        case 5:
+          return "#2F855A";
+        default:
+          return "#718096";
+      }
+    } else {
+      return "#718096";
+    }
+  };
 
   return (
     <Box>
@@ -115,16 +149,20 @@ export function PublicationDetail() {
                 .map((_, i) => (
                   <StarIcon
                     key={i}
-                    color={
-                      i < publication.ownership.rating ? "teal.500" : "gray.300"
-                    }
+                    color={i < avgRating ? "teal.500" : "gray.300"}
                   />
                 ))}
-              {/* <Box as="span" ml="2" color="gray.600" fontSize="sm">
-              {publication.reviews} valoraciones
-            </Box> */}
             </Box>
-            
+            <Text
+              fontSize="22px"
+              fontWeight="bold"
+              color={getColorForRating(avgRating)}
+            >
+              {avgRating !== null && avgRating !== undefined && avgRating !== 0
+                ? avgRating
+                : <Text fontSize="15px">Esta propiedad no tiene calificaciones aún</Text>}
+            </Text>
+
             <Center my={3} gap={5}>
               <a href={phoneLink}>
                 <Box

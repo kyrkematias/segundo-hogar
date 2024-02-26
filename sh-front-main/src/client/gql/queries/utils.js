@@ -202,13 +202,22 @@ export const GET_STUDENT_BY_EMAIL = gql`
   }
 `;
 
-
-
-
 export const GET_RENTS_BY_OWNERSHIP_ID = gql`
-query MyQuery($ownershipId: bigint) {
-  sh_rents(where: {ownerships_id: {_eq: $ownershipId}}) {
-    students_id
+  query MyQuery($ownershipId: bigint) {
+    sh_rents(where: { ownerships_id: { _eq: $ownershipId } }) {
+      students_id
+    }
   }
-}
+`;
+
+export const GET_AVG_RATING_BY_OWNERSHIPS_ID = gql`
+  query getAvgRatingByOwnershipsId($ownerships_id: bigint) {
+    sh_rents_aggregate(where: { ownerships_id: { _eq: $ownerships_id } }) {
+      aggregate {
+        avg {
+          rating
+        }
+      }
+    }
+  }
 `;
