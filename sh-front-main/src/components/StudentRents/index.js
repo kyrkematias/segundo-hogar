@@ -6,6 +6,7 @@ import {
   Table,
   TableContainer,
   Td,
+  Text,
   Thead,
   Tr,
   Th,
@@ -31,7 +32,7 @@ export function StudentRents() {
     fetchPolicy: "no-cache",
   });
 
-  const ownerships_id = data?.sh_rents[0]?.ownerships_id
+  const ownerships_id = data?.sh_rents[0]?.ownerships_id;
 
   const { data: avgRatingData } = useQuery(GET_AVG_RATING_BY_OWNERSHIPS_ID, {
     variables: { ownerships_id: ownerships_id },
@@ -39,7 +40,7 @@ export function StudentRents() {
 
   const avgRating = avgRatingData?.sh_rents_aggregate?.aggregate?.avg?.rating;
 
-  console.log("avr rating:", avgRating)
+  console.log("avr rating:", avgRating);
 
   console.log("data from rents: ", data);
   console.log("ownership id: ", ownerships_id);
@@ -102,8 +103,8 @@ export function StudentRents() {
           <Tbody>
             {data?.sh_rents.map((rent, index) => (
               <Tr key={rent.id}>
-                <Td>{rent.id}</Td>
-                <Td>{`${rent.ownership.address.address}`}</Td>
+                <Td color="#718096">{rent.id}</Td>
+                <Td color="#718096">{`${rent.ownership.address.address}`}</Td>
                 <Td>
                   <Box d="flex" mt="2" alignItems="center">
                     {Array(5)
@@ -113,9 +114,7 @@ export function StudentRents() {
                           key={i}
                           color={
                             i <
-                            (hoverRating ||
-                              selectedRating ||
-                              avgRating)
+                            (hoverRating || selectedRating || avgRating || 0)
                               ? "teal.500"
                               : "gray.300"
                           }
@@ -127,6 +126,16 @@ export function StudentRents() {
                           }}
                         />
                       ))}
+                    {avgRating === 0 && (
+                      <Text
+                        color="#718096"
+                        py={2}
+                        fontSize="15px"
+                        fontWeight="500"
+                      >
+                        Esta propiedad no tiene calificaciones aún
+                      </Text>
+                    )}
                   </Box>
                 </Td>
               </Tr>
