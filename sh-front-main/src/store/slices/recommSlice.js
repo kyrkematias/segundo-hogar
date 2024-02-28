@@ -62,8 +62,7 @@ export const createNodeAction = (data) => async (dispatch) => {
   }
 };
 
-export const createRelationsAction = (data) => async (dispatch) => {
-  const toast = useToast();
+export const createRelationsAction = (data, showToast) => async (dispatch) => {
   dispatch(recommLoading());
   try {
     const idPerson = getCreatedIdPerson();
@@ -71,7 +70,7 @@ export const createRelationsAction = (data) => async (dispatch) => {
     window.localStorage.removeItem("createdIdPerson");
     window.localStorage.removeItem("questionsValue");
     dispatch(clearState());
-    toast({
+    showToast({
       title: "¡Registrado con éxito!",
       description: "Se han guardado tus preferencias con éxito.",
       status: "success",
@@ -81,7 +80,7 @@ export const createRelationsAction = (data) => async (dispatch) => {
   } catch (err) {
     console.error(err);
     dispatch(failed(err));
-    toast({
+    showToast({
       title: "¡Ups! Algo salió mal.",
       description:
         "Por favor, inténtalo de nuevo más tarde o contacta a soporte.",

@@ -14,6 +14,7 @@ import { SectionHeader } from "components/commons/SectionHeader";
 import { sections } from "config/sections";
 import { createRelationsAction } from "store/slices/recommSlice";
 import { useLocation } from "wouter";
+import { useToast } from "@chakra-ui/react";
 import { paths } from "config/paths";
 import { StepperProfile } from "components/commons/Stepper/Stepper";
 
@@ -34,6 +35,7 @@ export function Tags({ fromPage }) {
   const [selectedTags, setSelectedTags] = useState([]);
 
   const { allTags } = useGetTags();
+  const showToast = useToast();
 
   const isSelectedElem = (tag) => selectedTags.includes(tag);
 
@@ -77,7 +79,7 @@ export function Tags({ fromPage }) {
       lifestyles: questionArr,
     };
 
-    dispatch(createRelationsAction(body));
+    dispatch(createRelationsAction(body, showToast));
     setLocation(paths.landing);
     console.log("respuestas: ", questionArr)
   };
