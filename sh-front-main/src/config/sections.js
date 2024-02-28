@@ -40,6 +40,10 @@ export const sections = {
         section: "Rents",
         title: "Mis rentas",
     },
+    questions: {
+        section: "Questions",
+        title: "Estilo de vida",
+    },
     tags: {
         section: "Tags",
         title: "Elige tus intereses",
