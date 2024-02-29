@@ -87,6 +87,20 @@ export const GET_OWNERSHIPS_BY_ID = gql`
   }
 `;
 
+export const GET_COORDINATES_BY_OWNERSHIPS_ID = gql`
+  query GetCoordinatesByOwnershipsId($id: Int!) {
+    sh_coordinates(where: { ownerships: { id: { _eq: $id } } }) {
+      lat
+      lon
+      ownerships {
+        address {
+          address
+        }
+      }
+    }
+  }
+`;
+
 export const IS_PUBLISHED = gql`
   query IsPublished($id: bigint) {
     sh_publications(where: { ownerships_id: { _eq: $id } }) {

@@ -39,7 +39,10 @@ import {
 } from "utils/validations/PublicationRegister";
 import Places from "components/commons/MapContainer/NewMap";
 import { useGetOwnershipsByOwnerId } from "hooks/utils/useGetOwnershipsByOwnerId";
-import { GET_OWNERSHIPS_BY_ID } from "client/gql/queries/utils";
+import {
+  GET_OWNERSHIPS_BY_ID,
+  GET_COORDINATES_BY_OWNERSHIPS_ID,
+} from "client/gql/queries/utils";
 import {
   UPDATE_COORDINATES_MUTATION,
   UPDATE_ADDRESS_MUTATION,
@@ -100,7 +103,38 @@ export function EditPublicationModal({
   const { data } = useQuery(GET_OWNERSHIPS_BY_ID, {
     variables: { id: parseInt(ownershipId) },
   });
+  const { data: coordinatesData } = useQuery(GET_COORDINATES_BY_OWNERSHIPS_ID, {
+    variables: { id: parseInt(ownershipId) },
+  });
+
+  const [loadedLat, setLoadedLat] = useState(null);
+  const [loadedLon, setLoadedLon] = useState(null);
+  const [loadedAddress, setLoadedAddress] = useState(null);
+  const [loadedApt, setLoadedApt] = useState("");
+  const [loadedFloor, setLoadedFloor] = useState("");
+
+  useEffect(() => {
+    if (coordinatesData && coordinatesData.sh_coordinates.length > 0) {
+      setLoadedLat(coordinatesData.sh_coordinates[0].lat);
+      setLoadedLon(coordinatesData.sh_coordinates[0].lon);
+      setLoadedAddress(
+        coordinatesData.sh_coordinates[0].ownerships[0].address.address
+      );
+      setLoadedApt(
+        coordinatesData.sh_coordinates[0].ownerships[0].address.apartment
+      );
+      setLoadedFloor(
+        coordinatesData.sh_coordinates[0].ownerships[0].address.floor
+      );
+    }
+  }, [coordinatesData]);
   console.log("Datos de la propiedad:", data?.sh_ownerships);
+  console.log("Tipo de propiedad", data?.sh_ownerships[0].ownerships_type.id);
+  console.log("coordinatesData", coordinatesData);
+  console.log("latitud: ", loadedLat);
+  console.log("longitud: ", loadedLon);
+  console.log("dirección: ", loadedAddress);
+
   const onSubmit = async (data) => {
     try {
       const lat = localStorage.getItem("lat");
@@ -121,51 +155,61 @@ export function EditPublicationModal({
         "coordenadas a editar",
         ownership.data.sh_ownerships[0].coordinate.id
       );
-      updateCoordinates({
+
+      await updateCoordinates({
         variables: {
           id: ownership.data.sh_ownerships[0].coordinate.id,
-          lat: parseFloat(data.coordinates.lat),
-          lon: parseFloat(data.coordinates.lng),
+          lat: loadedLat || parseFloat(data?.coordinates.lat),
+          lon: loadedLon || parseFloat(data?.coordinates.lng),
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
         console.log("coordenadas actualizadas", result);
       });
-      updateAddress({
+
+      await updateAddress({
         variables: {
           id: ownership.data.sh_ownerships[0].address.id,
-          address: data.address || data?.sh_ownerships[0]?.address?.address,
-          floor: data.floor || data?.sh_ownerships[0]?.address?.floor,
-          apartment:
-            data.apartment || data?.sh_ownerships[0]?.address?.apartment,
+          address: loadedAddress,
+          // || data?.sh_ownerships[0]?.address?.address || data?.address
+          floor: loadedFloor || data?.floor,
+          apartment: loadedApt || data?.apartment,
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
         console.log("dirección actualizada", result);
       });
-      updateOwnership({
+
+      await updateOwnership({
         variables: {
           id: ownershipId || data.sh_ownerships[0].ownerships_type.id,
           shared: true,
-          rooms: data.bedrooms || data?.sh_ownerships[0]?.rooms,
-          bathrooms: data.bathrooms || data?.sh_ownerships[0]?.bathrooms,
-          size: data.size || data?.sh_ownerships[0]?.size,
-          rating: 1,
+          rooms: data?.bedrooms || data?.sh_ownerships[0]?.rooms || "1",
+          bathrooms:
+            data?.bathrooms || data?.sh_ownerships[0]?.bathrooms || "1",
+          size: data?.size || data?.sh_ownerships[0]?.size || "40",
+          rating: 0,
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
         console.log("propiedad actualizada", result);
       });
-      // updateImages({
-      //   variables: {
-      //     ownerships_id: ownershipId,
-      //     imageurl:
-      //       "https://www.facebook.com/photo/?fbid=10160261246416664&set=a.429427646663", // Aquí debes pasar la URL de la imagen desde el formulario
-      //     updated_at: new Date().toISOString(),
-      //   },
-      // }).then((result) => {
-      //   console.log("Imágenes actualizadas", result);
-      // });
+
+      // Actualizar imágenes
+      // const imagesToUpdate = images.map((image) => ({
+      //   ownerships_id: ownershipId,
+      //   imageurl: image, // Aquí asignamos la imagen seleccionada como imageurl
+      //   updated_at: new Date().toISOString(),
+      // }));
+
+      // for (const imageData of imagesToUpdate) {
+      //   await updateImages({
+      //     variables: imageData,
+      //   }).then((result) => {
+      //     console.log("Imágenes actualizadas", result);
+      //   });
+      // }
+
       toast({
         title: "Propiedad actualizada",
         description:
@@ -174,6 +218,7 @@ export function EditPublicationModal({
         duration: 5000,
         isClosable: true,
       });
+
       onClose();
       closeModal();
     } catch (error) {
@@ -181,14 +226,12 @@ export function EditPublicationModal({
       toast({
         title: "Error al actualizar",
         description:
-          "La propiedad no se ha actualizado correctamente. Intenta mas tarde o contacta con soporte",
+          "La propiedad no se ha actualizado correctamente. Intenta más tarde o contacta con soporte",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
     }
-
-    localStorage.removeItem("ownershipToEdit");
   };
 
   console.log("ownership type: ", data?.sh_ownerships[0].ownerships_type.id);
@@ -227,10 +270,7 @@ export function EditPublicationModal({
                       placeholder="Selecciona el tipo de inmueble"
                       _focus={{ background: "none" }}
                       defaultValue={
-                        data &&
-                        data.sh_ownerships &&
-                        data.sh_ownerships.length > 0 &&
-                        data.sh_ownerships[0].ownerships_type.id === 1
+                        data?.sh_ownerships[0]?.ownerships_type.id === 1
                           ? "1"
                           : "2"
                       }
