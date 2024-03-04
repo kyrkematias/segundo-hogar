@@ -120,18 +120,18 @@ export const UPDATE_OWNERSHIPS_MUTATION = gql`
 `;
 
 export const UPDATE_OWNERSHIP_IMAGES = gql`
-  mutation MyMutation {
-    update_sh_ownerships_images(
-      where: { ownerships_id: { _eq: "8" } }
-      _set: {
-        imageurl: "https://www.facebook.com/photo/?fbid=10160261246416664&set=a.429427646663"
-      }
-    ) {
-      affected_rows
-      returning {
-        imageurl
-        updated_at
-      }
+mutation UpdateOwnershipImages($ownershipsId: bigint!, $imageUrl: String!) {
+  update_sh_ownerships_images(
+    where: { ownerships_id: { _eq: $ownershipsId } }
+    _set: {
+      imageurl: $imageUrl
+    }
+  ) {
+    affected_rows
+    returning {
+      imageurl
+      updated_at
     }
   }
+}
 `;

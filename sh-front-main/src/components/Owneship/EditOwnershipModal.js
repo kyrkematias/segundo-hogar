@@ -25,6 +25,7 @@ import {
   Center,
   Image,
   SimpleGrid,
+  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
@@ -43,6 +44,7 @@ import {
   GET_OWNERSHIPS_BY_ID,
   GET_COORDINATES_BY_OWNERSHIPS_ID,
 } from "client/gql/queries/utils";
+import { postImagesService } from "services/ownership/postImagesService";
 import {
   UPDATE_COORDINATES_MUTATION,
   UPDATE_ADDRESS_MUTATION,
@@ -112,6 +114,7 @@ export function EditPublicationModal({
   const [loadedAddress, setLoadedAddress] = useState(null);
   const [loadedApt, setLoadedApt] = useState("");
   const [loadedFloor, setLoadedFloor] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (coordinatesData && coordinatesData.sh_coordinates.length > 0) {
@@ -128,14 +131,15 @@ export function EditPublicationModal({
       );
     }
   }, [coordinatesData]);
-  console.log("Datos de la propiedad:", data?.sh_ownerships);
-  console.log("Tipo de propiedad", data?.sh_ownerships[0].ownerships_type.id);
-  console.log("coordinatesData", coordinatesData);
-  console.log("latitud: ", loadedLat);
-  console.log("longitud: ", loadedLon);
-  console.log("dirección: ", loadedAddress);
+  // console.log("Datos de la propiedad:", data?.sh_ownerships);
+  // console.log("Tipo de propiedad", data?.sh_ownerships[0].ownerships_type.id);
+  // console.log("coordinatesData", coordinatesData);
+  // console.log("latitud: ", loadedLat);
+  // console.log("longitud: ", loadedLon);
+  // console.log("dirección: ", loadedAddress);
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
       const lat = localStorage.getItem("lat");
       const lng = localStorage.getItem("lng");
@@ -144,17 +148,17 @@ export function EditPublicationModal({
       data.address = address;
       console.log("Datos formulario", data);
       const ownershipId = localStorage.getItem("ownershipToEdit");
-      console.log("OWNER ship ip a editar:", ownershipId);
+      // console.log("OWNER ship ip a editar:", ownershipId);
       const ownership = await client.query({
         query: GET_OWNERSHIPS_BY_ID,
         variables: { id: ownershipId },
         fetchPolicy: "no-cache",
       });
-      console.log("propiedad a editar", ownership);
-      console.log(
-        "coordenadas a editar",
-        ownership.data.sh_ownerships[0].coordinate.id
-      );
+      // console.log("propiedad a editar", ownership);
+      // console.log(
+      //   "coordenadas a editar",
+      //   ownership.data.sh_ownerships[0].coordinate.id
+      // );
 
       await updateCoordinates({
         variables: {
@@ -164,7 +168,7 @@ export function EditPublicationModal({
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
-        console.log("coordenadas actualizadas", result);
+        // console.log("coordenadas actualizadas", result);
       });
 
       await updateAddress({
@@ -177,7 +181,7 @@ export function EditPublicationModal({
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
-        console.log("dirección actualizada", result);
+        // console.log("dirección actualizada", result);
       });
 
       await updateOwnership({
@@ -192,23 +196,45 @@ export function EditPublicationModal({
           updatedAt: new Date().toISOString(),
         },
       }).then((result) => {
-        console.log("propiedad actualizada", result);
+        // console.log("propiedad actualizada", result);
       });
 
-      // Actualizar imágenes
-      // const imagesToUpdate = images.map((image) => ({
-      //   ownerships_id: ownershipId,
-      //   imageurl: image, // Aquí asignamos la imagen seleccionada como imageurl
-      //   updated_at: new Date().toISOString(),
-      // }));
+      const imagesToUpdate = images.map((image) => ({
+        ownershipsId: ownershipId,
+        imageFile: image,
+        updated_at: new Date().toISOString(),
+      }));
 
-      // for (const imageData of imagesToUpdate) {
-      //   await updateImages({
-      //     variables: imageData,
-      //   }).then((result) => {
-      //     console.log("Imágenes actualizadas", result);
-      //   });
-      // }
+      console.log("imagenes a actualizar: ", imagesToUpdate);
+
+      for (const imageData of imagesToUpdate) {
+        const formData = new FormData();
+        formData.append("image", imageData.imageFile);
+
+        formData.append("idHouse", imageData.ownershipsId);
+        formData.append("updated_at", imageData.updated_at);
+
+        console.log("Datos enviados al servicio de imágenes:", formData);
+
+        try {
+          const response = await postImagesService({ formData });
+          console.log("response: ", response);
+
+          const imageUrl = response.url || response;
+
+          await updateImages({
+            variables: {
+              ownershipsId: imageData.ownershipsId,
+              imageUrl: imageUrl,
+              updated_at: imageData.updated_at,
+            },
+          }).then((result) => {
+            console.log("Imágenes actualizadas", result);
+          });
+        } catch (error) {
+          console.error("Error al subir imagen:", error);
+        }
+      }
 
       toast({
         title: "Propiedad actualizada",
@@ -232,6 +258,7 @@ export function EditPublicationModal({
         isClosable: true,
       });
     }
+    setIsLoading(false);
   };
 
   console.log("ownership type: ", data?.sh_ownerships[0].ownerships_type.id);
@@ -554,7 +581,7 @@ export function EditPublicationModal({
                         <Input
                           type="file"
                           onChange={onFileChange}
-                          accept="image/x-png,image/jpeg,image/jpg"
+                          accept="image/*"
                           size="5000"
                           disabled={images.length >= 6 ? true : false}
                           display="none"
@@ -586,8 +613,11 @@ export function EditPublicationModal({
               bg="black"
               color="white"
               onClick={handleSubmit(onSubmit)}
+              isLoading={isLoading} // Utiliza el estado isLoading para mostrar el spinner
+              loadingText="Enviando..." // Opcional: texto que se muestra durante la carga
+              disabled={isLoading} // Deshabilita el botón mientras está cargando
             >
-              Guardar Cambios
+              {isLoading ? <Spinner color="white" /> : "Guardar Cambios"}
             </Button>
           </ModalFooter>
         </ModalContent>
