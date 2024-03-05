@@ -125,26 +125,35 @@ export const GET_ALL_FILES_NUMBERS = gql`
 `;
 
 export const GET_RENTS_BY_STUDENT_ID = gql`
-query GetRentsByStudentId($id: bigint) {
-  sh_rents(where: {students_id: {_eq: $id}}) {
-    id
-    ownership {
-      address {
-        address
-        apartment
-        floor
-        id
+  query GetRentsByStudentId($id: bigint) {
+    sh_rents(where: { students_id: { _eq: $id } }) {
+      id
+      ownership {
+        address {
+          address
+          apartment
+          floor
+          id
+        }
+        rating
       }
+      start_date
+      end_date
+      created_at
+      ownerships_id
+      students_id
+      updated_at
       rating
     }
-    start_date
-    end_date
-    created_at
-    ownerships_id
-    students_id
-    updated_at
-    rating
   }
-}
 `;
 
+export const GET_PUBLICATIONS_COUNT_BY_OWNERSHIP_ID = gql`
+  query GetPublicationCountByOwnershipId($id: bigint) {
+    sh_publications_aggregate(where: { ownerships_id: { _eq: $id } }) {
+      aggregate {
+        count
+      }
+    }
+  }
+`;

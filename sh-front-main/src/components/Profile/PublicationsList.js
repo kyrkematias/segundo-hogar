@@ -16,7 +16,7 @@ import {
 
 import { TbHomeDollar } from "react-icons/tb";
 import { MdOutlinePostAdd } from "react-icons/md";
-
+import { useQuery } from "@apollo/client";
 import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@apollo/client";
@@ -36,6 +36,7 @@ import {
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
 import { EditPublicationModal } from "components/Owneship/EditOwnershipModal";
+import { GET_PUBLICATIONS_COUNT_BY_OWNERSHIP_ID } from "client/gql/queries/users";
 
 export function PublicationsList() {
   const [isModalRequestRentOpen, setIsModalRequestRentOpen] = useState(false);
@@ -102,6 +103,16 @@ export function PublicationsList() {
     setLocation(`/registrar/publicacion/${id}`);
   };
 
+  const {
+    loading: publicationsLoading,
+    error: publicationsError,
+    data: publicationsData,
+  } = useQuery(GET_PUBLICATIONS_COUNT_BY_OWNERSHIP_ID, {
+    variables: { id: ownerships?.id },
+  });
+
+  console.log("publicationsData: ", publicationsData);
+  
   const handleRent = (id) => {
     localStorage.setItem("ownershipId", id);
     setIsModalEditOpen(false);
@@ -162,6 +173,11 @@ export function PublicationsList() {
                     onClick={() => handlePublish(ownership?.id)}
                   />
                 </Td>
+                {/* <Td>
+                  {publicationsData && publicationsData[ownership?.id] && (
+                    <Text>{publicationsData[ownership?.id].count}</Text>
+                  )}
+                </Td> */}
               </Tr>
             ))}
           </Tbody>

@@ -23,37 +23,32 @@ export function useGetOwnershipsByOwnerId() {
     data: ownerships,
     refetch,
   } = useQuery(GET_OWNERSHIPS_BY_OWNER_ID, { variables });
-
+  localStorage.setItem("ownerId", owner_id);
+  console.log("owner id: ", owner_id)
   const [deleteOwnership] = useMutation(DELETE_OWNERSHIP, {
     onCompleted: () => {
-      // Refetch the data after deletion
       refetch();
     },
     onError: (error) => {
       console.error(error);
-      // Handle error as needed
     },
   });
 
   const [deletePublications] = useMutation(DELETE_PUBLICATIONS, {
     onCompleted: () => {
-      // Refetch the data after deletion
       refetch();
     },
     onError: (error) => {
       console.error(error);
-      // Handle error as needed
     },
   });
 
   const [deleteImages] = useMutation(DELETE_IMAGES, {
     onCompleted: () => {
-      // Refetch the data after deletion
       refetch();
     },
     onError: (error) => {
       console.error(error);
-      // Handle error as needed
     },
   });
 

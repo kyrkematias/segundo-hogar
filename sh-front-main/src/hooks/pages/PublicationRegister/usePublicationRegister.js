@@ -3,11 +3,14 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { REGISTER_PUBLICATION } from "client/gql/mutations/registerPublication/registerPublication";
 import { paths } from "config/paths";
+import { useQuery } from "@apollo/client";
 import useLocation from "wouter/use-location";
 import { useInitialPublications } from "hooks/pages/Search/useInitialPublications";
 import { authSelector } from "store/slices/authSlice";
 import { useSelector } from "react-redux";
 import { useToast } from "@chakra-ui/react";
+import { GET_PUBLICATIONS_COUNT_BY_OWNERSHIP_ID } from "client/gql/queries/users";
+import { Alert, AlertIcon } from "@chakra-ui/react";
 
 export const createPublicationAction = (data) => ({
   type: "CREATE_PUBLICATION",
@@ -30,6 +33,17 @@ export function useRegisterPublicationForm() {
 
   const { user } = useSelector(authSelector);
   const ownershipId = localStorage.getItem("ownershipId");
+
+  const {
+    loading: publicationsLoading,
+    error: publicationsError,
+    data: publicationsData,
+  } = useQuery(GET_PUBLICATIONS_COUNT_BY_OWNERSHIP_ID, {
+    variables: { id: ownershipId },
+  });
+
+  console.log("publicationsData: ", publicationsData);
+
   const toast = useToast();
   const onSubmit = async (data) => {
     try {
