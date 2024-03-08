@@ -25,7 +25,7 @@ import { useGetCareers } from "hooks/utils/useGetCareers";
 import { useGetStates } from "hooks/utils/useGetStates";
 import { useGetCities } from "hooks/utils/useGetCities";
 import { CustomButton } from "components/commons/CustomButton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function ProfileForm() {
   const { user } = useGetUser();
@@ -38,6 +38,8 @@ export function ProfileForm() {
 
   console.log("Data from GET_STUDENT_USER_BY_ID:", user);
   console.log("file nr. ", user?.person?.students?.[0]?.file_number);
+
+  const career = user?.person.students?.[0]?.career?.id || "";
 
   return (
     <>
@@ -115,16 +117,11 @@ export function ProfileForm() {
                   {...register("career", validatecareer)}
                   w={["100%", "100%", "100%", "100%", "100%"]}
                   _focus={{ background: "none" }}
+                  value={user?.person.students?.[0]?.career?.id || ""} // Establece el valor por defecto aquí
                 >
                   {careers?.map((career) => {
                     return (
-                      <option
-                        value={career.id}
-                        key={career.id}
-                        selected={
-                          user?.person.students?.[0]?.career?.id === career.id
-                        }
-                      >
+                      <option value={career.id} key={career.id}>
                         {career.name}
                       </option>
                     );
@@ -144,6 +141,7 @@ export function ProfileForm() {
                   placeholder="Selecciona..."
                   {...register("gender", validateGender)}
                   _focus={{ background: "none" }}
+                  defaultValue={user?.person.students?.[0]?.gender}
                 >
                   <option
                     value="Male"
@@ -188,6 +186,7 @@ export function ProfileForm() {
                   {...register("state", validateState)}
                   _focus={{ background: "none" }}
                   onChange={(e) => setStateSelected(e.target.value)}
+                  defaultValue={user?.person.students?.[0]?.state_id}
                 >
                   {states?.map((state) => {
                     return (

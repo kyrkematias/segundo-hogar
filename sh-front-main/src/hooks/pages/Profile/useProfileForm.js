@@ -24,7 +24,7 @@ export function useProfileForm() {
   const [updateState] = useMutation(UPDATE_STATES)
 
   const onSubmit = async (data) => {
-    console.log("data: ", data);
+    console.log("data del form: ", data);
   
     try {
       await updateGender({

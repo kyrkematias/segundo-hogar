@@ -56,7 +56,7 @@ export function FindRoommate() {
         );
 
         let listaRecomendaciones = data;
-        console.log("IDs de todas las recomendaciones:");
+        console.log("IDs de todas las recomendaciones:", data);
 
         const promises = listaRecomendaciones.data.map(
           async (recomendacion) => {
@@ -66,8 +66,8 @@ export function FindRoommate() {
                 variables: { id: recomendacion.id_person },
               });
 
-              const sharedValue =
-                data.sh_persons[0]?.students[0]?.shared || false;
+              const sharedValue = data.sh_persons[0]?.students[0]?.shared
+              || false;
               console.log(
                 `id_person: ${recomendacion.id_person}, shared: ${sharedValue}`
               );
@@ -82,11 +82,12 @@ export function FindRoommate() {
 
         const results = await Promise.all(promises);
 
-        const filteredRecomms = results.filter(
-          (recomendacion) => recomendacion.shared
-        );
+        const filteredRecomms = results
+        // .filter(
+        //   (recomendacion) => recomendacion.shared
+        // );
 
-        setResponse({ data: filteredRecomms }); 
+        setResponse({ data: filteredRecomms });
         setLoading(false);
       } catch (error) {
         console.error("Error fetching recomms:", error);
@@ -125,6 +126,9 @@ export function FindRoommate() {
               recomms={response?.data}
               redirectToProfile={redirectToProfileById}
             />
+          )}
+          {response?.data.length === 0 && (
+            <Text fontSize="lg" color="gray.500" fontStyle="italic" py={4}>No hay recomendaciones para Mostrar</Text>
           )}
         </Center>
       </Box>

@@ -56,7 +56,7 @@ export const MapSearchForm = ({ markers, height, width }) => {
 
   var zoom = useMemo(() => calculateZoom(maxDistance), [maxDistance ] );
   if(!maxDistance){
-    zoom = 15
+    zoom = 13
   }
 
   height = height || "400px";
