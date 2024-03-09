@@ -38,9 +38,7 @@ export function ProfileForm() {
 
   console.log("Data from GET_STUDENT_USER_BY_ID:", user);
   console.log("file nr. ", user?.person?.students?.[0]?.file_number);
-
-  const career = user?.person.students?.[0]?.career?.id || "";
-
+  console.log("comparte renta?: ", user?.person.students?.[0]?.shared)
   return (
     <>
       <Flex
@@ -92,29 +90,26 @@ export function ProfileForm() {
 
             <Flex direction={["column", "column", "row", "row", "row"]}>
               <FormControl m={2}>
-                <FormLabel>Compartir</FormLabel>
+                <FormLabel>Compartir renta:</FormLabel>
                 <Select
                   name="share"
                   {...register("share")}
                   w={["100%", "100%", "100%", "100%", "100%"]}
                   _focus={{ background: "none" }}
+                  // defaultValue={user?.person.students?.[0]?.shared}
+                  
                 >
-                  <option value="False">No</option>
-                  <option
-                    value="True"
-                    selected={user?.person.students?.[0]?.shared || false}
-                  >
-                    Si
-                  </option>
+                  <option value="false" selected={user?.person.students?.[0]?.shared}>No</option>
+                  <option value="true" selected={user?.person.students?.[0]?.shared}>Si</option>
                 </Select>
               </FormControl>
 
               <FormControl m={2} isInvalid={errors.career}>
-                <FormLabel>Selecciona tu Carrera</FormLabel>
+                <FormLabel>Selecciona tu Carrera:</FormLabel>
                 <Select
                   name="career"
                   placeholder="Selecciona..."
-                  {...register("career", validatecareer)}
+                  // {...register("career", validatecareer)}
                   w={["100%", "100%", "100%", "100%", "100%"]}
                   _focus={{ background: "none" }}
                   value={user?.person.students?.[0]?.career?.id || ""} // Establece el valor por defecto aquí
@@ -135,7 +130,7 @@ export function ProfileForm() {
 
             <Flex direction={["column", "column", "row", "row", "row"]} w="50%">
               <FormControl m={2} isInvalid={errors.gender}>
-                <FormLabel>Selecciona tu genero</FormLabel>
+                <FormLabel>Selecciona tu genero:</FormLabel>
                 <Select
                   name="gender"
                   placeholder="Selecciona..."
@@ -179,11 +174,11 @@ export function ProfileForm() {
 
             <Flex direction={["column", "column", "row", "row", "row"]}>
               <FormControl m={2} isInvalid={errors.state}>
-                <FormLabel>Selecciona tu provincia origen</FormLabel>
+                <FormLabel>Selecciona tu provincia origen:</FormLabel>
                 <Select
                   name="state"
                   placeholder="Selecciona..."
-                  {...register("state", validateState)}
+                  // {...register("state", validateState)}
                   _focus={{ background: "none" }}
                   onChange={(e) => setStateSelected(e.target.value)}
                   defaultValue={user?.person.students?.[0]?.state_id}
@@ -211,12 +206,12 @@ export function ProfileForm() {
               </FormControl>
 
               <FormControl m={2} isInvalid={errors.city}>
-                <FormLabel>Selecciona tu ciudad origen</FormLabel>
+                <FormLabel>Selecciona tu ciudad origen:</FormLabel>
                 <Select
                   name="city"
                   placeholder="Selecciona..."
                   defaultValue={user?.person?.students[0]?.city.name || ""} // Establecer el valor por defecto
-                  {...register("city", validateCity)}
+                  // {...register("city", validateCity)}
                   _focus={{ background: "none" }}
                 >
                   {user?.person?.students[0]?.city.name && (
@@ -254,7 +249,7 @@ export function ProfileForm() {
                 isInvalid={errors.bio}
                 flexDirection={"column"}
               >
-                <FormLabel>Presentación</FormLabel>
+                <FormLabel>Presentación:</FormLabel>
                 <Textarea
                   id="bio"
                   placeholder="Escribe tu presentación aquí..."

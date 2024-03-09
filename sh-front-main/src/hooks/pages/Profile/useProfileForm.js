@@ -5,12 +5,19 @@ import {
   UPDATE_GENDER,
   UPDATE_BIO,
   UPDATE_STUDENT_BY_USER_ID,
-  UPDATE_STATES
+  UPDATE_STATES,
 } from "client/gql/mutations/updateProfileInfo/updateProfileInfo";
 import { useToast } from "@chakra-ui/react";
+import { useGetCareers } from "hooks/utils/useGetCareers";
+import { useGetStates } from "hooks/utils/useGetStates";
+import { useGetCities } from "hooks/utils/useGetCities";
 
 export function useProfileForm() {
   const { user } = useGetUser();
+  const { careers } = useGetCareers();
+  const { cities, setStateSelected } = useGetCities();
+  const { states } = useGetStates();
+
   const toast = useToast();
   const {
     register,
@@ -20,43 +27,45 @@ export function useProfileForm() {
 
   const [updateGender] = useMutation(UPDATE_GENDER);
   const [updateBio] = useMutation(UPDATE_BIO);
-  const [updateStudentByUserId] = useMutation(UPDATE_STUDENT_BY_USER_ID)
-  const [updateState] = useMutation(UPDATE_STATES)
+  const [updateStudentByUserId] = useMutation(UPDATE_STUDENT_BY_USER_ID);
+  const [updateState] = useMutation(UPDATE_STATES);
+  console.log("id usuario en el hook: ", user);
+  console.log("carrera: ", user?.person.students[0].career.name);
 
   const onSubmit = async (data) => {
     console.log("data del form: ", data);
-  
+
     try {
       await updateGender({
         variables: {
           userId: user.id,
-          newGender: data.gender,
+          newGender: user.person.students[0].gender || data.gender,
         },
       });
-  
+
       await updateBio({
         variables: {
           userId: user.id,
-          newBio: data.bio,
+          newBio: user.bio || data.bio,
         },
       });
-  
+
       await updateStudentByUserId({
         variables: {
           userId: user.id,
-          newCareer: data.career,
-          newCityId: data.city,
-          newShared: data.share,
+          newCareer: user.person.students[0].career.id || data.career,
+          newCityId: user.person.students[0].city.id || data.city,
+          newShared: data.shared || user.person.students[0].shared,
         },
       });
-  
+
       await updateState({
         variables: {
           userId: user.id,
-          newState: data.state,
+          newState: user?.person.students?.[0]?.city.state_id || data.state,
         },
       });
-  
+
       toast({
         title: "Datos actualizados.",
         description: "Los datos se han actualizado exitosamente.",
@@ -66,7 +75,7 @@ export function useProfileForm() {
       });
     } catch (error) {
       console.error("Error al actualizar datos:", error);
-  
+      console.log("data del form: ", data);
       toast({
         title: "Error al actualizar datos.",
         description: "Algo salió mal. Por favor, intenta de nuevo.",
