@@ -30,39 +30,41 @@ export function useProfileForm() {
   const [updateStudentByUserId] = useMutation(UPDATE_STUDENT_BY_USER_ID);
   const [updateState] = useMutation(UPDATE_STATES);
   console.log("id usuario en el hook: ", user);
-  console.log("carrera: ", user?.person.students[0].career.name);
+  // console.log("carrera: ", user?.person.students[0].career.name);
 
   const onSubmit = async (data) => {
     console.log("data del form: ", data);
-
+    // console.log("shared desde el form: ", data.share);
+    console.log("provincia del form: ", data.state);
+    console.log("ciudad del form: ", data.city)
     try {
       await updateGender({
         variables: {
           userId: user.id,
-          newGender: user.person.students[0].gender || data.gender,
+          newGender: data.gender || user?.person.gender,
         },
       });
 
       await updateBio({
         variables: {
           userId: user.id,
-          newBio: user.bio || data.bio,
+          newBio: data.bio || user.bio,
         },
       });
 
       await updateStudentByUserId({
         variables: {
           userId: user.id,
-          newCareer: user.person.students[0].career.id || data.career,
-          newCityId: user.person.students[0].city.id || data.city,
-          newShared: data.shared || user.person.students[0].shared,
+          newCareer: data.career || user.person.students[0].career.id,
+          newCityId: data.city || user.person.students[0].city.id,
+          newShared: data.share || user.person.students[0].shared,
         },
       });
 
       await updateState({
         variables: {
           userId: user.id,
-          newState: user?.person.students?.[0]?.city.state_id || data.state,
+          newState: data.state || user?.person.students?.[0]?.city.state_id,
         },
       });
 

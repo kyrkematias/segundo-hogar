@@ -37,8 +37,16 @@ export function ProfileForm() {
     useProfileForm();
 
   console.log("Data from GET_STUDENT_USER_BY_ID:", user);
-  console.log("file nr. ", user?.person?.students?.[0]?.file_number);
-  console.log("comparte renta?: ", user?.person.students?.[0]?.shared)
+  // console.log("file nr. ", user?.person?.students?.[0]?.file_number);
+  // console.log("comparte renta?: ", user?.person.students?.[0]?.shared);
+  // console.log("carrera: ", user?.person.students?.[0]?.career.name);
+  // console.log("genero: ", user?.person.gender)
+  console.log(
+    "ciudad: ",
+    user?.person.students?.[0]?.city.name,
+    "provincia: ",
+    user?.person.students?.[0]?.city.state_id
+  );
   return (
     <>
       <Flex
@@ -96,11 +104,20 @@ export function ProfileForm() {
                   {...register("share")}
                   w={["100%", "100%", "100%", "100%", "100%"]}
                   _focus={{ background: "none" }}
-                  // defaultValue={user?.person.students?.[0]?.shared}
-                  
+                  defaultValue={user?.person.students?.[0]?.shared}
                 >
-                  <option value="false" selected={user?.person.students?.[0]?.shared}>No</option>
-                  <option value="true" selected={user?.person.students?.[0]?.shared}>Si</option>
+                  <option
+                    value="False"
+                    selected={user?.person.students?.[0]?.shared}
+                  >
+                    No
+                  </option>
+                  <option
+                    value="True"
+                    selected={user?.person.students?.[0]?.shared}
+                  >
+                    Si
+                  </option>
                 </Select>
               </FormControl>
 
@@ -109,14 +126,20 @@ export function ProfileForm() {
                 <Select
                   name="career"
                   placeholder="Selecciona..."
-                  // {...register("career", validatecareer)}
+                  {...register("career")}
                   w={["100%", "100%", "100%", "100%", "100%"]}
                   _focus={{ background: "none" }}
-                  value={user?.person.students?.[0]?.career?.id || ""} // Establece el valor por defecto aquí
+                  defaultValue={user?.person.students?.[0]?.career?.id}
                 >
                   {careers?.map((career) => {
                     return (
-                      <option value={career.id} key={career.id}>
+                      <option
+                        value={career.id}
+                        key={career.id}
+                        selected={
+                          user?.person.students?.[0]?.career?.id === career.id
+                        }
+                      >
                         {career.name}
                       </option>
                     );
@@ -134,9 +157,12 @@ export function ProfileForm() {
                 <Select
                   name="gender"
                   placeholder="Selecciona..."
-                  {...register("gender", validateGender)}
+                  {...register(
+                    "gender"
+                    // , validateGender
+                  )}
                   _focus={{ background: "none" }}
-                  defaultValue={user?.person.students?.[0]?.gender}
+                  defaultValue={user?.person.gender}
                 >
                   <option
                     value="Male"
@@ -178,10 +204,13 @@ export function ProfileForm() {
                 <Select
                   name="state"
                   placeholder="Selecciona..."
-                  // {...register("state", validateState)}
+                  {...register(
+                    "state"
+                    // , validateState
+                  )}
                   _focus={{ background: "none" }}
                   onChange={(e) => setStateSelected(e.target.value)}
-                  defaultValue={user?.person.students?.[0]?.state_id}
+                  defaultValue={user?.person.students?.[0]?.city.state_id}
                 >
                   {states?.map((state) => {
                     return (
@@ -210,8 +239,11 @@ export function ProfileForm() {
                 <Select
                   name="city"
                   placeholder="Selecciona..."
-                  defaultValue={user?.person?.students[0]?.city.name || ""} // Establecer el valor por defecto
-                  // {...register("city", validateCity)}
+                  defaultValue={user?.person?.students[0]?.city.name || ""}
+                  {...register(
+                    "city"
+                    // , validateCity
+                  )}
                   _focus={{ background: "none" }}
                 >
                   {user?.person?.students[0]?.city.name && (
