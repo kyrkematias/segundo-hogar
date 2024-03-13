@@ -5,6 +5,7 @@ import { Results } from "./Results";
 import { useInitialPublications } from "hooks/pages/Search/useInitialPublications";
 import { Loading } from "components/commons/Loading";
 import { MapSearchForm } from "./MapSearchForm";
+import { HandleError } from "components/commons/ErrorHandling";
 
 export function Search() {
   const { publications, isError, isFetching } = useInitialPublications();
@@ -16,7 +17,7 @@ export function Search() {
 
   if (!Array.isArray(publications)) {
     console.error("Error: publications no es un array", publications);
-    return <div>Error en la carga de datos</div>;
+    return <HandleError errorMessage="Error al cargar datos"/>;
   }
 
   console.log("publications: ", publications);

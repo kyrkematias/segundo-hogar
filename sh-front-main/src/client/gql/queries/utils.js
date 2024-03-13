@@ -55,6 +55,11 @@ export const GET_OWNERSHIPS_BY_OWNER_ID = gql`
         id
       }
       owners_id
+      ownerships_images {
+        id
+        imageurl
+        public_id
+      }
     }
   }
 `;
