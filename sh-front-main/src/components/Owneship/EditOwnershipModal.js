@@ -53,6 +53,7 @@ import {
 } from "client/gql/queries/update/updateOwnershipById";
 import { useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { ownership } from "services";
+import { DELETE_IMAGES_BY_URL } from "client/gql/queries/delete/deleteImagesByOwnershipId";
 
 export function EditPublicationModal({
   isOpen,
@@ -70,6 +71,8 @@ export function EditPublicationModal({
   // const  { ownerships } = useGetOwnershipsByOwnerId();
   // const SOURCE = "register-ownership";
   const [showPlaces, setShowPlaces] = useState(false);
+
+  const [deleteImagesByUrl] = useMutation(DELETE_IMAGES_BY_URL);
 
   const handleCheckboxChange = () => {
     setShowPlaces(!showPlaces);
@@ -505,6 +508,29 @@ export function EditPublicationModal({
                               // Captura el valor del índice y lo muestra en la consola
                               const imageIndex = index;
                               console.log("Índice de la imagen:", imageIndex);
+                              console.log("imagen a eliminar", image.imageurl);
+                              deleteImagesByUrl({
+                                variables: { url: image.imageurl },
+                              })
+                                .then((result) => {
+                                  toast({
+                                    title: "Imagen eliminada con éxito",
+                                    status: "success",
+                                    duration: 3000,
+                                    isClosable: true,
+                                  });
+                                })
+                                .catch((error) => {
+                                  toast({
+                                    title: "Error al eliminar la imagen",
+                                    description:
+                                      error.message ||
+                                      "Hubo un error al eliminar la imagen.",
+                                    status: "error",
+                                    duration: 3000,
+                                    isClosable: true,
+                                  });
+                                });
                               removeImage(imageIndex);
                             }}
                           >

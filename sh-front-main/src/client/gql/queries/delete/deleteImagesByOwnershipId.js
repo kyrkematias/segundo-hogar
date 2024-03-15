@@ -7,3 +7,11 @@ export const DELETE_IMAGES = gql`
         }
     }
 `;
+
+export const DELETE_IMAGES_BY_URL = gql`
+    mutation DeleteImagesByUrl($url: String) {
+        delete_sh_ownerships_images(where: { imageurl: { _eq: $url } }) {
+            affected_rows
+        }
+    }
+`
