@@ -67,6 +67,8 @@ export function EditPublicationModal({
   const [updateAddress] = useMutation(UPDATE_ADDRESS_MUTATION);
   const [updateOwnership] = useMutation(UPDATE_OWNERSHIPS_MUTATION);
   const [updateImages] = useMutation(UPDATE_OWNERSHIP_IMAGES);
+  const [indexToDelete, setIndexToDelete] = useState(null);
+  const [deletedIndexes, setDeletedIndexes] = useState([]);
 
   // const  { ownerships } = useGetOwnershipsByOwnerId();
   // const SOURCE = "register-ownership";
@@ -101,6 +103,7 @@ export function EditPublicationModal({
     loading,
     error,
     removeImage,
+    deleteImage,
   } = useHouseRegisterForm();
 
   const toast = useToast();
@@ -242,7 +245,7 @@ export function EditPublicationModal({
       toast({
         title: "Propiedad actualizada",
         description:
-          "La propiedad " + ownershipId + " se ha actualizado correctamente.",
+          "La propiedad " + loadedAddress + " se ha actualizado correctamente.",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -487,65 +490,43 @@ export function EditPublicationModal({
 
                   <SimpleGrid columns={[1, 1, 2, 3, 3]}>
                     {data?.sh_ownerships[0]?.ownerships_images?.map(
-                      (image, index) => (
-                        <Box key={index} position="relative">
-                          <Button
-                            background="rgba(0, 0, 0, 0.1)"
-                            border="0"
-                            borderRadius="999px"
-                            color="white"
-                            fontSize="16px"
-                            width="32px"
-                            height="32px"
-                            position="absolute"
-                            top="15px"
-                            right={["120px", "490px", "220px", "95px"]}
-                            _hover={{
-                              color: "white",
-                              background: "rgba(0, 0, 0, 0.5)",
-                            }}
-                            onClick={() => {
-                              // Captura el valor del índice y lo muestra en la consola
-                              const imageIndex = index;
-                              console.log("Índice de la imagen:", imageIndex);
-                              console.log("imagen a eliminar", image.imageurl);
-                              deleteImagesByUrl({
-                                variables: { url: image.imageurl },
-                              })
-                                .then((result) => {
-                                  toast({
-                                    title: "Imagen eliminada con éxito",
-                                    status: "success",
-                                    duration: 3000,
-                                    isClosable: true,
-                                  });
-                                })
-                                .catch((error) => {
-                                  toast({
-                                    title: "Error al eliminar la imagen",
-                                    description:
-                                      error.message ||
-                                      "Hubo un error al eliminar la imagen.",
-                                    status: "error",
-                                    duration: 3000,
-                                    isClosable: true,
-                                  });
-                                });
-                              removeImage(imageIndex);
-                            }}
-                          >
-                            X
-                          </Button>
-                          <Image
-                            src={image.imageurl}
-                            alt={`Imagen ${index}`}
-                            width="200px"
-                            height="180px"
-                            objectFit="cover"
-                            p={2}
-                          />
-                        </Box>
-                      )
+                      (image, index) =>
+                        !deletedIndexes.includes(index) && (
+                          <Box key={index} position="relative">
+                            <Button
+                              background="rgba(0, 0, 0, 0.1)"
+                              border="0"
+                              borderRadius="999px"
+                              color="white"
+                              fontSize="16px"
+                              width="32px"
+                              height="32px"
+                              position="absolute"
+                              top="15px"
+                              right={["120px", "490px", "220px", "95px"]}
+                              _hover={{
+                                color: "white",
+                                background: "rgba(0, 0, 0, 0.5)",
+                              }}
+                              onClick={() => {
+                                deleteImage(index, image.imageurl);
+                                setDeletedIndexes([...deletedIndexes, index]);
+                              }}
+                            >
+                              X
+                            </Button>
+                            {index !== indexToDelete && (
+                              <Image
+                                src={image.imageurl}
+                                alt={`Imagen ${index}`}
+                                width="200px"
+                                height="180px"
+                                objectFit="cover"
+                                p={2}
+                              />
+                            )}
+                          </Box>
+                        )
                     )}
                     {/* Mostrar imágenes subidas */}
                     {images.map((image, index) => (

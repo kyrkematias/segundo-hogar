@@ -10,6 +10,7 @@ import { useGetOwnerId } from "hooks/utils/useGetOwnerId";
 import { postImagesService } from "services/ownership/postImagesService";
 import { authSelector } from "store/slices/authSlice";
 import { useToast } from "@chakra-ui/react";
+import { DELETE_IMAGES_BY_URL } from "client/gql/queries/delete/deleteImagesByOwnershipId";
 
 Geocode.setApiKey(process.env.REACT_APP_API_KEY_GEOCODER);
 Geocode.setLanguage("es");
@@ -24,6 +25,8 @@ export function useHouseRegisterForm() {
   const [coordinates, setCoordinates] = useState(null);
   const [address, setAddress] = useState("");
   const [zoom, setZoom] = useState(13);
+
+  const [deleteImagesByUrl] = useMutation(DELETE_IMAGES_BY_URL);
 
   const [images, setImages] = useState([]);
   const [errorsImage, setErrorsImage] = useState({ message: "" });
@@ -115,7 +118,7 @@ export function useHouseRegisterForm() {
       console.log("No se seleccionó ningún archivo.");
     }
   };
-
+  /*esta función remueve las nuevas imagenes cuando se cargan*/
   const removeImage = (index) => {
     let newImages = [];
     if (index !== -1) {
@@ -123,6 +126,35 @@ export function useHouseRegisterForm() {
         if (i !== index) newImages.push(image);
       });
       setImages(newImages);
+    }
+  };
+
+  /*esta función elimina de la bd y el renderizado las imagenes cargadas en el modal de edita propiedad*/
+
+  const deleteImage = async (index, imageUrl) => {
+    try {
+      // Realiza la eliminación de la imagen en la base de datos
+      await deleteImagesByUrl({ variables: { url: imageUrl } });
+      
+      // Elimina la imagen del estado local
+      let newImages = [...images];
+      newImages.splice(index, 1);
+      setImages(newImages);
+  
+      toast({
+        title: "Imagen eliminada con éxito",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Error al eliminar la imagen",
+        description: error.message || "Hubo un error al eliminar la imagen.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -144,5 +176,6 @@ export function useHouseRegisterForm() {
     loading,
     error,
     removeImage,
+    deleteImage
   };
 }
