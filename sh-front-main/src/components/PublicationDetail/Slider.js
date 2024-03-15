@@ -26,6 +26,7 @@ export function Slider({ images }) {
                 objectFit="cover"
                 alt="Foto de la propiedad"
                 className="swiper-image"
+                aspectRatio={16 / 9}
               />
             </SwiperSlide>
           ))}
