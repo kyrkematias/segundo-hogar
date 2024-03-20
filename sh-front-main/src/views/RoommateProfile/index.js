@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useQuery } from "@apollo/client";
 import { useRoute } from "wouter";
 import { paths } from "config/paths";
@@ -46,6 +46,10 @@ const formatDate = (birthdate) => {
 };
 
 export function RoommateProfileView() {
+  useEffect(() => {
+    document.title = "Segundo Hogar - Perfil del usuario";
+  }, []);
+
   const [_, params] = useRoute(paths.roommateAccount);
   const idPerson = params.userid;
   const { loading, error, data } = useQuery(GET_PERSON_BY_ID, {
@@ -142,7 +146,7 @@ export function RoommateProfileView() {
           <Text fontWeight="medium" my="10px">
             {userInfo?.bio || (
               <Heading
-                as="h4"
+                as="h3"
                 size="md"
                 fontStyle="italic"
                 color="gray"

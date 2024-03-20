@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from "react";
 
 export function ForgotterPassView() {
-    return (
-        <div>Forgotter Pass</div>
-    )
+  useEffect(() => {
+    document.title = "Segundo Hogar - Forgotter Pass";
+  }, []);
+  return <div>Forgotter Pass</div>;
 }

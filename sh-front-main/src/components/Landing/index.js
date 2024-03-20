@@ -22,7 +22,7 @@ export function Landing() {
       <Stack minH={"70vh"} direction={{ base: "column", md: "row" }}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={6} w={"full"} maxW={"lg"}>
-            <Heading fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}>
+            <Heading fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }} as="h1">
               {}
               <br />{" "}
               <Text color={"black"} as={"span"}>
@@ -34,7 +34,10 @@ export function Landing() {
               perfect for freelancers, agencies, and moonlighters.
             </Text>
             <Stack direction={{ base: "column", md: "row" }} spacing={4}>
-              {(isAuthenticated && user_category === 2) || !isAuthenticated || user_category === -1 || user_category === 1 ? (
+              {(isAuthenticated && user_category === 2) ||
+              !isAuthenticated ||
+              user_category === -1 ||
+              user_category === 1 ? (
                 <Button
                   onClick={handleSearch}
                   color={"white"}
@@ -46,7 +49,10 @@ export function Landing() {
                   Buscar mi hogar
                 </Button>
               ) : null}
-              {(isAuthenticated && user_category === 3) || !isAuthenticated || user_category === -1 || user_category === 1 ? (
+              {(isAuthenticated && user_category === 3) ||
+              !isAuthenticated ||
+              user_category === -1 ||
+              user_category === 1 ? (
                 <Button
                   onClick={handlePost}
                   color={"white"}
@@ -75,6 +81,16 @@ export function Landing() {
         <br></br>
       </div>
       <Stack minH={"70vh"} direction={{ base: "column", md: "row" }}>
+        
+        <Flex flex={1}>
+          <Image
+            alt={"Login Image"}
+            objectFit={"cover"}
+            src={
+              "https://apimonteleon.com/wp-content/uploads/2014/03/vender-casa.jpg"
+            }
+          />
+        </Flex>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={6} w={"full"} maxW={"lg"}>
             <Heading fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}>
@@ -93,15 +109,6 @@ export function Landing() {
               spacing={4}
             ></Stack>
           </Stack>
-        </Flex>
-        <Flex flex={1}>
-          <Image
-            alt={"Login Image"}
-            objectFit={"cover"}
-            src={
-              "https://apimonteleon.com/wp-content/uploads/2014/03/vender-casa.jpg"
-            }
-          />
         </Flex>
       </Stack>
 

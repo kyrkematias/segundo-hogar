@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { useLocation } from "wouter";
 import { paths } from "config/paths";
-import { Tags } from 'components/Tags';
+import { Tags } from "components/Tags";
 import { useRedirect } from "hooks/utils/useRedirect";
 import { USER_CATEGORIES } from "const";
 
 export function TagsView() {
-    const [_, setLocation] = useLocation();
+  const [_, setLocation] = useLocation();
 
-    const { isAuthenticated, user_category } = useRedirect();
+  const { isAuthenticated, user_category } = useRedirect();
 
-    // if (isAuthenticated && user_category != USER_CATEGORIES.DEFAULT) {
-    //     setLocation(paths.search);
-    // }
-
-    return <Tags />
+  // if (isAuthenticated && user_category != USER_CATEGORIES.DEFAULT) {
+  //     setLocation(paths.search);
+  // }
+  useEffect(() => {
+    document.title = "Segundo Hogar - Selecciona tus intereses";
+  }, []);
+  return <Tags />;
 }

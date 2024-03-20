@@ -37,26 +37,26 @@ export function AccountTabs() {
     <>
       <Tabs variant="soft-rounded" colorScheme="gray">
         <TabList>
-          <Tab>Mi cuenta</Tab>
+          <Tab as="h1">Mi cuenta</Tab>
           {user_category === USER_CATEGORIES.OWNER ? (
-            <Tab>Propiedades</Tab>
+            <Tab as="h2">Propiedades</Tab>
           ) : (
             <></>
           )}
           {user_category === USER_CATEGORIES.STUDENT ? (
-            <Tab>Mis Rentas</Tab>
+            <Tab as="h2">Mis Rentas</Tab>
           ) : (
             <></>
           )}
           {/* Pestaña de usuarios. Solo visible para admin */}
           {user_category === USER_CATEGORIES.ADMIN ? (
-            <Tab>Usuarios</Tab>
+            <Tab as="h2">Usuarios</Tab>
           ) : (
             <></>
           )}
           {/* Pestaña de solicitudes. Solo visible para admin */}
           {user_category === USER_CATEGORIES.ADMIN ? (
-            <Tab>Solicitudes</Tab>
+            <Tab as="h2">Solicitudes</Tab>
           ) : (
             <></>
           )}

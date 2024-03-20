@@ -5,6 +5,9 @@ export function SearchView() {
     useEffect(() => {
         localStorage.removeItem('maxDistance');
     }, []);
+    useEffect(() => {
+        document.title = "Segundo Hogar - Buscar inmuebles";
+      }, []);
     return (
         <Search />
     )

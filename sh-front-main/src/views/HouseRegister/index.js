@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { HouseRegister } from "components/HouseRegister";
 
 export function HouseRegisterView() {
-    return <HouseRegister />
+  useEffect(() => {
+    document.title = "Segundo Hogar - Registra tu inmueble";
+  }, []);
+  return <HouseRegister />;
 }

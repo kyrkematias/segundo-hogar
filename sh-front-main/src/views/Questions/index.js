@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { useLocation } from "wouter";
 import { paths } from "config/paths";
-import { Questions } from 'components/Questions'
+import { Questions } from "components/Questions";
 import { useRedirect } from "hooks/utils/useRedirect";
 import { USER_CATEGORIES } from "const";
 
 export function QuestionsView() {
-    const [_, setLocation] = useLocation();
+  const [_, setLocation] = useLocation();
 
-    const { isAuthenticated, user_category } = useRedirect();
+  const { isAuthenticated, user_category } = useRedirect();
 
-    // if (isAuthenticated && user_category != USER_CATEGORIES.DEFAULT) {
-    //     setLocation(paths.search);
-    // }
-
-    return <Questions />
+  // if (isAuthenticated && user_category != USER_CATEGORIES.DEFAULT) {
+  //     setLocation(paths.search);
+  // }
+  useEffect(() => {
+    document.title = "Segundo Hogar - Responde unas preguntas";
+  }, []);
+  return <Questions />;
 }

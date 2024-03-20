@@ -114,7 +114,7 @@ export function PublicationDetail() {
 
         <Card width={{ base: "100%", md: "1/4" }} p={2} height={"100%"}>
           <Flex flexDirection={"column"} align={"center"} textAlign={"center"}>
-            <Heading size="md" mb={5}>
+            <Heading size="md" mb={5} as="h1">
               {publication.title}
             </Heading>
             <Heading color={"gray"}>${publication.price}</Heading>

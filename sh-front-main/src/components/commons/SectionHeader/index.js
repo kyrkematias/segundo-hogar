@@ -8,7 +8,7 @@ export function SectionHeader({ section, sectionTitle, isOwner }) {
   let subTitle = null;
 
   if (section === "Login") {
-    title = (<Heading>{sectionTitle}</Heading>);
+    title = (<Heading as="h1">{sectionTitle}</Heading>);
     subTitle = (
       <Text mt={4} fontSize="md" fontWeight="400" color="gray">
         ¿Todavía no tenés cuenta en Segundo Hogar?{" "}
@@ -21,7 +21,7 @@ export function SectionHeader({ section, sectionTitle, isOwner }) {
 
   if (section === "Register") {
     title = (
-      <Heading>
+      <Heading as="h1">
         {sectionTitle}{isOwner ? "propietario" : "estudiante"}
       </Heading>
     );
@@ -38,31 +38,31 @@ export function SectionHeader({ section, sectionTitle, isOwner }) {
   }
 
   if (section === "Questions") {
-    title = (<Heading>{sectionTitle}</Heading>);
+    title = (<Heading as="h1">{sectionTitle}</Heading>);
   }
 
   if (section === "Tags") {
-    title = (<Heading>{sectionTitle}</Heading>);
+    title = (<Heading as="h1">{sectionTitle}</Heading>);
   }
 
   if (section === "Profile") {
-    title = (<Heading>{sectionTitle}</Heading>);
+    title = (<Heading as="h1">{sectionTitle}</Heading>);
   }
 
   if (section === "Search") {
-    title = (<Heading>{sectionTitle}</Heading>);
+    title = (<Heading as="h1">{sectionTitle}</Heading>);
   }
 
   if (section === "RegisterHouse") {
-    title = (<Heading>{sectionTitle}</Heading>);
+    title = (<Heading as="h1">{sectionTitle}</Heading>);
   }
 
   if (section === "RegisterPublication") {
-    title = (<Heading>{sectionTitle}</Heading>);
+    title = (<Heading as="h1">{sectionTitle}</Heading>);
   }
 
   if (section === "FindRoommate") {
-    title = (<Heading>{sectionTitle}</Heading>);
+    title = (<Heading as="h1">{sectionTitle}</Heading>);
   }
 
   return (

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { PublicationRegister } from "components/Owneship";
 
 export function PublicationRegisterView() {
-    return <PublicationRegister />
+  useEffect(() => {
+    document.title = "Segundo Hogar - Publica tu inmueble";
+  }, []);
+  return <PublicationRegister />;
 }

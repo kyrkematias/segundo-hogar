@@ -107,6 +107,7 @@ export function FindRoommate() {
         <SectionHeader
           section={findRoommate.section}
           sectionTitle={findRoommate.title}
+          as="h1"
         />
         <FindRoommateForm />
       </FormArea>
