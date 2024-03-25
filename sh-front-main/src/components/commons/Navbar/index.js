@@ -87,10 +87,11 @@ export function Navbar() {
           >
             <Button
               as={"a"}
-              fontSize={"sm"}
+              fontSize={"md"}
               fontWeight={400}
               variant={"link"}
-              _hover={{ cursor: "pointer" }}
+              transition={"all .5s ease-in-out"}
+              _hover={{ cursor: "pointer", color: "#4299e1", textDecoration: "underline" }}
               _focus={{ outline: "none", border: "none " }}
               onClick={() => goTo(paths.login)}
             >
@@ -102,8 +103,9 @@ export function Navbar() {
               fontWeight={600}
               color={"white"}
               bg="black"
+              transition={"all .3s ease-in-out"}
               _focus={{ outline: "none", border: "none " }}
-              _hover={{ background: "#36393f" }}
+              _hover={{ background: "#36393f", boxShadow: "lg" }}
               onClick={() => goTo(paths.register)}
             >
               Registrarse

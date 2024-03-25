@@ -31,8 +31,11 @@ export function Card({ post }) {
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
+        transition={"all .5s ease"}
         _hover={{
           cursor: "pointer",
+          boxShadow: "2xl",
+          opacity: "0.8"
         }}
       >
         <Image

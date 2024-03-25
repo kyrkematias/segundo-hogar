@@ -24,7 +24,6 @@ import { useRegisterUser } from "hooks/pages/SignUp/useRegisterUser";
 // import ReCAPTCHA from "react-google-recaptcha";
 
 export function RegisterFormOwner() {
-
   const {
     loading_owner,
     error_owner,
@@ -34,7 +33,7 @@ export function RegisterFormOwner() {
     handleSubmit,
     errors,
     showPass,
-    handleShowPass 
+    handleShowPass,
   } = useRegisterUser();
 
   // const [errorsCaptcha, setErrorsCaptcha] = useState({ message: "" });
@@ -91,8 +90,8 @@ export function RegisterFormOwner() {
               <Input
                 id="phone"
                 type="text"
-                placeholder="Celular"
-                w={"200px"}
+                placeholder="Ej.: 3815123456"
+                w={"100%"}
                 {...register("phone", validatePhone)}
               />
               <FormErrorMessage>
@@ -154,7 +153,7 @@ export function RegisterFormOwner() {
               type="submit"
               isLoading={loading_owner}
               loadingText="Registrando"
-              width="40%"
+              width={{ base: "100%", md: "40%" }}
               textButton="Registrarse"
             />
           </Center>

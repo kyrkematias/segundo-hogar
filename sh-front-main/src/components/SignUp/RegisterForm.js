@@ -76,7 +76,7 @@ export function RegisterForm() {
                 type="text"
                 placeholder="Nombre de usuario"
                 {...register("username", validateUsername)}
-                w={["200px", "300px", "300px", "300px", "300px"]}
+                w={"100%"}
               />
               <FormErrorMessage>
                 {errors.username && errors.username.message}
@@ -136,7 +136,7 @@ export function RegisterForm() {
                 id="dateOfBirth"
                 type="date"
                 placeholder="Fecha de nacimiento"
-                w={"200px"}
+                w={"100%"}
                 {...register("dateOfBirth", validateDateOfBirth)}
               />
               <FormErrorMessage>
@@ -164,8 +164,8 @@ export function RegisterForm() {
               <Input
                 id="phone"
                 type="text"
-                placeholder="Celular"
-                w={"200px"}
+                placeholder="Ej.: 3815123456"
+                w={"100%"}
                 {...register("phone", validatePhone)}
               />
               <FormErrorMessage>
@@ -296,7 +296,7 @@ export function RegisterForm() {
               type="submit"
               isLoading={loading}
               loadingText="Registrando"
-              width="40%"
+              width={{base: "100%", md: "40%"}}
               textButton="Registrarse"
             />
           </Center>

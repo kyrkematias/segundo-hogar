@@ -12,7 +12,7 @@ import { NAV_ITEMS } from "config/navbarItems";
 
 export function DesktopNav() {
   const linkColor = useColorModeValue("gray.600", "gray.200");
-  const linkHoverColor = useColorModeValue("gray.800", "white");
+  const linkHoverColor = useColorModeValue("#4299e1");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
 
   return (
@@ -24,14 +24,16 @@ export function DesktopNav() {
               <Link
                 p={2}
                 href={navItem.href ?? "#"}
-                fontSize={"sm"}
+                fontSize={"md"}
                 fontWeight={500}
                 color={linkColor}
                 _focus={{ outline: "none", border: "none " }}
+                transition={"all .3s ease-in-out"}
                 _hover={{
                   textDecoration: "none",
                   color: linkHoverColor,
                 }}
+                
               >
                 {navItem.label}
               </Link>

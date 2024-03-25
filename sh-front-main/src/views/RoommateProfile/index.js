@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { useRoute } from "wouter";
 import { paths } from "config/paths";
@@ -20,6 +20,7 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  background,
 } from "@chakra-ui/react";
 import { FaWhatsapp } from "react-icons/fa";
 import { IoMdMale } from "react-icons/io";
@@ -74,7 +75,7 @@ export function RoommateProfileView() {
   console.log("data: ", data);
   console.log("student info: ", studentInfo);
   console.log("student share?: ", studentInfo?.shared);
-  console.log("user bio: ", userInfo?.bio);
+  console.log("user : ", userInfo);
   const phoneLink = `https://wa.me/${person.phone}`;
 
   const formattedBirthdate = formatDate(person.birth_date);
@@ -159,7 +160,7 @@ export function RoommateProfileView() {
         </Box>
         <Box flex={{ base: "1", md: "0 0 40%" }}>
           <Text
-            fontSize={{base: "16px", md: "20px"}}
+            fontSize={{ base: "16px", md: "20px" }}
             fontWeight="semibold"
             textAlign={{ base: "center", md: "right" }}
           >
@@ -168,7 +169,7 @@ export function RoommateProfileView() {
         </Box>
       </Stack>
 
-      <Divider my={{base: "2", md: "10"}} />
+      <Divider my={{ base: "2", md: "10" }} />
       <Container my={10} width={{ base: "100%", md: "100%" }}>
         <Card width={{ base: "100%", md: "100%" }}>
           <Tabs width={{ base: "100%", md: "100%" }}>
@@ -179,6 +180,7 @@ export function RoommateProfileView() {
                 transition={".5s"}
                 fontSize={{ base: "12px", md: "18px" }}
                 width={"33.3%"}
+                _hover={{background:"#f9fafb"}}
               >
                 Información General
               </Tab>
@@ -188,6 +190,7 @@ export function RoommateProfileView() {
                 transition={".5s"}
                 fontSize={{ base: "12px", md: "18px" }}
                 width={"33.3%"}
+                _hover={{background:"#f9fafb"}}
               >
                 Información Académica
               </Tab>
@@ -197,6 +200,7 @@ export function RoommateProfileView() {
                 transition={".5s"}
                 fontSize={{ base: "12px", md: "18px" }}
                 width={"33.3%"}
+                _hover={{background:"#f9fafb"}}
               >
                 Contacto
               </Tab>
@@ -211,46 +215,33 @@ export function RoommateProfileView() {
                   Información general
                 </Heading>
                 <Divider />
-                <Stack py={4}>
-                  <Center>
-                    <Flex alignItems={"center"} gap={2}>
-                      <Text
-                        fontSize={{ base: "12px", md: "18px" }}
-                        fontWeight={"semibold"}
-                      >
-                        Género:
-                      </Text>
-                      {person.gender === "male" && (
-                        <Flex alignItems={"center"} gap={1}>
-                          <IoMdMale color={"#4299E1"} fontWeight={"medium"} />
-                          <Text
-                            fontSize={{ base: "12px", md: "18px" }}
-                            color={"gray.400"}
-                            fontWeight={"semibold"}
-                          >
-                            Hombre
-                          </Text>
-                        </Flex>
-                      )}
-
-                      {person.gender === "female" && (
-                        <Flex alignItems={"center"} gap={1}>
-                          <IoMdFemale color={"#F56565"} fontWeight={"medium"} />
-                          <Text
-                            fontSize={{ base: "12px", md: "18px" }}
-                            color={"gray.400"}
-                            fontWeight={"semibold"}
-                          >
-                            Mujer
-                          </Text>
-                        </Flex>
-                      )}
-
-                      {person.gender !== "male" &&
-                        person.gender !== "female" && (
+                <Center>
+                  <Stack py={4} justifyContent={"center"} width={"fit-content"}>
+                    <Center width={"fit-content"}>
+                      <Flex alignItems={"center"} gap={2}>
+                        <Text
+                          fontSize={{ base: "12px", md: "18px" }}
+                          fontWeight={"semibold"}
+                        >
+                          Género:
+                        </Text>
+                        {person.gender === "male" && (
                           <Flex alignItems={"center"} gap={1}>
-                            <IoMaleFemaleSharp
-                              color={"#ED64A6"}
+                            <IoMdMale color={"gray"} fontWeight={"medium"} />
+                            <Text
+                              fontSize={{ base: "12px", md: "18px" }}
+                              color={"gray.400"}
+                              fontWeight={"semibold"}
+                            >
+                              Hombre
+                            </Text>
+                          </Flex>
+                        )}
+
+                        {person.gender === "female" && (
+                          <Flex alignItems={"center"} gap={1}>
+                            <IoMdFemale
+                              color={"gray"}
                               fontWeight={"medium"}
                             />
                             <Text
@@ -258,53 +249,71 @@ export function RoommateProfileView() {
                               color={"gray.400"}
                               fontWeight={"semibold"}
                             >
-                              Otro
+                              Mujer
                             </Text>
                           </Flex>
                         )}
-                    </Flex>
-                  </Center>
-                  <Center>
-                    <Flex alignItems={"center"} gap={2}>
-                      <Text
-                        fontSize={{ base: "12px", md: "18px" }}
-                        fontWeight={"semibold"}
-                      >
-                        Cumpleaños:
-                      </Text>
-                      <Flex alignItems={"center"} gap={1}>
-                        <FaBirthdayCake color="pink" />
+
+                        {person.gender !== "male" &&
+                          person.gender !== "female" && (
+                            <Flex alignItems={"center"} gap={1}>
+                              <IoMaleFemaleSharp
+                                color={"gray"}
+                                fontWeight={"medium"}
+                              />
+                              <Text
+                                fontSize={{ base: "12px", md: "18px" }}
+                                color={"gray.400"}
+                                fontWeight={"semibold"}
+                              >
+                                Otro
+                              </Text>
+                            </Flex>
+                          )}
+                      </Flex>
+                    </Center>
+                    <Center>
+                      <Flex alignItems={"center"} gap={2}>
                         <Text
                           fontSize={{ base: "12px", md: "18px" }}
-                          color={"gray.400"}
                           fontWeight={"semibold"}
                         >
-                          {formattedBirthdate}
+                          Cumpleaños:
                         </Text>
+                        <Flex alignItems={"center"} gap={1}>
+                          <FaBirthdayCake color="gray" />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px" }}
+                            color={"gray.400"}
+                            fontWeight={"semibold"}
+                          >
+                            {formattedBirthdate}
+                          </Text>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </Center>
-                  <Center>
-                    <Flex alignItems={"center"} gap={2}>
-                      <Text
-                        fontSize={{ base: "12px", md: "18px" }}
-                        fontWeight={"semibold"}
-                      >
-                        Edad:
-                      </Text>
-                      <Flex alignItems={"center"} gap={1}>
-                        <FaUserClock color="#4A5568" />
+                    </Center>
+                    <Center width={"fit-content"}>
+                      <Flex alignItems={"center"} gap={2}>
                         <Text
                           fontSize={{ base: "12px", md: "18px" }}
-                          color={"gray.400"}
                           fontWeight={"semibold"}
                         >
-                          {calculateAge(person.birth_date)} años
+                          Edad:
                         </Text>
+                        <Flex alignItems={"center"} gap={1}>
+                          <FaUserClock color="gray" />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px" }}
+                            color={"gray.400"}
+                            fontWeight={"semibold"}
+                          >
+                            {calculateAge(person.birth_date)} años
+                          </Text>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </Center>
-                </Stack>
+                    </Center>
+                  </Stack>
+                </Center>
               </TabPanel>
               <TabPanel>
                 <Heading
@@ -315,63 +324,75 @@ export function RoommateProfileView() {
                   Información Académica
                 </Heading>
                 <Divider />
-                <Stack py={4}>
-                  <Center>
-                    <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
-                        Carrera:
-                      </Text>
-                      <Flex alignItems={"center"} gap={1}>
-                        <RiGraduationCapFill color="#4A5568" />
+                <Center>
+                  <Stack py={4}>
+                    <Center width={"fit-content"}>
+                      <Flex alignItems={"center"} gap={2}>
                         <Text
-                          fontSize={{base: "12px", md:"18px"}}
-                          color={"gray.400"}
+                          fontSize={{ base: "12px", md: "18px" }}
                           fontWeight={"semibold"}
                         >
-                          {person.students[0]?.career?.name.replace(
-                            "Ingeniería",
-                            "Ing."
-                          ) || "No especificada"}
+                          Carrera:
                         </Text>
+                        <Flex alignItems={"center"} gap={1}>
+                          <RiGraduationCapFill color="gray.400" />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px" }}
+                            color={"gray.400"}
+                            fontWeight={"semibold"}
+                          >
+                            {person.students[0]?.career?.name.replace(
+                              "Ingeniería",
+                              "Ing."
+                            ) || "No especificada"}
+                          </Text>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </Center>
-                  <Center>
-                    <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
-                        Provincia:
-                      </Text>
-                      <Flex alignItems={"center"} gap={1}>
-                        <FaLocationDot color="#F56565" />
+                    </Center>
+                    <Center width={"fit-content"}>
+                      <Flex alignItems={"center"} gap={2}>
                         <Text
-                          fontSize={{base: "12px", md:"18px"}}
-                          color={"gray.400"}
+                          fontSize={{ base: "12px", md: "18px" }}
                           fontWeight={"semibold"}
                         >
-                          {person.students[0]?.city?.state?.name ||
-                            "No especificada"}
+                          Provincia:
                         </Text>
+                        <Flex alignItems={"center"} gap={1}>
+                          <FaLocationDot color="gray" />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px" }}
+                            color={"gray.400"}
+                            fontWeight={"semibold"}
+                          >
+                            {person.students[0]?.city?.state?.name ||
+                              "No especificada"}
+                          </Text>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </Center>
-                  <Center>
-                    <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
-                        Ciudad:
-                      </Text>
-                      <Flex alignItems={"center"} gap={1}>
-                        <BsPinMapFill color="#4A5568" />
+                    </Center>
+                    <Center width={"fit-content"}>
+                      <Flex alignItems={"center"} gap={2}>
                         <Text
-                          fontSize={{base: "12px", md:"18px"}}
-                          color={"gray.400"}
+                          fontSize={{ base: "12px", md: "18px" }}
                           fontWeight={"semibold"}
                         >
-                          {person.students[0]?.city?.name || "No especificada"}
+                          Ciudad:
                         </Text>
+                        <Flex alignItems={"center"} gap={1}>
+                          <BsPinMapFill color="gray" />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px" }}
+                            color={"gray.400"}
+                            fontWeight={"semibold"}
+                          >
+                            {person.students[0]?.city?.name ||
+                              "No especificada"}
+                          </Text>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </Center>
-                </Stack>
+                    </Center>
+                  </Stack>
+                </Center>
               </TabPanel>
               <TabPanel>
                 <Heading
@@ -382,42 +403,50 @@ export function RoommateProfileView() {
                   Información de Contacto
                 </Heading>
                 <Divider />
-                <Stack py={4}>
-                  <Center>
-                    <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
-                        Telefono de contacto:
-                      </Text>
-                      <Flex alignItems={"center"} gap={1}>
-                        <FaPhoneAlt color="#4A5568" />
+                <Center>
+                  <Stack py={4}>
+                    <Center width={"fit-content"}>
+                      <Flex alignItems={"center"} gap={2}>
                         <Text
-                          fontSize={{base: "12px", md:"18px"}}
-                          color={"gray.400"}
+                          fontSize={{ base: "12px", md: "18px" }}
                           fontWeight={"semibold"}
                         >
-                          {person.phone || "No especificada"}
+                          Telefono de contacto:
                         </Text>
+                        <Flex alignItems={"center"} gap={1}>
+                          <FaPhoneAlt color="gray" />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px" }}
+                            color={"gray.400"}
+                            fontWeight={"semibold"}
+                          >
+                            {person.phone || "No especificada"}
+                          </Text>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </Center>
-                  <Center>
-                    <Flex alignItems={"center"} gap={2}>
-                      <Text fontSize={{base: "12px", md:"18px"}} fontWeight={"semibold"}>
-                        E-mail:
-                      </Text>
-                      <Flex alignItems={"center"} gap={1}>
-                        <MdEmail color="#4A5568" />
+                    </Center>
+                    <Center width={"fit-content"}>
+                      <Flex alignItems={"center"} gap={2}>
                         <Text
-                          fontSize={{base: "12px", md:"18px"}}
-                          color={"gray.400"}
+                          fontSize={{ base: "12px", md: "18px" }}
                           fontWeight={"semibold"}
                         >
-                          {userInfo?.email || "-"}
+                          E-mail:
                         </Text>
+                        <Flex alignItems={"center"} gap={1}>
+                          <MdEmail color="gray" />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px" }}
+                            color={"gray.400"}
+                            fontWeight={"semibold"}
+                          >
+                            {userInfo?.email || "-"}
+                          </Text>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </Center>
-                </Stack>
+                    </Center>
+                  </Stack>
+                </Center>
               </TabPanel>
             </TabPanels>
           </Tabs>

@@ -17,9 +17,9 @@ import {
 } from "@chakra-ui/react";
 
 export function FaqView() {
-    useEffect(() => {
-        document.title = "Segundo Hogar - Preguntas Frecuentes";
-      }, []);
+  useEffect(() => {
+    document.title = "Segundo Hogar - Preguntas Frecuentes";
+  }, []);
 
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -97,7 +97,6 @@ export function FaqView() {
       answer:
         "Tomamos medidas exhaustivas para proteger tus datos personales, como la encriptación de datos, el acceso restringido, la protección contra ataques cibernéticos, políticas de retención de datos, cumplimiento normativo, educación y capacitación del personal. Nuestra prioridad es mantener la confidencialidad de tus datos y cumplir con los estándares de privacidad y seguridad. Si tienes más questions, contáctanos.",
     },
-    // Agrega más questions y answers para estudiantes según sea necesario
   ];
 
   const handleToggle = (index) => {
@@ -105,14 +104,14 @@ export function FaqView() {
   };
 
   return (
-    <div style={{ width: "1024px", height: "800px" }}>
+    <Box>
       <Heading
         align={"center"}
         justify={"center"}
         fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
         as="h1"
       >
-        <Text color={"black"} as={"span"} >
+        <Text color={"black"} as={"span"}>
           FAQ
         </Text>
       </Heading>
@@ -171,28 +170,6 @@ export function FaqView() {
           </TabPanel>
         </TabPanels>
       </Tabs>
-
-      {/* <Heading align={'center'} justify={'center'} fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-                        <Text color={'black'} as={'span'}>
-                            FAQ
-                        </Text>
-                    </Heading>
-                    <br></br>
-            <Accordion allowToggle>
-                {faqData.map((item, index) => (
-                    <AccordionItem key={index}>
-                        <h2>
-                            <AccordionButton bg="rgb(240, 238, 238)" sx={{ outline: 'none', _focus: { boxShadow: 'none' } }}>
-                                <Box flex="1" textAlign="left" fontWeight='semibold' >
-                                    {item.question}
-                                </Box>
-                                <AccordionIcon />
-                            </AccordionButton>
-                        </h2>
-                        <AccordionPanel>{item.answer}</AccordionPanel>
-                    </AccordionItem>
-                ))}
-            </Accordion> */}
-    </div>
+    </Box>
   );
 }
